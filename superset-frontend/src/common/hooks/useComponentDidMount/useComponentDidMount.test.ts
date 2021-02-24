@@ -16,18 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import React from 'react';
+import { renderHook } from '@testing-library/react-hooks';
+import { useComponentDidMount } from './useComponentDidMount';
 
-import ModalTrigger from 'src/components/ModalTrigger';
-
-describe('ModalTrigger', () => {
-  const defaultProps = {
-    triggerNode: <i className="fa fa-link" />,
-    modalTitle: 'My Modal Title',
-    modalBody: <div>Modal Body</div>,
-  };
-
-  it('is a valid element', () => {
-    expect(React.isValidElement(<ModalTrigger {...defaultProps} />)).toBe(true);
-  });
+test('the effect should only be executed on the first render', () => {
+  const effect = jest.fn();
+  const hook = renderHook(() => useComponentDidMount(effect));
+  expect(effect).toBeCalledTimes(1);
+  hook.rerender();
+  expect(effect).toBeCalledTimes(1);
 });

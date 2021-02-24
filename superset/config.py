@@ -1093,6 +1093,10 @@ GLOBAL_ASYNC_QUERIES_POLLING_DELAY = 500
 # It will get executed each time when user open a chart's explore view.
 DATASET_HEALTH_CHECK = None
 
+# SQLalchemy link doc reference
+SQLALCHEMY_DOCS_URL = "https://docs.sqlalchemy.org/en/13/core/engines.html"
+SQLALCHEMY_DISPLAY_TEXT = "SQLAlchemy docs"
+
 # -------------------------------------------------------------------
 # *                WARNING:  STOP EDITING  HERE                    *
 # -------------------------------------------------------------------

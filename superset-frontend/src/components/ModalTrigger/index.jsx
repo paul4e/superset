@@ -91,6 +91,7 @@ export default class ModalTrigger extends React.Component {
         <>
           <Button
             className="modal-trigger"
+            data-test="btn-modal-trigger"
             tooltip={this.props.tooltip}
             onClick={this.open}
           >
@@ -103,7 +104,7 @@ export default class ModalTrigger extends React.Component {
     /* eslint-disable jsx-a11y/interactive-supports-focus */
     return (
       <>
-        <span onClick={this.open} role="button">
+        <span data-test="span-modal-trigger" onClick={this.open} role="button">
           {this.props.triggerNode}
         </span>
         {this.renderModal()}
