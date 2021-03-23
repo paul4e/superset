@@ -316,7 +316,7 @@ DEFAULT_FEATURE_FLAGS: Dict[str, bool] = {
     "REMOVE_SLICE_LEVEL_LABEL_COLORS": False,
     "SHARE_QUERIES_VIA_KV_STORE": False,
     "SIP_38_VIZ_REARCHITECTURE": False,
-    "TAGGING_SYSTEM": False,
+    "TAGGING_SYSTEM": True,
     "SQLLAB_BACKEND_PERSISTENCE": False,
     "LISTVIEWS_DEFAULT_CARD_VIEW": False,
     # Enables the replacement React views for all the FAB views (list, edit, show) with
@@ -328,7 +328,7 @@ DEFAULT_FEATURE_FLAGS: Dict[str, bool] = {
     "DISPLAY_MARKDOWN_HTML": True,
     # When True, this escapes HTML (rather than rendering it) in Markdown components
     "ESCAPE_MARKDOWN_HTML": False,
-    "DASHBOARD_NATIVE_FILTERS": False,
+    "DASHBOARD_NATIVE_FILTERS": True,
     "GLOBAL_ASYNC_QUERIES": False,
     "VERSIONED_EXPORT": False,
     # Note that: RowLevelSecurityFilter is only given by default to the Admin role
@@ -338,9 +338,9 @@ DEFAULT_FEATURE_FLAGS: Dict[str, bool] = {
     # by that custom datasource access. So we are assuming a default security config,
     # a custom security config could potentially give access to setting filters on
     # tables that users do not have access to.
-    "ROW_LEVEL_SECURITY": False,
+    "ROW_LEVEL_SECURITY": True,
     # Enables Alerts and reports new implementation
-    "ALERT_REPORTS": False,
+    "ALERT_REPORTS": True,
 }
 
 # Set the default view to card/grid view if thumbnail support is enabled.
