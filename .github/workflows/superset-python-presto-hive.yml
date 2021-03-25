@@ -33,7 +33,7 @@ jobs:
           # GitHub action runner's default installations
           - 15432:5432
       presto:
-        image: prestosql/presto:339
+        image: starburstdata/presto:350-e.6
         env:
           POSTGRES_USER: superset
           POSTGRES_PASSWORD: superset
@@ -82,7 +82,7 @@ jobs:
       - name: Upload code coverage
         if: steps.check.outcome == 'failure'
         run: |
-          bash <(curl -s https://codecov.io/bash) -cF python
+          bash <(curl -s https://codecov.io/bash) -c -F python -F presto
 
   test-postgres-hive:
     if: github.event.pull_request.draft == false
@@ -158,4 +158,4 @@ jobs:
       - name: Upload code coverage
         if: steps.check.outcome == 'failure'
         run: |
-          bash <(curl -s https://codecov.io/bash) -cF python
+          bash <(curl -s https://codecov.io/bash) -c -F python -F hive
