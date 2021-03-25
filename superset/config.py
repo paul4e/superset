@@ -307,7 +307,10 @@ LANGUAGES = {
 }
 # Turning off i18n by default as translation in most languages are
 # incomplete and not well maintained.
-LANGUAGES = {}
+LANGUAGES = {
+    "es": {"flag": "es", "name": "Spanish"},
+    "en": {"flag": "us", "name": "English"}
+}
 
 # ---------------------------------------------------
 # Feature flags
@@ -357,9 +360,9 @@ DEFAULT_FEATURE_FLAGS: Dict[str, bool] = {
     "DISPLAY_MARKDOWN_HTML": True,
     # When True, this escapes HTML (rather than rendering it) in Markdown components
     "ESCAPE_MARKDOWN_HTML": False,
-    "DASHBOARD_NATIVE_FILTERS": False,
-    "DASHBOARD_CROSS_FILTERS": False,
-    "DASHBOARD_NATIVE_FILTERS_SET": False,
+    "DASHBOARD_NATIVE_FILTERS": True,
+    "DASHBOARD_CROSS_FILTERS": True,
+    "DASHBOARD_NATIVE_FILTERS_SET": True,
     "GLOBAL_ASYNC_QUERIES": False,
     "VERSIONED_EXPORT": False,
     # Note that: RowLevelSecurityFilter is only given by default to the Admin role
