@@ -14,17 +14,19 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+
+import logging
 from datetime import datetime
 from typing import Optional, TYPE_CHECKING
-
-from superset.db_engine_specs.base import BaseEngineSpec
 from superset.utils import core as utils
 
-if TYPE_CHECKING:
-    from superset.connectors.sqla.models import TableColumn
+from superset.db_engine_specs.base import BaseEngineSpec
+
+logger = logging.getLogger()
 
 
 class CrateEngineSpec(BaseEngineSpec):
+    """ Abstract class for Crate 'like' databases """
 
     engine = "crate"
     engine_name = "CrateDB"
@@ -42,21 +44,17 @@ class CrateEngineSpec(BaseEngineSpec):
     }
 
     @classmethod
+    def convert_dttm(cls, target_type: str, dttm: datetime) -> Optional[str]:
+        tt = target_type.upper()
+        if tt == utils.TemporalType.TIMESTAMP:
+            dttm_formatted = dttm.isoformat(sep=" ", timespec="microseconds")
+            return f"""DATE_FORMAT('{dttm_formatted}')"""
+        return None
+
+    @classmethod
     def epoch_to_dttm(cls) -> str:
         return "{col} * 1000"
 
     @classmethod
     def epoch_ms_to_dttm(cls) -> str:
         return "{col}"
-
-    @classmethod
-    def convert_dttm(cls, target_type: str, dttm: datetime) -> Optional[str]:
-        tt = target_type.upper()
-        if tt == utils.TemporalType.TIMESTAMP:
-            return f"{dttm.timestamp() * 1000}"
-        return None
-
-    @classmethod
-    def alter_new_orm_column(cls, orm_col: "TableColumn") -> None:
-        if orm_col.type == "TIMESTAMP":
-            orm_col.python_date_format = "epoch_ms"
