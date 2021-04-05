@@ -287,7 +287,10 @@ LANGUAGES = {
 }
 # Turning off i18n by default as translation in most languages are
 # incomplete and not well maintained.
-LANGUAGES = {}
+LANGUAGES = {
+    "es": {"flag": "es", "name": "Spanish"},
+    "en": {"flag": "us", "name": "English"}
+}
 
 # ---------------------------------------------------
 # Feature flags
