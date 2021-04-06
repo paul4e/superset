@@ -114,6 +114,9 @@ VERSION_STRING = _try_json_readversion(VERSION_INFO_FILE) or _try_json_readversi
 VERSION_SHA_LENGTH = 8
 VERSION_SHA = _try_json_readsha(VERSION_INFO_FILE, VERSION_SHA_LENGTH)
 
+# default viz used in chart explorer
+DEFAULT_VIZ_TYPE = "table"
+
 ROW_LIMIT = 50000
 VIZ_ROW_LIMIT = 10000
 # max rows retreieved when requesting samples from datasource in explore view
@@ -359,6 +362,13 @@ DEFAULT_FEATURE_FLAGS: Dict[str, bool] = {
     "OMNIBAR": False,
     "DASHBOARD_RBAC": False,
     "ENABLE_EXPLORE_DRAG_AND_DROP": False,
+    # Enabling ALERTS_ATTACH_REPORTS, the system sends email and slack message
+    # with screenshot and link
+    # Disables ALERTS_ATTACH_REPORTS, the system DOES NOT generate screenshot
+    # for report with type 'alert' and sends email and slack message with only link;
+    # for report with type 'report' still send with email and slack message with
+    # screenshot and link
+    "ALERTS_ATTACH_REPORTS": True,
 }
 
 # Set the default view to card/grid view if thumbnail support is enabled.
