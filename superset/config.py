@@ -429,7 +429,20 @@ GET_FEATURE_FLAGS_FUNC: Optional[Callable[[Dict[str, bool]], Dict[str, bool]]] =
 #     }]
 
 # This is merely a default
-EXTRA_CATEGORICAL_COLOR_SCHEMES: List[Dict[str, Any]] = []
+EXTRA_CATEGORICAL_COLOR_SCHEMES: List[Dict[str, Any]] = [
+    {
+        "id": 'caja-de-ande-color-scheme-cat',
+        "description": 'Esquema de colores Caja de Ande',
+        "label": 'Caja de Ande',
+        "colors": [
+            "#d1992a",
+            "#16458e",
+            "#96c11e",
+            "#949494",'#DDAA77', '#7799BB', '#88AA77',
+            '#552288', '#5AAA46', '#CC7788', '#EEDD55', '#9977BB', '#BBAA44', '#DDCCDD'
+        ]
+    }
+]
 
 # THEME_OVERRIDES is used for adding custom theme to superset
 # example code for "My theme" custom scheme
@@ -463,7 +476,20 @@ THEME_OVERRIDES: Dict[str, Any] = {}
 #     }]
 
 # This is merely a default
-EXTRA_SEQUENTIAL_COLOR_SCHEMES: List[Dict[str, Any]] = []
+EXTRA_SEQUENTIAL_COLOR_SCHEMES: List[Dict[str, Any]] = [
+    {
+        "id": 'caja-de-ande-color-scheme-seq',
+        "description": 'Esquema de colores Caja de Ande',
+        "label": 'Caja de Ande',
+        "colors": [
+            "#d1992a",
+            "#16458e",
+            "#96c11e",
+            "#949494",'#DDAA77', '#7799BB', '#88AA77',
+            '#552288', '#5AAA46', '#CC7788', '#EEDD55', '#9977BB', '#BBAA44', '#DDCCDD'
+        ]
+    }
+]
 
 # ---------------------------------------------------
 # Thumbnail config (behind feature flag)
