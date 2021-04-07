@@ -171,6 +171,12 @@
       "Time Series - Paired t-test": ["时间序列 - 配对t检验"],
       "Time Series - Nightingale Rose Chart": ["时间序列 - 南丁格尔玫瑰图"],
       "Partition Diagram": ["分区图"],
+      "Choose either fields to [Group By] and [Metrics] and/or [Percentage Metrics], or [Columns], not both": [
+        "为[分组]和[指标]或[列]选择任何的字段，或者两个都不选"
+      ],
+      "Box Plot": ["箱线图"],
+      "Distribution - NVD3 - Pie Chart": ["分布 - NVD3 - 饼图"],
+      "iFrame": ["内嵌框架"],
       "Deleted %(num)d annotation layer": ["选择一个注释图层"],
       "All Text": [""],
       "Deleted %(num)d annotation": ["选择一个注释图层"],
@@ -200,18 +206,11 @@
       "upper percentile must be greater than 0 and less than 100. Must be higher than lower percentile.": [
         ""
       ],
-      "`width` must be greater or equal to 0": ["`宽度` 必须大于或等于0"],
-      "`row_offset` must be greater than or equal to 0": [
-        "`行偏移量` 必须大于或等于0"
-      ],
-      "There are associated alerts or reports: %s,": [
-        "存在关联的警报或报告：%s,"
-      ],
-      "Time string is unclear. Please specify [%(human_readable)s ago] or [%(human_readable)s later].": [
-        ""
-      ],
-      "Cannot parse time string [%(human_readable)s]": [""],
-      "Database does not exist": ["数据库不存在"],
+      "`width` must be greater or equal to 0": [""],
+      "`row_limit` must be greater than or equal to 1": [""],
+      "`row_offset` must be greater than or equal to 0": [""],
+      "There are associated alerts or reports: %s,": [""],
+      "Database does not exist": [""],
       "Dashboards do not exist": ["看板"],
       "Datasource type is required when datasource_id is given": [""],
       "Chart parameters are invalid.": [""],
@@ -224,17 +223,10 @@
       "Import chart failed for an unknown reason": [""],
       "Owners are invalid": [""],
       "Dataset does not exist": ["数据集不存在"],
-      "Duplicate column/metric labels: %(labels)s. Please make sure all columns and metrics have a unique label.": [
-        ""
-      ],
-      "`operation` property of post processing object undefined": [
-        "后处理必须指定操作类型（`operation`）"
-      ],
-      "Unsupported post processing operation: %(operation)s": [
-        "不支持的处理操作：%(operation)s"
-      ],
-      "Adding new datasource [{}]": ["添加 Druid 数据源 [{}]"],
-      "Refreshing datasource [{}]": ["刷新数据源 [{}]"],
+      "`operation` property of post processing object undefined": [""],
+      "Unsupported post processing operation: %(operation)s": [""],
+      "Adding new datasource [{}]": ["添加 Druid 数据源"],
+      "Refreshing datasource [{}]": [""],
       "Metric(s) {} must be aggregations.": ["度量(s) {} 必须是聚合。"],
       "Unsupported extraction function: ": ["不支持的提取函数："],
       "Columns": ["列"],
@@ -321,15 +313,10 @@
         "缺少时间字段"
       ],
       "Empty query?": ["查询为空？"],
-      "Metric '%(metric)s' does not exist": ["指标 '%(metric)s' 不存在"],
-      "Must specify a value for filters with comparison operators": [""],
-      "Invalid filter operation type: %(op)s": ["选择框的操作类型无效: %(op)s"],
-      "Error in jinja expression in WHERE clause: %(msg)s": [
-        "jinja表达式中的WHERE子句出错：%(msg)s"
-      ],
-      "Error in jinja expression in HAVING clause: %(msg)s": [
-        "jinja表达式中的HAVING子句出错：%(msg)s"
-      ],
+      "Metric '%(metric)s' does not exist": [""],
+      "Invalid filter operation type: %(op)s": [""],
+      "Error in jinja expression in WHERE clause: %(msg)s": [""],
+      "Error in jinja expression in HAVING clause: %(msg)s": [""],
       "Show Column": ["显示列"],
       "Add Column": ["添加列"],
       "Edit Column": ["编辑列"],
@@ -437,12 +424,13 @@
       "Import dashboard failed for an unknown reason": [""],
       "No data in file": [""],
       "Table name undefined": ["表名"],
-      "Invalid connection string, a valid string usually follows: driver://user:password@database-host/database-name": [
+      "Invalid connection string, a valid string usually follows: dirver://user:password@database-host/database-name": [
         ""
       ],
-      "Field cannot be decoded by JSON. %(msg)s": [
-        "字段不能由JSON解码。%(msg)s"
+      "SQLite database cannot be used as a data source for security reasons.": [
+        ""
       ],
+      "Field cannot be decoded by JSON. %(msg)s": [""],
       "The metadata_params in Extra field is not configured correctly. The key %(key)s is invalid.": [
         ""
       ],
@@ -462,44 +450,31 @@
       "Stopped an unsafe database connection": [
         "选择任何列用来对元数据进行探查"
       ],
-      "Cannot delete a database that has tables attached": [
-        "无法删除已含有表的数据库"
-      ],
-      "Database could not be deleted.": ["数据库不能删除。"],
-      "Stopped an unsafe database connection": ["已停止不安全的数据库连接"],
-      "Could not load database driver": ["无法加载数据库驱动程序"],
-      "Unexpected error occurred, please check your logs for details": [
-        "发生意外错误，请检查日志以了解详细信息"
-      ],
-      "Import database failed for an unknown reason": [
-        "导入数据库失败，原因未知"
-      ],
-      "Could not load database driver: {}": ["无法加载数据库驱动程序：{}"],
-      "Deleted %(num)d dataset": ["已经删除 %(num)d 个数据集"],
-      "Null or Empty": ["Null或空"],
+      "Could not load database driver": ["无法连接服务器"],
+      "Unexpected error occurred, please check your logs for details": [""],
+      "Import database failed for an unknown reason": [""],
+      "Could not load database driver: {}": ["无法连接服务器"],
+      "Deleted %(num)d dataset": ["选择结束日期"],
+      "Null or Empty": [""],
       "Dataset %(name)s already exists": ["数据集 %(name)s 已存在"],
-      "Database not allowed to change": ["数据集不允许被修改"],
-      "One or more columns do not exist": ["一个或多个字段不存在"],
-      "One or more columns are duplicated": ["一个或多个列被复制"],
-      "One or more columns already exist": ["一个或多个列已存在"],
-      "One or more metrics do not exist": ["一个或多个指标不存在"],
-      "One or more metrics are duplicated": ["一个或多个指标重复"],
-      "One or more metrics already exist": ["一个或多个度量已存在"],
+      "Database not allowed to change": [""],
+      "One or more columns do not exist": [""],
+      "One or more columns are duplicated": [""],
+      "One or more columns already exist": [""],
+      "One or more metrics do not exist": ["一个或多个指标显示"],
+      "One or more metrics are duplicated": ["一个或多个指标显示"],
+      "One or more metrics already exist": ["一个或多个指标显示"],
       "Table [%(table_name)s] could not be found, please double check your database connection, schema, and table name": [
         "找不到 [{}] 表，请仔细检查您的数据库连接、Schema 和 表名"
       ],
-      "Dataset parameters are invalid.": ["数据集参数无效。"],
-      "Dataset could not be created.": ["无法创建数据集。"],
-      "Dataset could not be updated.": ["无法更新数据集。"],
-      "Dataset could not be deleted.": ["无法删除数据集"],
-      "Dataset(s) could not be bulk deleted.": ["数据集无法批量删除"],
-      "Changing this dataset is forbidden": ["没有权限更新此数据集"],
-      "Import dataset failed for an unknown reason": [
-        "因为未知的原因导入数据集失败"
-      ],
-      "Original value": [""],
-      "Week ending saturday": [""],
-      "Unknown Presto Error": ["未知 Presto 错误"],
+      "Dataset parameters are invalid.": [""],
+      "Dataset could not be created.": ["您的查询无法保存"],
+      "Dataset could not be updated.": ["您的查询无法保存"],
+      "Dataset could not be deleted.": [""],
+      "Dataset(s) could not be bulk deleted.": [""],
+      "Changing this dataset is forbidden": [""],
+      "Import dataset failed for an unknown reason": [""],
+      "Unknown Presto Error": ["未知错误"],
       "We can't seem to resolve the column \"%(column_name)s\" at line %(location)s.": [
         ""
       ],
@@ -530,35 +505,28 @@
       "Report Schedule reached a working timeout.": [""],
       "Alert query returned more then one row.": [""],
       "Alert validator config error.": ["错误的经纬度配置。"],
-      "Alert query returned more then one column.": ["警报查询返回多个列。"],
-      "Alert query returned a non-number value.": ["警报查询返回非数字值。"],
-      "Alert found an error while executing a query.": [
-        "警报在执行查询时发现错误。"
+      "Alert query returned more then one column.": [""],
+      "Alert query returned a non-number value.": [""],
+      "Alert found an error while executing a query.": [""],
+      "Alert fired during grace period.": [""],
+      "Alert ended grace period.": [""],
+      "Alert on grace period": [""],
+      "Report Schedule sellenium user not found": [""],
+      "Report Schedule state not found": [""],
+      "Report schedule unexpected error": ["意外错误。"],
+      "Changing this report is forbidden": [""],
+      "An error occurred while pruning logs ": ["渲染可视化时发生错误：%s"],
+      "\n            <b><a href=\"%(url)s\">Explore in Superset</a></b><p></p>\n            <img src=\"cid:%(msgid)s\">\n            ": [
+        "\n            <b><a href=\"%(url)s\">探索 Superset</a></b><p></p>\n            <img src=\"cid:%(msgid)s\">\n            "
       ],
-      "Alert fired during grace period.": ["在宽限期内触发警报。"],
-      "Alert ended grace period.": ["警报已结束宽限期。"],
-      "Alert on grace period": ["警报宽限期"],
-      "Report Schedule sellenium user not found": [
-        "找不到报表计划sellenium用户"
-      ],
-      "Report Schedule state not found": ["未找到报表计划状态"],
-      "Report schedule unexpected error": ["报告计划意外错误。"],
-      "Changing this report is forbidden": ["禁止更改此报告"],
-      "An error occurred while pruning logs ": ["精简日志时出错 "],
-      "\n            Error: %(text)s\n            ": [""],
       "%(prefix)s %(title)s": [""],
-      "\n            *%(name)s*\n\n            Error: %(text)s\n            ": [
+      "\n            *%(name)s*\n\n            <%(url)s|Explore in Superset>\n            ": [
         ""
       ],
       "\n        *%(name)s*\n\n        <%(url)s|Explore in Superset>\n        ": [
         ""
       ],
-      "<b><a href=\"%(url)s\">Explore in Superset</a></b><p></p>": [
-        "<b><a href=\"%(url)s\">探索 Superset</a></b><p></p>"
-      ],
-      "\n            <b><a href=\"%(url)s\">Explore in Superset</a></b><p></p>\n            <img src=\"cid:%(msgid)s\">\n            ": [
-        "\n            <b><a href=\"%(url)s\">探索 Superset</a></b><p></p>\n            <img src=\"cid:%(msgid)s\">\n            "
-      ],
+      "<b><a href=\"%(url)s\">Explore in Superset</a></b><p></p>": [""],
       "%(name)s.csv": [""],
       "\n        *%(slice_name)s*\n\n        <%(slice_url_user_friendly)s|Explore in Superset>\n        ": [
         ""
@@ -593,52 +561,27 @@
       "[Superset] Access to the datasource %(name)s was granted": [
         "[Superset] 允许访问数据源 %(name)s"
       ],
-      "Referenced columns not available in DataFrame.": [
-        "引用的列在数据帧（DataFrame）中不可用。"
-      ],
-      "Column referenced by aggregate is undefined: %(column)s": [
-        "聚合引用的列未定义：%(column)s"
-      ],
-      "Operator undefined for aggregator: %(name)s": [
-        "未定义聚合器的运算符：%(name)s"
-      ],
-      "Invalid numpy function: %(operator)s": ["无效的numpy函数：%(operator)s"],
-      "Pivot operation requires at least one index": [
-        "透视操作至少需要一个索引"
-      ],
-      "Pivot operation must include at least one aggregate": [
-        "数据透视操作必须至少包含一个聚合"
-      ],
-      "Undefined window for rolling operation": ["未定义滚动操作窗口"],
-      "Invalid rolling_type: %(type)s": ["无效的滚动类型：%(type)s"],
-      "Invalid options for %(rolling_type)s: %(options)s": [
-        "%(rolling_type)s 的选项无效：%(options)s"
-      ],
-      "Invalid cumulative operator: %(operator)s": [
-        "累积运算符无效：%(operator)s"
-      ],
-      "Invalid geohash string": ["无效的geohash字符串"],
-      "Invalid longitude/latitude": ["无效的经度/纬度"],
-      "Invalid geodetic string": ["无效的 geodetic 字符串"],
-      "Column \"%(column)s\" is not numeric or does not exists in the query results.": [
-        ""
-      ],
-      "`rename_columns` must have the same length as `columns`.": [""],
-      "`fbprophet` package not installed": ["未安装程序包 `fbprophet`"],
-      "Time grain missing": ["时间粒度缺失"],
-      "Unsupported time grain: %(time_grain)s": [
-        "不支持的时间粒度：%(time_grain)s"
-      ],
-      "Periods must be a positive integer value": ["句点必须是正整数值"],
-      "Confidence interval must be between 0 and 1 (exclusive)": [
-        "置信区间必须介于0和1（不包含1）之间"
-      ],
-      "DataFrame must include temporal column": [
-        "数据帧（DataFrame）必须包含时间列"
-      ],
-      "DataFrame include at least one series": [
-        "数据帧（DataFrame）至少包括一个序列"
-      ],
+      "Unable to find such a holiday: [{}]": [""],
+      "Referenced columns not available in DataFrame.": [""],
+      "Column referenced by aggregate is undefined: %(column)s": [""],
+      "Operator undefined for aggregator: %(name)s": [""],
+      "Invalid numpy function: %(operator)s": [""],
+      "Pivot operation requires at least one index": [""],
+      "Pivot operation must include at least one aggregate": [""],
+      "Undefined window for rolling operation": [""],
+      "Invalid rolling_type: %(type)s": [""],
+      "Invalid options for %(rolling_type)s: %(options)s": [""],
+      "Invalid cumulative operator: %(operator)s": [""],
+      "Invalid geohash string": [""],
+      "Invalid longitude/latitude": ["经纬度结束"],
+      "Invalid geodetic string": [""],
+      "`fbprophet` package not installed": [""],
+      "Time grain missing": ["时间的粒度"],
+      "Unsupported time grain: %(time_grain)s": [""],
+      "Periods must be a positive integer value": [""],
+      "Confidence interval must be between 0 and 1 (exclusive)": [""],
+      "DataFrame must include temporal column": [""],
+      "DataFrame include at least one series": ["请至少选择一个指标"],
       "percentiles must be a list or tuple with two numeric values, of which the first is lower than the second value": [
         ""
       ],
@@ -659,28 +602,21 @@
       "A SQL statement that defines whether the alert should get triggered or not. The query is expected to return either NULL or a number value.": [
         ""
       ],
-      "This feature is deprecated and will be removed on 2.0. Take a look at the replacement feature <a href='https://superset.apache.org/docs/installation/alerts-reports'>Alerts & Reports documentation</a>": [
-        ""
-      ],
-      "annotation start time or end time is required.": [
-        "注释的开始时间或结束时间是必需的。"
-      ],
-      "Annotation end time must be no earlier than start time.": [
-        "注释的结束时间不能早于开始时间。"
-      ],
-      "Annotations": ["注释"],
-      "Show Annotation": ["查看注释"],
-      "Add Annotation": ["添加注释"],
-      "Edit Annotation": ["编辑注释"],
-      "Layer": ["层"],
+      "annotation start time or end time is required.": [""],
+      "Annotation end time must be no earlier than start time.": [""],
+      "Annotations": ["注解"],
+      "Show Annotation": ["注解"],
+      "Add Annotation": ["添加注释层"],
+      "Edit Annotation": ["注解"],
+      "Layer": ["隐藏Layer"],
       "Label": ["标签"],
       "Start": ["开始时间"],
       "End": [""],
       "JSON Metadata": ["JSON 模板"],
       "Show Annotation Layer": ["注解层"],
       "Add Annotation Layer": ["添加注释层"],
-      "Edit Annotation Layer": ["编辑注释层"],
-      "Name": ["名称"],
+      "Edit Annotation Layer": ["添加注释层"],
+      "Name": ["名字"],
       "Table [%{table}s] could not be found, please double check your database connection, schema, and table name, error: {}": [
         "找不到 [{}] 表，请仔细检查您的数据库连接、Schema 和 表名"
       ],
@@ -709,14 +645,14 @@
       "An unknown error occurred. Please contact your Superset administrator": [
         "出现未知错误。（状态：%s）"
       ],
-      "You don't have the rights to ": ["您没有授权 "],
+      "You don't have the rights to ": ["你没有授权 "],
       "alter this ": ["修改这个 "],
       "chart": ["图表"],
       "create a ": ["创建一个 "],
-      "Explore - %(table)s": ["查看 - %(table)s"],
+      "Explore - %(table)s": [""],
       "Explore": ["探索"],
-      "Chart [{}] has been saved": ["图表 [{}] 已经保存"],
-      "Chart [{}] has been overwritten": ["图表 [{}] 已经覆盖"],
+      "Chart [{}] has been saved": [""],
+      "Chart [{}] has been overwritten": [""],
       "dashboard": ["看板"],
       "Chart [{}] was added to dashboard [{}]": [""],
       "Dashboard [{}] just got created and chart [{}] was added to it": [""],
@@ -756,7 +692,7 @@
       "Template Name": ["模板名称"],
       "Request missing data field.": [""],
       "Duplicate column name(s): %(columns)s": [""],
-      "A human-friendly name": ["人性化的名称"],
+      "A human-friendly name": [""],
       "Used internally to identify the plugin. Should be set to the package name from the pluginʼs package.json": [
         ""
       ],
@@ -815,9 +751,6 @@
       ],
       "Owners is a list of users who can alter the dashboard.": [
         "“所有者”是一组可以修改看板的用户列表。"
-      ],
-      "Roles is a list which defines access to the dashboard. These roles are always applied in addition to restrictions on dataset level access. If no roles defined then the dashboard is available to all roles.": [
-        ""
       ],
       "Determines whether or not this dashboard is visible in the list of all dashboards": [
         ""
@@ -990,6 +923,10 @@
       "dttm": ["dttm"],
       "Add item": ["增加过滤条件"],
       "The query couldn't be loaded": ["这个查询无法被加载"],
+      "Your query was saved": ["您的查询已保存"],
+      "Your query could not be saved": ["您的查询无法保存"],
+      "Your query was updated": ["您的查询已保存"],
+      "Your query could not be updated": ["您的查询无法保存"],
       "Your query has been scheduled. To see details of your query, navigate to Saved queries": [
         ""
       ],
@@ -1019,9 +956,6 @@
       "An error occurred while fetching tab state": [
         "获取表格元数据时发生错误"
       ],
-      "An error occurred while removing tab. Please contact your administrator.": [
-        "创建数据源时发生错误"
-      ],
       "An error occurred while removing query. Please contact your administrator.": [
         "创建数据源时发生错误"
       ],
@@ -1037,10 +971,6 @@
       "An error occurred while setting the tab title. Please contact your administrator.": [
         "创建数据源时发生错误"
       ],
-      "Your query was saved": ["您的查询已保存"],
-      "Your query could not be saved": ["您的查询无法保存"],
-      "Your query was updated": ["您的查询已保存"],
-      "Your query could not be updated": ["您的查询无法保存"],
       "An error occurred while storing your query in the backend. To avoid losing your changes, please save your query using the \"Save Query\" button.": [
         ""
       ],
@@ -1076,14 +1006,10 @@
       "Creating a data source and creating a new tab": [
         "创建数据源，并弹出一个新的标签页"
       ],
-      "An error occurred": ["发生了一个错误"],
-      "Explore the result set in the data exploration view": [
-        "在数据探索视图中探索结果集"
-      ],
-      "This query took %s seconds to run, ": ["这个查询使用了 %s 秒去执行，"],
-      "and the explore view times out at %s seconds ": [
-        "，浏览视图在 %s 秒超时"
-      ],
+      "An error occurred": [""],
+      "Explore the result set in the data exploration view": [""],
+      "This query took %s seconds to run, ": [""],
+      "and the explore view times out at %s seconds ": [""],
       "following this flow will most likely lead to your query timing out. ": [
         ""
       ],
@@ -1096,20 +1022,20 @@
       "cannot be used as a column name. The column name/alias \"__timestamp\"\n          is reserved for the main temporal expression, and column aliases ending with\n          double underscores followed by a numeric value (e.g. \"my_col__1\") are reserved\n          for deduplicating duplicate column names. Please use aliases to rename the\n          invalid column names.": [
         ""
       ],
-      "Source SQL": ["源 SQL"],
       "Raw SQL": ["行 SQL"],
+      "Source SQL": ["源 SQL"],
       "SQL": ["SQL"],
       "No query history yet...": ["暂无历史查询..."],
-      "An error occurred when refreshing queries": ["创建数据源时发生错误"],
       "It seems you don't have access to any database": [
         "貌似您没有访问到任何数据库"
       ],
-      "Filter by user": ["过滤用户"],
-      "Filter by database": ["过滤数据库"],
-      "Query search string": ["查询搜索字符串"],
-      "[From]-": ["[从]-"],
-      "[To]-": ["[至]-"],
-      "Filter by status": ["过滤状态"],
+      "An error occurred when refreshing queries": ["创建数据源时发生错误"],
+      "Filter by user": ["过滤值"],
+      "Filter by database": ["选择一个数据库"],
+      "Query search string": ["查询搜索"],
+      "[From]-": ["[From]-"],
+      "[To]-": ["[To]-"],
+      "Filter by status": ["过滤值"],
       "Edit": ["编辑"],
       "View results": ["展示结果"],
       "Data preview": ["数据预览"],
@@ -1118,13 +1044,10 @@
       ],
       "Run query in a new tab": ["在新标签中运行查询"],
       "Remove query from log": ["从日志中删除查询"],
-      "An error occurred saving dataset": ["保存数据集时发生错误"],
-      "Download to CSV": [""],
-      "Filter results": ["过滤结果"],
-      "It appears that the number of rows in the query results displayed\n           was limited on the server side to\n           the %s limit.": [
-        "服务器端显示的查询结果中的行数似乎限制在 %s 以内。"
-      ],
-      "Database error": ["数据库错误"],
+      "An error occurred saving dataset": ["创建数据源时发生错误"],
+      ".CSV": [""],
+      "Filter results": ["搜索结果"],
+      "Database error": ["数据库表达式"],
       "was created": ["已创建"],
       "Query in a new tab": ["在新标签中查询"],
       "The query returned no data": [""],
@@ -1133,11 +1056,11 @@
       "Track job": ["跟踪任务"],
       "Stop": ["停止"],
       "Run selection": ["运行选定的查询"],
-      "Run": ["执行"],
-      "Stop running (Ctrl + x)": ["停止运行 (Ctrl + x)"],
-      "Run query (Ctrl + Return)": ["执行运行 (Ctrl + Return)"],
-      "Save & Explore": ["保存和浏览"],
-      "Overwrite & Explore": ["覆写和浏览"],
+      "Run": [""],
+      "Stop running (Ctrl + x)": [""],
+      "Run query (Ctrl + Return)": [""],
+      "Save & Explore": ["保存一个切片"],
+      "Overwrite & Explore": ["覆盖切片 %s"],
       "Undefined": ["未命名"],
       "Save": ["保存"],
       "Save as": ["另存为"],
@@ -1161,10 +1084,12 @@
       "Run query": ["运行查询"],
       "New tab": ["关闭标签"],
       "Untitled query": ["未命名的查询"],
-      "Stop query": ["停止查询"],
-      "Schedule the query periodically": ["定期调度查询"],
-      "You must run the query successfully first": ["必须先成功运行查询"],
-      "Autocomplete": ["自动补全"],
+      "Stop query": ["查询为空？"],
+      "Schedule the query periodically": [""],
+      "You must run the query successfully first": [""],
+      "It appears that the number of rows in the query results displayed\n           was limited on the server side to\n           the %s limit.": [
+        "服务器端显示的查询结果中的行数似乎限制在 %s 以内。"
+      ],
       "CREATE TABLE AS": ["允许 CREATE TABLE AS"],
       "CREATE VIEW AS": ["允许 CREATE TABLE AS"],
       "Estimate the cost before running a query": [""],
@@ -1175,9 +1100,8 @@
       "Rename tab": ["重命名标签"],
       "Expand tool bar": ["展开工具栏"],
       "Hide tool bar": ["隐藏工具栏"],
-      "Close all other tabs": ["关闭其他tab页"],
-      "Duplicate tab": ["复制tab页"],
-      "New tab (Ctrl + t)": ["新建Tab页 (Ctrl + t)"],
+      "Close all other tabs": [""],
+      "Duplicate tab": [""],
       "Copy partition query to clipboard": ["将分区查询复制到剪贴板"],
       "latest partition:": ["最新分区："],
       "Keys for table": ["表的键"],
@@ -1188,6 +1112,10 @@
       "Show CREATE VIEW statement": [""],
       "CREATE VIEW statement": [""],
       "Remove table preview": ["删除表格预览"],
+      "Assign a set of parameters as": [""],
+      "below (example:": [""],
+      "), and they become available in your SQL (example:": [""],
+      ") by using": [""],
       "Edit template parameters": ["编辑模板参数"],
       "Invalid JSON": ["无效的JSON"],
       "Create a new chart": ["创建新图表"],
@@ -1198,14 +1126,14 @@
       "Choose a visualization type": ["选择可视化类型"],
       "Create new chart": ["创建新图表"],
       "An error occurred while loading the SQL": ["创建数据源时发生错误"],
-      "every": ["任意"],
-      "every month": ["每个月"],
-      "every day of the month": ["每月的每一天"],
-      "day of the month": ["一个月中的天数"],
-      "every day of the week": ["一周的每一天"],
-      "day of the week": ["一周的天数"],
-      "every hour": ["每小时"],
-      "every minute UTC": ["每分钟 UTC"],
+      "every": [""],
+      "every month": ["月"],
+      "every day of the month": ["国家3字母代码"],
+      "day of the month": [""],
+      "every day of the week": [""],
+      "day of the week": [""],
+      "every hour": ["1小时"],
+      "every minute UTC": [""],
       "year": ["年"],
       "month": ["月"],
       "week": ["周"],
@@ -1219,58 +1147,48 @@
       "and": [""],
       "at": [""],
       ":": [""],
-      "minute(s) UTC": ["分钟 UTC"],
-      "Invalid cron expression": ["cron表达式无效"],
-      "Clear": ["清除"],
-      "Sunday": ["星期日"],
-      "Monday": ["星期一"],
-      "Tuesday": ["星期二"],
-      "Wednesday": ["星期三"],
-      "Thursday": ["星期四"],
-      "Friday": ["星期五"],
-      "Saturday": ["星期六"],
-      "January": ["一月"],
-      "February": ["二月"],
-      "March": ["三月"],
-      "April": ["四月"],
-      "May": ["五月"],
-      "June": ["六月"],
-      "July": ["七月"],
-      "August": ["八月"],
-      "September": ["九月"],
-      "October": ["十月"],
-      "November": ["十一月"],
-      "December": ["十二月"],
-      "SUN": ["星期日"],
-      "MON": ["星期一"],
-      "TUE": ["星期二"],
-      "WED": ["星期三"],
-      "THU": ["星期四"],
-      "FRI": ["星期五"],
-      "SAT": ["星期六"],
-      "JAN": ["一月"],
-      "FEB": ["二月"],
-      "MAR": ["三月"],
-      "APR": ["四月"],
-      "MAY": ["五月"],
-      "JUN": ["六月"],
-      "JUL": ["七月"],
-      "AUG": ["八月"],
-      "SEP": ["九月"],
-      "OCT": ["十月"],
-      "NOV": ["十一月"],
-      "DEC": ["十二月"],
-      "OK": ["确认"],
-      "Certified by %s": ["认证人 %s"],
-      "Error while fetching schema list": ["获取schema列表时出错"],
-      "Error while fetching database list": ["获取数据库列表时出错"],
-      "Database:": ["数据库："],
-      "Select a database": ["选择一个数据库"],
-      "Force refresh schema list": ["强制刷新数据"],
-      "Select a schema (%s)": ["选择一个schema（%s）"],
-      "Schema:": [""],
-      "datasource": ["数据源"],
-      "schema": ["模式"],
+      "minute(s) UTC": ["5分钟"],
+      "Invalid cron expression": [""],
+      "Clear": [""],
+      "Sunday": [""],
+      "Monday": [""],
+      "Tuesday": [""],
+      "Wednesday": [""],
+      "Thursday": [""],
+      "Friday": [""],
+      "Saturday": [""],
+      "January": [""],
+      "February": [""],
+      "March": ["搜索"],
+      "April": [""],
+      "May": ["天"],
+      "June": [""],
+      "July": [""],
+      "August": [""],
+      "September": [""],
+      "October": [""],
+      "November": [""],
+      "December": [""],
+      "SUN": [""],
+      "MON": [""],
+      "TUE": [""],
+      "WED": [""],
+      "THU": [""],
+      "FRI": [""],
+      "SAT": [""],
+      "JAN": [""],
+      "FEB": [""],
+      "MAR": [""],
+      "APR": [""],
+      "MAY": [""],
+      "JUN": [""],
+      "JUL": ["URL 地址"],
+      "AUG": [""],
+      "SEP": [""],
+      "OCT": [""],
+      "NOV": [""],
+      "DEC": [""],
+      "OK": [""],
       "Click to see difference": ["点击查看差异"],
       "Altered": ["已更改"],
       "Chart changes": ["图表变化"],
@@ -1280,11 +1198,21 @@
       "Loaded data cached": ["数据缓存已加载"],
       "Loaded from cache": ["从缓存中加载"],
       "Click to force-refresh": ["点击强制刷新"],
-      "cached": ["已缓存"],
+      "cached": ["缓存于%s"],
+      "Certified by %s": ["认证人 %s"],
       "Copy to clipboard": ["复制到剪贴板"],
       "Sorry, your browser does not support copying. Use Ctrl / Cmd + C!": [
         "抱歉，您的浏览器不支持复制操作。使用 Ctrl / Cmd + C！"
       ],
+      "Error while fetching schema list": ["获取schema列表时出错"],
+      "Error while fetching database list": ["获取数据库列表时出错"],
+      "Database:": ["数据库："],
+      "Select a database": ["选择一个数据库"],
+      "Force refresh schema list": ["强制刷新数据"],
+      "Select a schema (%s)": ["选择一个schema（%s）"],
+      "Schema:": [""],
+      "datasource": ["数据源"],
+      "schema": ["模式"],
       "delete": ["删除"],
       "Type \"%s\" to confirm": [""],
       "DELETE": [""],
@@ -1293,51 +1221,48 @@
         "你没有权利改变这个标题。"
       ],
       "Unexpected error": ["意外错误。"],
-      "This may be triggered by:": ["这可能由以下因素触发："],
-      "Please reach out to the Chart Owner for assistance.": [
-        "请联系图表所有者寻求帮助。"
-      ],
-      "Chart Owner: %s": ["图表所有者：%s"],
-      "%s Error": ["%s 异常"],
-      "See more": ["查看更多"],
-      "See less": ["查看更少"],
-      "Copy message": ["复制信息"],
-      "Close": ["关闭"],
-      "This was triggered by:": ["这是由以下因素引发的："],
-      "Did you mean:": ["您的意思是："],
-      "%(suggestion)s instead of \"%(undefinedParameter)s?\"": [
-        "用 %(suggestion)s 替换 \"%(undefinedParameter)s\" 吗？"
-      ],
-      "Parameter error": ["参数错误"],
+      "Click to favorite/unfavorite": ["点击 收藏/取消收藏"],
+      "An error occurred while fetching dashboards": ["创建数据源时发生错误"],
+      "Error while fetching table list": ["获取表列表时出错"],
+      "Select table or type table name": [""],
+      "Type to search ...": ["键入搜索 ..."],
+      "Select table ": ["选择表"],
+      "Force refresh table list": ["强制刷新数据"],
+      "See table schema": ["选择表"],
+      "%s%s": ["%s%s"],
+      "Share dashboard": ["保存仪表板"],
+      "This may be triggered by:": [""],
+      "Please reach out to the Chart Owner for assistance.": [""],
+      "Chart Owner: %s": ["图表选项"],
+      "%s Error": ["异常"],
+      "See more": [""],
+      "See less": [""],
+      "Copy message": ["告警信息"],
+      "Close": [""],
+      "This was triggered by:": [""],
+      "Did you mean:": [""],
+      "%(suggestion)s instead of \"%(undefinedParameter)s?\"": [""],
+      "Parameter error": ["参数"],
       "We’re having trouble loading this visualization. Queries are set to timeout after %s second.": [
         "可视化查询超时设置为  ${action.timeout} 秒。"
       ],
       "We’re having trouble loading these results. Queries are set to timeout after %s second.": [
         ""
       ],
-      "Timeout error": ["超时错误"],
-      "Click to favorite/unfavorite": ["点击 收藏/取消收藏"],
-      "Cell content": ["单元格内容"],
-      "The import was successful": ["导入成功"],
-      "OVERWRITE": ["覆盖"],
-      "Overwrite": ["覆盖"],
+      "Timeout error": [""],
+      "Cell content": ["创建内容"],
+      "The import was successful": ["未成功"],
+      "OVERWRITE": [""],
+      "Overwrite": ["覆盖切片 %s"],
       "Import": ["导入"],
-      "Import %s": ["导入 %s"],
-      "Last Updated %s": ["上次更新 %s"],
-      "Sort:": ["排序:"],
-      "%s Selected": ["%s 已选定"],
-      "Deselect all": ["反选所有"],
-      "%s-%s of %s": ["%s-%s 总计 %s"],
-      "Settings": ["设置"],
-      "About": ["关于"],
-      "SQL query": ["SQL查询"],
-      "Error while fetching table list": ["获取表列表时出错"],
-      "Select table or type table name": ["选择表或输入表名"],
-      "Type to search ...": ["输入搜索条件 ..."],
-      "Select table ": ["选择表"],
-      "Force refresh table list": ["强制刷新数据"],
-      "See table schema": ["选择表"],
-      "%s%s": ["%s%s"],
+      "Import %s": ["导入"],
+      "Last Updated %s": [""],
+      "%s Selected": ["运行选定的查询"],
+      "Deselect all": ["选择表"],
+      "%s-%s of %s": [""],
+      "Settings": ["GeoJson设置"],
+      "About": [""],
+      "SQL query": ["保存查询"],
       "There is not enough space for this component. Try decreasing its width, or increasing the destination width.": [
         ""
       ],
@@ -1397,20 +1322,20 @@
       "You do not have permission to edit this dashboard": [
         "你不能访问这个数据源"
       ],
-      "A valid color scheme is required": ["需要有效的配色方案"],
-      "The dashboard has been saved": ["该看板已成功保存。"],
+      "A valid color scheme is required": [""],
+      "The dashboard has been saved": ["该仪表板已成功保存。"],
+      "Apply": [""],
+      "Dashboard properties": ["编辑这个仪表板的属性"],
+      "Basic information": ["额外的元数据"],
+      "URL slug": ["Slug"],
+      "A readable URL for your dashboard": ["为看板生成一个可读的 URL"],
       "Access": ["访问"],
       "Owners is a list of users who can alter the dashboard. Searchable by name or username.": [
         "“所有者”是一组可以修改看板的用户列表。"
       ],
       "Colors": ["颜色"],
-      "Apply": ["应用"],
-      "Dashboard properties": ["看板属性"],
-      "Basic information": ["基本情况"],
-      "URL slug": ["使用 Slug"],
-      "A readable URL for your dashboard": ["为看板生成一个可读的 URL"],
-      "Advanced": ["进阶"],
-      "JSON metadata": ["JSON 元数据"],
+      "Advanced": ["高级"],
+      "JSON metadata": ["JSON 模板"],
       "This dashboard is not published, it will not show up in the list of dashboards. Click here to publish this dashboard.": [
         ""
       ],
@@ -1452,7 +1377,7 @@
       "Maximize chart": ["最大化"],
       "Force refresh": ["强制刷新"],
       "Toggle chart description": ["切换图表说明"],
-      "View chart in Explore": ["查看图表"],
+      "View chart in Explore": ["覆盖切片 %s"],
       "Export CSV": ["导出 CSV"],
       "Applied Filters (%d)": ["增加过滤条件"],
       "Incompatible Filters (%d)": [""],
@@ -1476,44 +1401,36 @@
       "Header": ["标题行"],
       "Row": [""],
       "Tabs": [""],
-      "Preview": ["预览"],
-      "Sorry, your browser does not support copying.": [
-        "抱歉，您的浏览器不支持复制操作。使用 Ctrl / Cmd + C！"
-      ],
-      "Sorry, something went wrong. Try again later.": [""],
-      "Select parent filters": ["选择父级过滤"],
-      "All Filters (${filterValues.length})": [""],
-      "Filter Sets (${filterSetFilterValues.length})": [""],
-      "This filter set is identical to: \"%s\"": [""],
-      "Rebuild": [""],
-      "This filter doesn't exist in dashboard. It will not be applied.": [""],
-      "Filter metadata changed in dashboard. It will not be applied.": [""],
-      "None": ["空"],
-      "Add filter": ["增加过滤条件"],
-      "(Removed)": ["(已删除)"],
-      "Undo?": ["撤消？"],
+      "Preview": ["预览 %s"],
+      "Yes, cancel": [""],
+      "Keep editing": [""],
+      "Select parent filters": ["选择结束日期"],
+      "Reset all": ["状态重置"],
+      "You have removed this filter.": [""],
+      "Restore filter": ["结果筛选"],
       "Filter name": ["过滤值"],
-      "Name is required": ["需要名称"],
-      "Datasource is required": ["需要数据源"],
-      "Parent filter": ["父级过滤"],
-      "Apply changes instantly": ["立即应用更改"],
-      "You have removed this filter.": ["您已删除此过滤条件。"],
-      "Scoping": ["范围"],
-      "Apply to all panels": ["应用于所有面板"],
-      "Apply to specific panels": ["应用于特定面板"],
-      "Only selected panels will be affected by this filter": [
-        "只有选定的面板将受此过滤条件的影响"
-      ],
-      "All panels with this column will be affected by this filter": [
-        "包含此列的所有面板都将受到此过滤条件的影响"
-      ],
-      "Yes, cancel": ["是的，取消"],
-      "Keep editing": ["继续编辑"],
-      "Are you sure you want to cancel?": ["您确定要取消吗？"],
-      "will not be saved.": ["不会被保存。"],
-      "All filters": ["所有过滤"],
-      "All charts": ["所有图表"],
-      "Tab title": [""],
+      "Name is required": [""],
+      "Datasource is required": ["数据源"],
+      "Field": [""],
+      "Parent filter": ["日期过滤器"],
+      "None": [""],
+      "Apply changes instantly": [""],
+      "Allow multiple selections": [""],
+      "Inverse selection": [""],
+      "Required": [""],
+      "Scoping": [""],
+      "Apply to all panels": [""],
+      "Apply to specific panels": [""],
+      "Only selected panels will be affected by this filter": [""],
+      "All panels with this column will be affected by this filter": [""],
+      "Are you sure you want to cancel?": [""],
+      "will not be saved.": [""],
+      "Filter configuration and scoping": ["配置Layer"],
+      "Add filter": ["增加过滤条件"],
+      "(Removed)": [""],
+      "Undo?": [""],
+      "All filters": ["过滤"],
+      "All charts": ["没有图表"],
       "Warning! Changing the dataset may break the chart if the metadata does not exist.": [
         ""
       ],
@@ -1566,13 +1483,10 @@
       "The duration of time in seconds before the cache is invalidated": [
         "终止缓存前的时间（秒）"
       ],
-      "Hours offset": ["小时偏移"],
-      "The number of hours, negative or positive, to shift the time column. This can be used to move UTC time to local time.": [
-        ""
-      ],
-      "Spatial": ["空间"],
-      "virtual": ["虚拟信息"],
-      "Dataset name": ["数据集名称"],
+      "Hours offset": [""],
+      "Spatial": [""],
+      "virtual": [""],
+      "Dataset name": ["数据库名称"],
       "When specifying SQL, the datasource acts as a view. Superset will use this statement as a subquery while grouping and filtering on the generated parent queries.": [
         ""
       ],
@@ -1603,12 +1517,15 @@
       "The dataset configuration exposed here\n                affects all the charts using this dataset.\n                Be mindful that changing settings\n                here may affect other charts\n                in undesirable ways.": [
         ""
       ],
-      "Are you sure you want to save and apply changes?": [
-        "确实要保存并应用更改吗？"
-      ],
-      "Confirm save": ["确认保存"],
-      "Edit Dataset ": ["编辑数据集"],
-      "Use legacy datasource editor": ["使用旧数据源编辑器"],
+      "Are you sure you want to save and apply changes?": [""],
+      "Confirm save": [""],
+      "Edit Dataset ": ["编辑数据库"],
+      "Use legacy datasource editor": [""],
+      "Time range": ["时间的粒度"],
+      "Time column": ["时间字段"],
+      "Time grain": ["时间的粒度"],
+      "Origin": ["起点"],
+      "Time granularity": ["可视化的时间粒度"],
       "A reference to the [Time] configuration, taking granularity into account": [
         "参考 [时间] 配置，考虑粒度"
       ],
@@ -1673,28 +1590,24 @@
       "description": ["描述"],
       "bolt": ["螺栓"],
       "Changing this control takes effect instantly": ["更改此控件立即生效。"],
-      "Customize": ["定制化配置"],
-      "rows retrieved": ["行被检索到"],
-      "Sorry, An error occurred": ["抱歉，发生错误"],
-      "No data": ["没有数据"],
-      "View samples": ["查看样例"],
-      "New chart": ["新增图表"],
+      "Customize": [""],
+      "rows retrieved": [""],
+      "Sorry, An error occurred": [""],
+      "No data": ["元数据"],
+      "View samples": [""],
+      "Search Metrics & Columns": ["时间序列的列"],
+      "Showing %s of %s": [""],
+      "New chart": ["没有图表"],
       "Edit properties": ["编辑属性"],
       "View query": ["分享查询"],
       "Run in SQL Lab": ["在 SQL 工具箱中公开"],
       "Height": ["高度"],
       "Width": ["宽度"],
-      "Loading...": ["加载中..."],
       "%s - untitled": ["%s  - 无标题"],
       "Edit chart properties": ["编辑图表属性"],
-      "Control labeled ": ["控件名称为 "],
-      "Open Datasource tab": ["打开数据源tab"],
-      "\n                This filter was inherited from the dashboard's context.\n                It won't be saved when saving the chart.\n              ": [
-        "此过滤条件是从看板上下文继承的。保存图表时不会保存。"
-      ],
-      "You do not have permission to edit this chart": [
-        "您没有编辑此图表的权限"
-      ],
+      "Control labeled ": [""],
+      "Open Datasource tab": ["数据库名称"],
+      "You do not have permission to edit this chart": ["您没有权限批准此请求"],
       "The description can be displayed as widget headers in the dashboard view. Supports markdown.": [
         ""
       ],
@@ -1714,13 +1627,8 @@
       "Save as new chart": ["创建新图表"],
       "Save (Overwrite)": ["已保存查询"],
       "Save as ...": ["另存为"],
-      "Chart name": ["图表名称"],
-      "Add to dashboard": ["添加到看板"],
-      "Search Metrics & Columns": ["搜索指标和列"],
-      "Showing %s of %s": ["显示 %s个 总计 %s个"],
-      "This section allows you to configure how to use the slice\n               to generate annotations.": [
-        ""
-      ],
+      "Chart name": ["[图表名称]"],
+      "Add to dashboard": ["添加到新的仪表板"],
       "Display configuration": ["显示配置"],
       "Configure your how you overlay is displayed here.": [
         "配置如何在这里显示您的覆盖。"
@@ -1744,20 +1652,18 @@
       "Max": ["最大值"],
       "Edit dataset": ["编辑数据库"],
       "View in SQL Lab": ["在 SQL 工具箱中公开"],
-      "More dataset related options": ["更多数据集相关选项"],
-      "Missing dataset": ["丢失数据集"],
-      "The dataset linked to this chart may have been deleted.": [
-        "这个图表所链接的数据集可能被删除了。"
+      "More dataset related options": [""],
+      "Superset supports smart date parsing. Strings like `3 weeks ago`, `last sunday`, or `2 weeks from now` can be used.": [
+        ""
       ],
       "Default": ["默认纬度"],
       "(optional) default value for the filter, when using the multiple option, you can use a semicolon-delimited list of options.": [
         ""
       ],
-      "Sort metric": ["排序指标"],
-      "Metric to sort the results by": ["按照指标的结果进行排序"],
-      "Sort ascending": ["升序排序"],
-      "Check for sorting ascending": ["按照升序进行排序"],
-      "Allow multiple selections": ["允许多选"],
+      "Sort metric": ["显示指标"],
+      "Metric to sort the results by": [""],
+      "Sort ascending": ["降序"],
+      "Check for sorting ascending": ["是降序还是升序排序"],
       "Multiple selections allowed, otherwise filter is limited to a single value": [
         ""
       ],
@@ -1765,13 +1671,8 @@
       "By default, each filter loads at most 1000 choices at the initial page load. Check this box if you have more than 1000 filter values and want to enable dynamically searching that loads filter values as users type (may add stress to your database).": [
         ""
       ],
-      "Required": ["必填"],
-      "User must select a value for this filter": [
-        "用户必须给过滤器选择一个值"
-      ],
-      "Filter configuration": ["过滤配置"],
-      "Fixed": ["固定值"],
-      "Based on a metric": ["基于指标"],
+      "User must select a value for this filter": [""],
+      "Filter configuration": ["配置Layer"],
       "Error while fetching data": ["获取数据时出错"],
       "No results found": ["未找到结果"],
       "%s option(s)": ["%s 选项"],
@@ -1789,25 +1690,23 @@
       "This visualization type is not supported.": ["选择可视化类型"],
       "Click to change visualization type": ["选择一个可视化类型"],
       "Select a visualization type": ["选择一个可视化类型"],
-      "Failed to verify select options: %s": ["验证选择选项失败：%s"],
-      "RANGE TYPE": ["范围类型"],
-      "Actual time range": ["实际时间范围"],
-      "CANCEL": ["取消"],
-      "APPLY": ["应用"],
-      "Edit time range": ["编辑时间范围"],
-      "Configure Advanced Time Range ": ["配置进阶时间范围"],
-      "START (INCLUSIVE)": [""],
-      "Start date included in time range": [""],
-      "END (EXCLUSIVE)": [""],
-      "Configure Time Range: Previous...": ["配置时间范围：前一（Previous）.."],
-      "Configure Time Range: Last...": ["配置时间范围：上一（Last）.."],
-      "Configure custom time range": ["配置自定义时间范围"],
-      "Relative quantity": ["相对量"],
-      "Anchor to": ["锚定到"],
-      "NOW": ["现在"],
-      "Date/Time": ["日期/时间"],
-      "Return to specific datetime.": ["返回指定的日期时间。"],
-      "Syntax": ["语法"],
+      "Failed to verify select options: %s": [""],
+      "RANGE TYPE": [""],
+      "Actual time range": [""],
+      "CANCEL": [""],
+      "APPLY": [""],
+      "Edit time range": ["编辑模板参数"],
+      "START": [""],
+      "END": [""],
+      "Configure Time Range: Previous...": [""],
+      "Configure Time Range: Last...": [""],
+      "Configure custom time range": ["编辑模板参数"],
+      "Relative quantity": [""],
+      "Anchor to": [""],
+      "NOW": [""],
+      "Date/Time": ["时间格式"],
+      "Return to specific datetime.": [""],
+      "Syntax": [""],
       "Example": ["例子"],
       "Moves the given set of dates by a specified interval.": [
         "将给定的日期集以指定的间隔进行移动"
@@ -1817,8 +1716,8 @@
       ],
       "Get the last date by the date unit.": ["按日期单位获取最后的日期。"],
       "Get the specify date for the holiday": ["获取指定节假日的日期"],
-      "Simple": ["简单配置"],
-      "Custom SQL": ["自定义SQL"],
+      "Simple": [""],
+      "Custom SQL": [""],
       "No such column found. To filter on a metric, try the Custom SQL tab.": [
         "没有发现这样的列。若要在度量值上筛选，请尝试自定义SQL选项卡。"
       ],
@@ -1827,11 +1726,15 @@
       "To filter on a metric, use Custom SQL tab.": [
         "若要在计量值上筛选，请使用自定义SQL选项卡。"
       ],
+      "%s operator(s)": ["%s 运算符"],
       "Type a value here": ["在这里键入一个值"],
       "Filter value (case sensitive)": [""],
       "choose WHERE or HAVING...": ["选择WHERE或HAVING子句..."],
-      "Filters by columns": ["按列过滤"],
-      "Filters by metrics": ["按指标过滤"],
+      "Filters by columns": ["线列"],
+      "Filters by metrics": ["指标列"],
+      "\n                This filter was inherited from the dashboard's context.\n                It won't be saved when saving the chart.\n              ": [
+        "此过滤条件是从看板上下文继承的。保存图表时不会保存。"
+      ],
       "%s aggregates(s)": ["%s 聚合"],
       "%s saved metric(s)": ["%s 列与计量指标"],
       "Saved": ["保存"],
@@ -1898,7 +1801,6 @@
       "Pandas resample rule": ["Pandas 重新采样的规则"],
       "Method": [""],
       "Pandas resample method": ["Pandas 重新采样的填充方法"],
-      "Chosen non-numeric column": [""],
       "Favorites": ["收藏"],
       "Created content": ["创建内容"],
       "Recent activity": ["近期活动"],
@@ -1929,9 +1831,9 @@
       "Notification method": ["添加注释层"],
       "Execution log": ["操作日志"],
       "Actions": ["操作"],
-      "Bulk select": ["批量选择"],
-      "No %s yet": ["还没有 %s"],
-      "Created by": ["创建人"],
+      "Bulk select": ["选择 %s"],
+      "No %s yet": [""],
+      "Created by": ["创建日期"],
       "An error occurred while fetching created by values: %s": [
         "渲染可视化时发生错误：%s"
       ],
@@ -1941,24 +1843,22 @@
       "${AlertState.error}": [""],
       "${AlertState.noop}": [""],
       "${AlertState.grace}": [""],
-      "Alerts & reports": ["警报和报告"],
-      "Reports": ["报告"],
-      "This action will permanently delete %s.": ["此操作将永久删除 %s 。"],
-      "Delete %s?": ["需要删除 %s 吗？"],
-      "Please confirm": ["请确认"],
-      "Are you sure you want to delete the selected %s?": [
-        "确实要删除选定的 %s 吗？"
-      ],
-      "< (Smaller than)": ["< (小于)"],
-      "> (Larger than)": ["> (大于)"],
-      "<= (Smaller or equal)": ["<= (小于等于)"],
-      ">= (Larger or equal)": [">= (大于等于)"],
-      "== (Is equal)": ["== (等于)"],
-      "!= (Is not equal)": ["!= (不等于)"],
-      "Not null": ["非空"],
-      "30 days": ["30天"],
-      "60 days": ["60天"],
-      "90 days": ["90天"],
+      "Alerts & reports": ["视口"],
+      "Reports": ["视口"],
+      "This action will permanently delete %s.": [""],
+      "Delete %s?": ["删除"],
+      "Please confirm": [""],
+      "Are you sure you want to delete the selected %s?": [""],
+      "< (Smaller than)": [""],
+      "> (Larger than)": [""],
+      "<= (Smaller or equal)": [""],
+      ">= (Larger or equal)": [""],
+      "== (Is equal)": [""],
+      "!= (Is not equal)": [""],
+      "Not null": [""],
+      "30 days": [""],
+      "60 days": [""],
+      "90 days": [""],
       "Add notification method": ["添加注释层"],
       "Add delivery method": [""],
       "Recipients are separated by \",\" or \";\"": [""],
@@ -1985,28 +1885,27 @@
       "Duration": ["描述"],
       "Error message": ["告警信息"],
       "${alertResource?.type}": [""],
-      "CRON expression": ["CRON表达式"],
-      "Report sent": ["已发送报告"],
-      "Alert triggered, notification sent": ["警报已触发，通知已发送"],
-      "Report sending": ["报告发送"],
-      "Alert running": ["警报运行"],
-      "Report failed": ["报告失败"],
-      "Alert failed": ["警报失败"],
-      "Nothing triggered": ["无触发"],
-      "Alert Triggered, In Grace Period": ["警报已触发，在宽限期内"],
+      "CRON expression": ["表达式"],
+      "Refer to the ": [""],
+      "crontab guru": [""],
+      " for more information on how to structure your CRON schedule.": [""],
+      "Report sent": ["视口"],
+      "Alert triggered, notification sent": ["添加注释层"],
+      "Report sending": ["降序"],
+      "Alert running": ["测试连接"],
+      "Report failed": ["模板名称"],
+      "Alert failed": ["表名"],
+      "Nothing triggered": [""],
+      "Alert Triggered, In Grace Period": [""],
       "${RecipientIconName.email}": [""],
       "${RecipientIconName.slack}": [""],
-      "annotation": ["注释"],
-      "There was an issue deleting the selected annotations: %s": [
-        "删除所选注释时出现问题：%s"
-      ],
-      "Edit annotation": ["编辑注释"],
-      "Delete annotation": ["删除注释"],
-      "Annotation": ["注释"],
-      "No annotation yet": ["没有注释"],
-      "Annotation Layer ${annotationLayerName}": [
-        "注释层 ${annotationLayerName}"
-      ],
+      "annotation": ["注解"],
+      "There was an issue deleting the selected annotations: %s": [""],
+      "Edit annotation": ["注解"],
+      "Delete annotation": ["注解"],
+      "Annotation": ["注解"],
+      "No annotation yet": ["注解层"],
+      "Annotation Layer ${annotationLayerName}": ["注释层类型"],
       "Are you sure you want to delete ${annotationCurrentlyDeleting?.short_descr}?": [
         ""
       ],
@@ -2045,7 +1944,6 @@
       "There was an issue deleting the selected charts: %s": [""],
       "Modified by": ["已修改"],
       "Owner": ["所有者"],
-      "All": ["所有"],
       "An error occurred while fetching chart owners values: %s": [
         "创建数据源时发生错误"
       ],
@@ -2057,33 +1955,22 @@
         "创建数据源时发生错误"
       ],
       "Favorite": ["收藏"],
-      "Any": ["所有"],
-      "Yes": ["是"],
-      "No": ["否"],
-      "Alphabetical": ["按字母顺序排列"],
-      "Recently modified": ["最近修改"],
-      "Least recently modified": ["最远修改"],
-      "Are you sure you want to delete the selected charts?": [
-        "确实要删除所选图表吗？"
-      ],
-      "css_template": ["css模板"],
-      "Edit CSS template properties": ["编辑CSS属性属性"],
-      "Add CSS template": ["新增CSS模板"],
-      "CSS template name": ["CSS模板名称"],
+      "Yes": [""],
+      "No": [""],
+      "Are you sure you want to delete the selected charts?": [""],
+      "css_template": [""],
+      "Edit CSS template properties": ["编辑属性"],
+      "Add CSS template": ["CSS 模板"],
+      "CSS template name": ["模板名称"],
       "css": [""],
       "CSS templates": ["CSS 模板"],
       "There was an issue deleting the selected templates: %s": [""],
       "Last modified by %s": ["最后修改"],
       "CSS template": ["CSS 模板"],
-      "This action will permanently delete the template.": [
-        "此操作将永久删除模板。"
-      ],
-      "Delete Template?": ["删除模板？"],
-      "Are you sure you want to delete the selected templates?": [
-        "确实要删除选定的模板吗？"
-      ],
-      "published": ["已发布"],
-      "draft": ["草稿"],
+      "This action will permanently delete the template.": [""],
+      "Delete Template?": ["CSS 模板"],
+      "Are you sure you want to delete the selected templates?": [""],
+      "Please Confirm": [""],
       "The passwords for the databases below are needed in order to import them together with the dashboards. Please note that the \"Secure Extra\" and \"Certificate\" sections of the database configuration are not present in export files, and should be added manually after the import if they are needed.": [
         ""
       ],
@@ -2102,11 +1989,9 @@
       "An error occurred while fetching dashboard created by values: %s": [
         "获取表格元数据时发生错误"
       ],
-      "Unpublished": ["未发布"],
-      "Are you sure you want to delete the selected dashboards?": [
-        "确实要删除选定的仪表板吗？"
-      ],
-      "SQL Copied!": ["SQL复制成功！"],
+      "Unpublished": [""],
+      "Are you sure you want to delete the selected dashboards?": [""],
+      "SQL Copied!": ["复制成功！"],
       "The passwords for the databases below are needed in order to import them. Please note that the \"Secure Extra\" and \"Certificate\" sections of the database configuration are not present in export files, and should be added manually after the import if they are needed.": [
         ""
       ],
@@ -2117,53 +2002,40 @@
       "An error occurred while fetching database related data: %s": [
         "获取表格元数据时发生错误"
       ],
-      "Asynchronous query execution": ["异步执行查询"],
       "AQE": [""],
-      "Allow data manipulation language": [""],
+      "Allow Data Manipulation Language": [""],
       "DML": [""],
-      "CSV upload": ["允许Csv上传"],
       "Delete database": ["选择一个数据库"],
       "The database %s is linked to %s charts that appear on %s dashboards. Are you sure you want to continue? Deleting the database will break those objects.": [
         ""
       ],
-      "Delete Database?": ["确定删除数据库？"],
-      "Please enter a SQLAlchemy URI to test": ["请输入要测试的SQLAlchemy URI"],
+      "Delete Database?": ["选择一个数据库"],
+      "Please enter a SQLAlchemy URI to test": ["请输入切片名称"],
+      "Connection looks good!": [""],
+      "ERROR: Connection failed. ": [""],
       "Sorry there was an error fetching database information: %s": [
         "抱歉，这个仪表板在获取图表时发生错误："
       ],
-      "Edit database": ["编辑数据库"],
-      "Add database": ["添加数据库"],
       "Connection": ["测试连接"],
-      "Database name": ["数据库名称"],
       "Name your dataset": [""],
       "dialect+driver://username:password@host:port/database": [""],
-      "Test connection": ["测试连接"],
-      "Refer to the ": ["参考 "],
-      " for more information on how to structure your URI.": [
-        " 来查询有关如何构造URI的更多信息。"
-      ],
-      "Performance": ["性能"],
-      "Chart cache timeout": ["图表缓存超时"],
+      "SQLAlchemy docs": ["SQLAlchemy URI"],
+      " for more information on how to structure your URI.": [""],
+      "Performance": [""],
       "Operate the database in asynchronous mode, meaning that the queries are executed on remote workers as opposed to on the web server itself. This assumes that you have a Celery worker setup as well as a results backend. Refer to the installation docs for more information.": [
         "以异步模式操作数据库，这意味着查询是在远程工作人员上执行的，而不是在web服务器本身上执行的, 这假设您有一个Celery worker setup以及一个结果后端。有关更多信息，请参考安装文档。"
       ],
-      "SQL Lab settings": ["SQL Lab 设置"],
-      "Allow this database to be queried in SQL Lab": [""],
-      "Allow creation of new tables based on queries": [""],
-      "Allow creation of new views based on queries": [""],
-      "Allow manipulation of the database using non-SELECT statements such as UPDATE, DELETE, CREATE, etc.": [
+      "Allow users to run non-SELECT statements (UPDATE, DELETE, CREATE, ...)": [
         ""
       ],
-      "Allow multi schema metadata fetch": [""],
-      "CTAS schema": ["CTAS 模式"],
       "When allowing CREATE TABLE AS option in SQL Lab, this option forces the table to be created in this schema.": [
         "当在 SQL 编辑器中允许 CREATE TABLE AS 选项时，此选项可以此模式中强制创建表"
       ],
-      "Secure extra": ["安全"],
       "JSON string containing additional connection configuration.": [""],
       "This is used to provide connection information for systems like Hive, Presto, and BigQuery, which do not conform to the username:password syntax normally used by SQLAlchemy.": [
         ""
       ],
+      "Root Certificate": [""],
       "Optional CA_BUNDLE contents to validate HTTPS requests. Only available on certain database engines.": [
         ""
       ],
@@ -2171,7 +2043,6 @@
       "If Presto, all the queries in SQL Lab are going to be executed as the currently logged on user who must have permission to run them. If Hive and hive.server2.enable.doAs is enabled, will run the queries as service account, but impersonate the currently logged on user via hive.server2.proxy.user property.": [
         "如果使用Presto，SQL 工具箱中的所有查询都将被当前登录的用户执行，并且这些用户必须拥有运行它们的权限。<br/>如果启用 Hive 和hive.server2.enable.doAs，将作为服务帐户运行查询，但会根据hive.server2.proxy.user的属性伪装当前登录用户。"
       ],
-      "Allow data upload": ["允许Csv上传"],
       "If selected, please set the schemas allowed for data upload in Extra.": [
         "如果选择，请额外设置csv上传允许的模式。"
       ],
@@ -2191,7 +2062,7 @@
       "5. The allows_virtual_table_explore field is a boolean specifying whether or not the Explore button in SQL Lab results is shown.": [
         ""
       ],
-      "Add dataset": ["添加数据集"],
+      "Error while saving dataset: %s": ["获取数据库列表时出错"],
       "The passwords for the databases below are needed in order to import them together with the datasets. Please note that the \"Secure Extra\" and \"Certificate\" sections of the database configuration are not present in export files, and should be added manually after the import if they are needed.": [
         ""
       ],
@@ -2204,8 +2075,6 @@
       "An error occurred while fetching dataset related data: %s": [
         "获取表格元数据时发生错误"
       ],
-      "Physical dataset": ["选择数据源"],
-      "Virtual dataset": ["编辑数据库"],
       "An error occurred while fetching dataset owner values: %s": [
         "创建数据源时发生错误"
       ],
@@ -2230,37 +2099,34 @@
       "Offline": [""],
       "Scheduled": [""],
       "Duration: %s": [""],
-      "Tab name": ["表名"],
       "TABLES": [""],
       "Rows": ["跳过行"],
       "Open query in SQL Lab": ["在 SQL 工具箱中公开"],
       "An error occurred while fetching database values: %s": [
         "创建数据源时发生错误"
       ],
-      "Time range": ["时间范围"],
-      "Search by query text": ["按查询文本搜索"],
-      "Query preview": ["查询预览"],
-      "Previous": ["之前"],
-      "Next": ["之后"],
-      "Open in SQL Lab": ["在 SQL 工具箱中打开"],
-      "User query": ["用户查询"],
-      "Executed query": ["已执行查询"],
-      "Saved queries": ["已保存查询"],
+      "Search by query text": [""],
+      "Previous": ["预览 %s"],
+      "Next": [""],
+      "Open in SQL Lab": ["在 SQL 工具箱中公开"],
+      "User query": ["分享查询"],
+      "Executed query": ["运行选定的查询"],
       "There was an issue previewing the selected query %s": [""],
       "Link Copied!": ["复制成功！"],
       "There was an issue deleting the selected queries: %s": [""],
+      "Query preview": ["数据预览"],
       "Edit query": ["查询为空？"],
       "Copy query URL": ["查询为空？"],
       "Delete query": ["删除"],
       "This action will permanently delete the saved query.": [""],
       "Delete Query?": ["运行选定的查询"],
       "Are you sure you want to delete the selected queries?": [""],
-      "Query name": ["国家的名字"],
       "Edited": ["编辑"],
       "Created": ["创建日期"],
       "Viewed": [""],
       "Examples": [""],
       "Mine": [""],
+      "View All »": [""],
       "Recently viewed charts, dashboards, and saved queries will appear here": [
         ""
       ],
@@ -2273,41 +2139,25 @@
       "Recently edited charts, dashboards, and saved queries will appear here": [
         ""
       ],
-      "${tableName\n                      .split('')\n                      .slice(0, tableName.length - 1)\n                      .join('')}\n                    ": [
+      "${tableName\n                        .split('')\n                        .slice(0, tableName.length - 1)\n                        .join('')}\n                    ": [
         ""
       ],
-      "You don't have any favorites yet!": ["您还没有任何的收藏！"],
-      "SQL Lab queries": ["SQL工具箱查询"],
+      "You don't have any favorites yet!": ["你没有授权 "],
+      "${tableName}": ["表名"],
       "query": ["查询"],
       "Share": ["分享查询"],
       "Last run %s": [""],
       "Recents": [""],
       "Select start and end date": ["选择开始时间"],
       "Type or Select [%s]": ["选择 [%s]"],
-      "Filter box": ["筛选盒"],
-      "Filters configuration": ["配置Layer"],
       "Filter configuration for the filter box": [""],
-      "Date filter": ["日期过滤器"],
       "Whether to include a time filter": ["是否包含时间过滤器"],
-      "Instant filtering": ["即时过滤"],
       "Check to apply filters instantly as they change instead of displaying [Apply] button": [
         ""
       ],
-      "Show SQL granularity dropdown": ["显示SQL Granularity Dropdown"],
-      "Check to include SQL granularity dropdown": ["检查是否包含SQL粒度下拉"],
-      "Show SQL time column": ["显示SQL时间列"],
-      "Check to include time column dropdown": ["检查包含时间列 Dropdown"],
-      "Show Druid granularity dropdown": ["显示 Druid Granularity Dropdown"],
-      "Check to include Druid granularity dropdown": [
-        "检查包含Druid Granularity Dropdown"
-      ],
-      "Show Druid time origin": ["显示Druid原始时间"],
-      "Check to include time origin dropdown": ["检查包含时间原点的下拉列表"],
-      "Limit selector values": ["限制选择器值"],
-      "These filters apply to the values available in the dropdowns": [
-        "这些过滤器应用于下拉列表中的可用值"
-      ],
-      "Time-series Table": ["时间序列-表格"]
+      "Limit Selector Values": [""],
+      "These filters apply to the values available in the dropdowns": [""],
+      "Time-series Table": ["时间序列表"]
     }
   }
 }

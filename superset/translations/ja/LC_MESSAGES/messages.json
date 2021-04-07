@@ -156,6 +156,10 @@
       "Time Series - Paired t-test": [""],
       "Time Series - Nightingale Rose Chart": ["時系列 - 折れ線グラフ"],
       "Partition Diagram": [""],
+      "Choose either fields to [Group By] and [Metrics] and/or [Percentage Metrics], or [Columns], not both": [
+        ""
+      ],
+      "Box Plot": [""],
       "Deleted %(num)d annotation layer": [""],
       "All Text": [""],
       "Deleted %(num)d annotation": [""],
@@ -192,13 +196,8 @@
         ""
       ],
       "`width` must be greater or equal to 0": [""],
-      "`row_limit` must be greater than or equal to 0": [""],
       "`row_offset` must be greater than or equal to 0": [""],
       "There are associated alerts or reports: %s,": [""],
-      "Time string is unclear. Please specify [%(human_readable)s ago] or [%(human_readable)s later].": [
-        ""
-      ],
-      "Cannot parse time string [%(human_readable)s]": [""],
       "Database does not exist": [""],
       "Dashboards do not exist": ["ダッシュボード"],
       "Datasource type is required when datasource_id is given": [""],
@@ -301,8 +300,6 @@
       ],
       "Empty query?": [""],
       "Metric '%(metric)s' does not exist": [""],
-      "Filter value list cannot be empty": [""],
-      "Must specify a value for filters with comparison operators": [""],
       "Invalid filter operation type: %(op)s": [""],
       "Error in jinja expression in WHERE clause: %(msg)s": [""],
       "Error in jinja expression in HAVING clause: %(msg)s": [""],
@@ -407,7 +404,10 @@
       "Import dashboard failed for an unknown reason": [""],
       "No data in file": [""],
       "Table name undefined": ["テーブル名"],
-      "Invalid connection string, a valid string usually follows: driver://user:password@database-host/database-name": [
+      "Invalid connection string, a valid string usually follows: dirver://user:password@database-host/database-name": [
+        ""
+      ],
+      "SQLite database cannot be used as a data source for security reasons.": [
         ""
       ],
       "Field cannot be decoded by JSON. %(msg)s": [""],
@@ -452,11 +452,6 @@
       "Dataset(s) could not be bulk deleted.": [""],
       "Changing this dataset is forbidden": [""],
       "Import dataset failed for an unknown reason": [""],
-      "Original value": [""],
-      "Week starting sunday": [""],
-      "Week starting monday": [""],
-      "Week ending saturday": [""],
-      "Week_ending sunday": [""],
       "Unknown Presto Error": [""],
       "We can't seem to resolve the column \"%(column_name)s\" at line %(location)s.": [
         ""
@@ -505,20 +500,13 @@
         ""
       ],
       "%(prefix)s %(title)s": [""],
-      "\n            *%(name)s*\n\n            Error: %(text)s\n            ": [
+      "\n            *%(name)s*\n\n            <%(url)s|Explore in Superset>\n            ": [
         ""
       ],
-      "\n                *%(name)s*\n\n                <%(url)s|Explore in Superset>\n                ": [
-        ""
-      ],
-      "%(dialect)s cannot be used as a data source for security reasons.": [""],
       "\n        *%(name)s*\n\n        <%(url)s|Explore in Superset>\n        ": [
         ""
       ],
       "<b><a href=\"%(url)s\">Explore in Superset</a></b><p></p>": [""],
-      "\n            <b><a href=\"%(url)s\">Explore in Superset</a></b><p></p>\n            <img src=\"cid:%(msgid)s\">\n            ": [
-        ""
-      ],
       "%(name)s.csv": [""],
       "\n        *%(slice_name)s*\n\n        <%(slice_url_user_friendly)s|Explore in Superset>\n        ": [
         ""
@@ -553,7 +541,7 @@
       "[Superset] Access to the datasource %(name)s was granted": [
         "[Superset]　データソース　%(name)s へのアクセスは許可されました"
       ],
-      "Unable to find such a holiday: [%(holiday)s]": [""],
+      "Unable to find such a holiday: [{}]": [""],
       "Referenced columns not available in DataFrame.": [""],
       "Column referenced by aggregate is undefined: %(column)s": [""],
       "Operator undefined for aggregator: %(name)s": [""],
@@ -567,10 +555,6 @@
       "Invalid geohash string": [""],
       "Invalid longitude/latitude": [""],
       "Invalid geodetic string": [""],
-      "Column \"%(column)s\" is not numeric or does not exists in the query results.": [
-        ""
-      ],
-      "`rename_columns` must have the same length as `columns`.": [""],
       "`fbprophet` package not installed": [""],
       "Time grain missing": ["時間単位"],
       "Unsupported time grain: %(time_grain)s": [""],
@@ -598,9 +582,6 @@
         ""
       ],
       "A SQL statement that defines whether the alert should get triggered or not. The query is expected to return either NULL or a number value.": [
-        ""
-      ],
-      "This feature is deprecated and will be removed on 2.0. Take a look at the replacement feature <a href='https://superset.apache.org/docs/installation/alerts-reports'>Alerts & Reports documentation</a>": [
         ""
       ],
       "annotation start time or end time is required.": [""],
@@ -893,6 +874,10 @@
       "dttm": [""],
       "Add item": ["フィルターを追加"],
       "The query couldn't be loaded": [""],
+      "Your query was saved": ["クエリは保存されました"],
+      "Your query could not be saved": ["クエリを保存できませんでした"],
+      "Your query was updated": ["クエリは保存されました"],
+      "Your query could not be updated": ["クエリを保存できませんでした"],
       "Your query has been scheduled. To see details of your query, navigate to Saved queries": [
         ""
       ],
@@ -940,10 +925,6 @@
       "An error occurred while setting the tab title. Please contact your administrator.": [
         ""
       ],
-      "Your query was saved": ["クエリは保存されました"],
-      "Your query could not be saved": ["クエリを保存できませんでした"],
-      "Your query was updated": ["クエリは保存されました"],
-      "Your query could not be updated": ["クエリを保存できませんでした"],
       "An error occurred while storing your query in the backend. To avoid losing your changes, please save your query using the \"Save Query\" button.": [
         ""
       ],
@@ -977,7 +958,6 @@
       "Creating a data source and creating a new tab": [""],
       "An error occurred": [""],
       "Explore the result set in the data exploration view": [""],
-      "Explore": ["チャートを見る"],
       "This query took %s seconds to run, ": [""],
       "and the explore view times out at %s seconds ": [""],
       "following this flow will most likely lead to your query timing out. ": [
@@ -992,10 +972,11 @@
       "cannot be used as a column name. The column name/alias \"__timestamp\"\n          is reserved for the main temporal expression, and column aliases ending with\n          double underscores followed by a numeric value (e.g. \"my_col__1\") are reserved\n          for deduplicating duplicate column names. Please use aliases to rename the\n          invalid column names.": [
         ""
       ],
-      "Source SQL": [""],
       "Raw SQL": [""],
+      "Source SQL": [""],
       "SQL": [""],
       "No query history yet...": [""],
+      "It seems you don't have access to any database": [""],
       "An error occurred when refreshing queries": [""],
       "Filter by user": ["フィルタ値"],
       "Filter by database": ["データベースリンクを編集"],
@@ -1053,7 +1034,9 @@
       "Stop query": ["クエリを保存"],
       "Schedule the query periodically": [""],
       "You must run the query successfully first": [""],
-      "Autocomplete": [""],
+      "It appears that the number of rows in the query results displayed\n           was limited on the server side to\n           the %s limit.": [
+        ""
+      ],
       "CREATE TABLE AS": [""],
       "CREATE VIEW AS": [""],
       "Estimate the cost before running a query": [""],
@@ -1066,8 +1049,6 @@
       "Hide tool bar": [""],
       "Close all other tabs": [""],
       "Duplicate tab": [""],
-      "New tab (Ctrl + q)": [""],
-      "New tab (Ctrl + t)": [""],
       "Copy partition query to clipboard": [""],
       "latest partition:": [""],
       "Keys for table": [""],
@@ -1080,6 +1061,10 @@
       "Show CREATE VIEW statement": [""],
       "CREATE VIEW statement": [""],
       "Remove table preview": [""],
+      "Assign a set of parameters as": [""],
+      "below (example:": [""],
+      "), and they become available in your SQL (example:": [""],
+      ") by using": [""],
       "Edit template parameters": [""],
       "Invalid JSON": [""],
       "Create a new chart": ["作成したもの"],
@@ -1090,6 +1075,7 @@
       "Choose a visualization type": ["可視化タイプを選んでください"],
       "Create new chart": ["作成したもの"],
       "An error occurred while loading the SQL": [""],
+      "Updating chart was stopped": [""],
       "every": [""],
       "every month": ["月"],
       "every day of the month": [""],
@@ -1153,16 +1139,6 @@
       "NOV": [""],
       "DEC": [""],
       "OK": [""],
-      "Certified by %s": [""],
-      "Error while fetching schema list": [""],
-      "Error while fetching database list": [""],
-      "Database:": [""],
-      "Select a database": [""],
-      "Force refresh schema list": [""],
-      "Select a schema (%s)": [""],
-      "Schema:": [""],
-      "datasource": ["データソース"],
-      "schema": ["スキーマ"],
       "Click to see difference": [""],
       "Altered": [""],
       "Chart changes": ["最終更新日"],
@@ -1175,9 +1151,16 @@
       "Loaded from cache": [""],
       "Click to force-refresh": [""],
       "cached": [""],
+      "Certified by %s": [""],
       "Copy to clipboard": [""],
-      "Copied to clipboard!": [""],
+      "Copied!": [""],
       "Sorry, your browser does not support copying. Use Ctrl / Cmd + C!": [""],
+      "Error while fetching schema list": [""],
+      "Force refresh schema list": [""],
+      "Select a schema (%s)": [""],
+      "Schema:": [""],
+      "datasource": ["データソース"],
+      "schema": ["スキーマ"],
       "delete": ["削除"],
       "Type \"%s\" to confirm": [""],
       "DELETE": [""],
@@ -1284,11 +1267,11 @@
       "Basic information": [""],
       "URL slug": [""],
       "A readable URL for your dashboard": ["保存してダッシュボードに移動"],
-      "Access": [""],
+      "Access": ["アクセス"],
       "Owners is a list of users who can alter the dashboard. Searchable by name or username.": [
-        ""
+        "所有者は、ダッシュボードを変更できるユーザーのリストです。名前またはユーザー名で検索可能"
       ],
-      "Colors": [""],
+      "Colors": ["色"],
       "Advanced": [""],
       "JSON metadata": [""],
       "This dashboard is not published, it will not show up in the list of dashboards. Click here to publish this dashboard.": [
@@ -1368,17 +1351,17 @@
       "Allow multiple selections": [""],
       "Inverse selection": [""],
       "Required": [""],
+      "Scoping": [""],
+      "Apply to all panels": [""],
+      "Apply to specific panels": [""],
+      "Only selected panels will be affected by this filter": [""],
+      "All panels with this column will be affected by this filter": [""],
       "Are you sure you want to cancel?": [""],
       "will not be saved.": [""],
       "Filter configuration and scoping": ["フィルタ項目"],
       "Add filter": ["フィルターを追加"],
       "(Removed)": [""],
       "Undo?": [""],
-      "Scoping": [""],
-      "Apply to all panels": [""],
-      "Apply to specific panels": [""],
-      "Only selected panels will be affected by this filter": [""],
-      "All panels with this column will be affected by this filter": [""],
       "All filters": ["フィルター"],
       "All charts": ["チャートを見る"],
       "Warning! Changing the dataset may break the chart if the metadata does not exist.": [
@@ -1430,9 +1413,6 @@
       "Cache timeout": [""],
       "The duration of time in seconds before the cache is invalidated": [""],
       "Hours offset": [""],
-      "The number of hours, negative or positive, to shift the time column. This can be used to move UTC time to local time.": [
-        ""
-      ],
       "Spatial": [""],
       "virtual": [""],
       "Dataset name": ["データソース"],
@@ -1546,8 +1526,6 @@
       "Run in SQL Lab": ["SQLツール"],
       "Height": ["高さ"],
       "Width": ["幅"],
-      "Copy chart URL to clipboard": [""],
-      "Loading...": [""],
       "%s - untitled": [""],
       "Edit chart properties": ["チャートを編集"],
       "Control labeled ": [""],
@@ -1574,11 +1552,6 @@
       "Save as ...": ["別名で保存"],
       "Chart name": ["グラフ様式"],
       "Add to dashboard": ["新しいダッシュボードに追加"],
-      "Search Metrics & Columns": [""],
-      "Showing %s of %s": [""],
-      "This section allows you to configure how to use the slice\n               to generate annotations.": [
-        ""
-      ],
       "Display configuration": [""],
       "Configure your how you overlay is displayed here.": [""],
       "Style": [""],
@@ -1602,6 +1575,9 @@
       "View in SQL Lab": ["SQLツール"],
       "More dataset related options": [""],
       "The dataset linked to this chart may have been deleted.": [""],
+      "Superset supports smart date parsing. Strings like `3 weeks ago`, `last sunday`, or `2 weeks from now` can be used.": [
+        ""
+      ],
       "Default": [""],
       "(optional) default value for the filter, when using the multiple option, you can use a semicolon-delimited list of options.": [
         ""
@@ -1610,7 +1586,6 @@
       "Metric to sort the results by": [""],
       "Sort ascending": [""],
       "Check for sorting ascending": [""],
-      "Allow multiple selections": ["複数の選択を許可する"],
       "Multiple selections allowed, otherwise filter is limited to a single value": [
         ""
       ],
@@ -1618,7 +1593,6 @@
       "By default, each filter loads at most 1000 choices at the initial page load. Check this box if you have more than 1000 filter values and want to enable dynamically searching that loads filter values as users type (may add stress to your database).": [
         ""
       ],
-      "Required": ["必須"],
       "User must select a value for this filter": [""],
       "Filter configuration": ["フィルタ項目"],
       "Error while fetching data": ["データの取得中にエラーが発生しました"],
@@ -1644,9 +1618,7 @@
       "CANCEL": [""],
       "APPLY": [""],
       "Edit time range": [""],
-      "Configure advanced time range": [""],
-      "START": [""],
-      "END": [""],
+      "Configure Advanced Time Range ": [""],
       "Configure Time Range: Previous...": [""],
       "Configure Time Range: Last...": [""],
       "Configure custom time range": [""],
@@ -1654,6 +1626,14 @@
       "Anchor to": [""],
       "NOW": [""],
       "Date/Time": ["開始時間"],
+      "Return to specific datetime.": [""],
+      "Syntax": [""],
+      "Moves the given set of dates by a specified interval.": [""],
+      "Truncates the specified date to the accuracy specified by the date unit.": [
+        ""
+      ],
+      "Get the last date by the date unit.": [""],
+      "Get the specify date for the holiday": [""],
       "Simple": [""],
       "Custom SQL": [""],
       "No such column found. To filter on a metric, try the Custom SQL tab.": [
@@ -1735,8 +1715,6 @@
       "Pandas resample rule": [""],
       "Method": [""],
       "Pandas resample method": [""],
-      "Chosen non-numeric column": [""],
-      "%s option": [""],
       "Favorites": ["お気に入り"],
       "Created content": ["作成したもの"],
       "Recent activity": ["近況"],
@@ -1814,6 +1792,9 @@
       "Error message": [""],
       "${alertResource?.type}": [""],
       "CRON expression": [""],
+      "Refer to the ": [""],
+      "crontab guru": [""],
+      " for more information on how to structure your CRON schedule.": [""],
       "Report sent": ["エクスポート"],
       "Alert triggered, notification sent": [""],
       "Report sending": ["エクスポート"],
@@ -1889,6 +1870,7 @@
       "This action will permanently delete the template.": [""],
       "Delete Template?": ["CSSテンプレート"],
       "Are you sure you want to delete the selected templates?": [""],
+      "Please Confirm": [""],
       "The passwords for the databases below are needed in order to import them together with the dashboards. Please note that the \"Secure Extra\" and \"Certificate\" sections of the database configuration are not present in export files, and should be added manually after the import if they are needed.": [
         ""
       ],
@@ -1913,11 +1895,11 @@
       ],
       "database": ["データベース"],
       "An error occurred while fetching database related data: %s": [""],
-      "Asynchronous query execution": [""],
+      "Asynchronous Query Execution": [""],
       "AQE": [""],
-      "Allow data manipulation language": [""],
+      "Allow Data Manipulation Language": [""],
       "DML": [""],
-      "CSV upload": [""],
+      "CSV Upload": [""],
       "Delete database": ["データベース"],
       "The database %s is linked to %s charts that appear on %s dashboards. Are you sure you want to continue? Deleting the database will break those objects.": [
         ""
@@ -1925,36 +1907,27 @@
       "Delete Database?": ["データベースリンクを編集"],
       "Please enter a SQLAlchemy URI to test": ["スライス名を入力してください"],
       "Connection looks good!": [""],
-      "ERROR: Connection failed. ": [""],
       "Sorry there was an error fetching database information: %s": [""],
-      "Edit database": ["データベースリンクを編集"],
-      "Add database": ["データベースを追加"],
       "Connection": ["アクション"],
-      "Database name": ["データソース"],
       "Name your dataset": [""],
       "dialect+driver://username:password@host:port/database": [""],
-      "Test connection": ["アクション"],
-      "Refer to the ": [""],
+      "SQLAlchemy docs": [""],
       " for more information on how to structure your URI.": [""],
       "Performance": [""],
-      "Chart cache timeout": ["グラフ様式"],
       "Operate the database in asynchronous mode, meaning that the queries are executed on remote workers as opposed to on the web server itself. This assumes that you have a Celery worker setup as well as a results backend. Refer to the installation docs for more information.": [
         ""
       ],
-      "SQL Lab settings": ["SQLツール"],
       "Allow users to run non-SELECT statements (UPDATE, DELETE, CREATE, ...)": [
         ""
       ],
-      "Allow multi schema metadata fetch": [""],
-      "CTAS schema": ["スキーマ"],
       "When allowing CREATE TABLE AS option in SQL Lab, this option forces the table to be created in this schema.": [
         ""
       ],
-      "Secure extra": ["セキュリティー"],
       "JSON string containing additional connection configuration.": [""],
       "This is used to provide connection information for systems like Hive, Presto, and BigQuery, which do not conform to the username:password syntax normally used by SQLAlchemy.": [
         ""
       ],
+      "Root Certificate": [""],
       "Optional CA_BUNDLE contents to validate HTTPS requests. Only available on certain database engines.": [
         ""
       ],
@@ -1962,7 +1935,7 @@
       "If Presto, all the queries in SQL Lab are going to be executed as the currently logged on user who must have permission to run them. If Hive and hive.server2.enable.doAs is enabled, will run the queries as service account, but impersonate the currently logged on user via hive.server2.proxy.user property.": [
         ""
       ],
-      "Allow data upload": [""],
+      "Allow Data Upload": [""],
       "If selected, please set the schemas allowed for data upload in Extra.": [
         ""
       ],
@@ -1985,7 +1958,6 @@
       "Error while saving dataset: %s": [
         "データの取得中にエラーが発生しました"
       ],
-      "Add dataset": ["データベースを追加"],
       "The passwords for the databases below are needed in order to import them together with the datasets. Please note that the \"Secure Extra\" and \"Certificate\" sections of the database configuration are not present in export files, and should be added manually after the import if they are needed.": [
         ""
       ],
@@ -1996,8 +1968,6 @@
         "データの取得中にエラーが発生しました"
       ],
       "An error occurred while fetching dataset related data: %s": [""],
-      "Physical dataset": ["ターゲットを選択"],
-      "Virtual dataset": ["データベースリンクを編集"],
       "An error occurred while fetching dataset owner values: %s": [""],
       "An error occurred while fetching datasets: %s": [
         "データの取得中にエラーが発生しました"
@@ -2020,7 +1990,6 @@
       "Offline": [""],
       "Scheduled": [""],
       "Duration: %s": [""],
-      "Tab name": ["テーブル名"],
       "TABLES": [""],
       "Rows": [""],
       "Open query in SQL Lab": ["新しいタブでクエリを実行"],
@@ -2028,28 +1997,27 @@
         "データの取得中にエラーが発生しました"
       ],
       "Search by query text": [""],
-      "Query preview": ["データプレビュー"],
       "Previous": [""],
       "Next": [""],
       "Open in SQL Lab": ["SQLエディタで開く"],
       "User query": ["クエリを共有"],
       "Executed query": ["選択したクエリを実行"],
-      "Saved queries": ["保存されたクエリ"],
       "There was an issue previewing the selected query %s": [""],
       "Link Copied!": [""],
       "There was an issue deleting the selected queries: %s": [""],
+      "Query preview": ["データプレビュー"],
       "Edit query": ["保存されたクエリの編集"],
       "Copy query URL": [""],
       "Delete query": ["削除"],
       "This action will permanently delete the saved query.": [""],
       "Delete Query?": ["選択したクエリを実行"],
       "Are you sure you want to delete the selected queries?": [""],
-      "Query name": ["クエリ"],
       "Edited": [""],
       "Created": ["作成日"],
       "Viewed": [""],
       "Examples": [""],
       "Mine": [""],
+      "View All »": [""],
       "Recently viewed charts, dashboards, and saved queries will appear here": [
         ""
       ],
@@ -2062,11 +2030,10 @@
       "Recently edited charts, dashboards, and saved queries will appear here": [
         ""
       ],
-      "${tableName\n                      .split('')\n                      .slice(0, tableName.length - 1)\n                      .join('')}\n                    ": [
+      "${tableName\n                        .split('')\n                        .slice(0, tableName.length - 1)\n                        .join('')}\n                    ": [
         ""
       ],
       "You don't have any favorites yet!": [""],
-      "SQL Lab queries": ["SQLツール"],
       "${tableName}": ["テーブル名"],
       "query": ["クエリ"],
       "Share": [""],
@@ -2074,24 +2041,19 @@
       "Recents": [""],
       "Select start and end date": [""],
       "Type or Select [%s]": [""],
-      "Filter box": ["フィルタボックス"],
-      "Filters configuration": ["データソースの設定を編集"],
       "Filter configuration for the filter box": [""],
-      "Date filter": ["フィルターを追加"],
       "Whether to include a time filter": [""],
-      "Instant filtering": ["検索/フィルタ"],
       "Check to apply filters instantly as they change instead of displaying [Apply] button": [
         ""
       ],
-      "Show SQL granularity dropdown": [""],
-      "Check to include SQL granularity dropdown": [""],
-      "Show SQL time column": ["時間列"],
-      "Check to include time column dropdown": [""],
-      "Show Druid granularity dropdown": [""],
-      "Check to include Druid granularity dropdown": [""],
-      "Show Druid time origin": [""],
-      "Check to include time origin dropdown": [""],
-      "Limit selector values": [""],
+      "Show SQL Granularity Dropdown": [""],
+      "Check to include SQL Granularity dropdown": [""],
+      "Check to include Time Column dropdown": [""],
+      "Show Druid Granularity Dropdown": [""],
+      "Check to include Druid Granularity dropdown": [""],
+      "Show Druid Time Origin": [""],
+      "Check to include Time Origin dropdown": [""],
+      "Limit Selector Values": [""],
       "These filters apply to the values available in the dropdowns": [""],
       "Time-series Table": ["時系列 - 積み上げ線グラフ"]
     }
