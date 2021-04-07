@@ -17,7 +17,7 @@
 import json
 import logging
 from datetime import datetime
-from io import BytesIO
+from io import BytesIO, StringIO
 from typing import Any, Dict
 from zipfile import ZipFile
 
@@ -85,7 +85,13 @@ from superset.views.base_api import (
 from superset.views.core import CsvResponse, generate_download_headers
 from superset.views.filters import FilterRelatedOwners
 
+from superset import app
+
+import pandas as pd
+
 logger = logging.getLogger(__name__)
+
+config = app.config
 
 
 class ChartRestApi(BaseSupersetModelRestApi):
@@ -484,7 +490,12 @@ class ChartRestApi(BaseSupersetModelRestApi):
         if result_format == ChartDataResultFormat.CSV:
             # return the first result
             data = result["queries"][0]["data"]
-            return CsvResponse(data, headers=generate_download_headers("csv"))
+            df = pd.read_csv(StringIO(data), sep=',')
+            include_index = not isinstance(df.index, pd.RangeIndex)
+            df = df.to_csv(index=include_index, **config["CSV_EXPORT"],sep=';')
+            
+            
+            return CsvResponse(df, headers=generate_download_headers("csv"))
 
         if result_format == ChartDataResultFormat.JSON:
             response_data = simplejson.dumps(
