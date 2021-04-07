@@ -174,9 +174,6 @@
         "Há um loop em seu Sankey, por favor, forneça uma árvore. Aqui está um link defeituoso: {}"
       ],
       "Directed Force Layout": ["Layout de Força Dirigida"],
-      "Pick exactly 2 columns to 'Group By'": [
-        "Escolha exatamente 2 colunas para 'Agrupar por'"
-      ],
       "Country Map": ["Mapa do País"],
       "World Map": ["Mapa mundial"],
       "Filters": ["Filtros"],
@@ -224,14 +221,6 @@
         "Série temporal - gráfico de rosa de Nightingale"
       ],
       "Partition Diagram": ["Diagrama de Partição"],
-      "Choose either fields to [Group By] and [Metrics] and/or [Percentage Metrics], or [Columns], not both": [
-        "Escolha entre campos para [Group By] e [Metrics] e/ou [Percentage Metrics], ou [Columns], mas não os dois"
-      ],
-      "Box Plot": ["Parcela"],
-      "Distribution - NVD3 - Pie Chart": [
-        "Distribuição - NVD3 - Gráfico de torta"
-      ],
-      "iFrame": ["iFrame"],
       "Deleted %(num)d annotation layer": [
         "%(num)d camada de anotação deletada",
         "%(num)d camadas de anotação deletadas"
@@ -299,15 +288,16 @@
       "`width` must be greater or equal to 0": [
         "`width` deve ser maior ou igual a 0"
       ],
-      "`row_limit` must be greater than or equal to 1": [
-        "`row_limit` deve ser maior ou igual a 1"
-      ],
       "`row_offset` must be greater than or equal to 0": [
         "`row_offset` deve ser superior ou igual a 0"
       ],
       "There are associated alerts or reports: %s,": [
         "Existem alertas ou relatórios associados: %s"
       ],
+      "Time string is unclear. Please specify [%(human_readable)s ago] or [%(human_readable)s later].": [
+        ""
+      ],
+      "Cannot parse time string [%(human_readable)s]": [""],
       "Database does not exist": ["O banco de dados não existe"],
       "Dashboards do not exist": ["Os painéis não existem"],
       "Datasource type is required when datasource_id is given": [
@@ -329,6 +319,9 @@
       ],
       "Owners are invalid": ["Donos inválidos"],
       "Dataset does not exist": ["Fonte de dados não existe"],
+      "Duplicate column/metric labels: %(labels)s. Please make sure all columns and metrics have a unique label.": [
+        ""
+      ],
       "`operation` property of post processing object undefined": [
         "A propriedade `operation` do objeto de pós processamento está indefinida"
       ],
@@ -442,6 +435,8 @@
       ],
       "Empty query?": ["Consulta vazia?"],
       "Metric '%(metric)s' does not exist": ["Métrica '%(metric)s' não existe"],
+      "Filter value list cannot be empty": [""],
+      "Must specify a value for filters with comparison operators": [""],
       "Invalid filter operation type: %(op)s": [
         "Tipo de operação do filtro inválido: %(op)s"
       ],
@@ -593,9 +588,6 @@
       "Invalid connection string, a valid string usually follows: driver://user:password@database-host/database-name": [
         "Texto de conexão inválido, um texto válido geralmente segue: driver://user:password@database-host/database-name"
       ],
-      "SQLite database cannot be used as a data source for security reasons.": [
-        "O banco de dados SQLite não pode ser usado como fonte de dados por razões de segurança."
-      ],
       "Field cannot be decoded by JSON. %(msg)s": [
         "Campo não pode ser decodificado por JSON. %(msg)s"
       ],
@@ -649,6 +641,7 @@
         "%(num)d fontes de dados deletadas"
       ],
       "Null or Empty": ["Nulo ou vazio"],
+      "Dataset %(name)s already exists": ["Fonte de dados %(name)s já existe"],
       "Database not allowed to change": [
         "Não é permitido alterar o banco de dados"
       ],
@@ -686,6 +679,11 @@
       "Import dataset failed for an unknown reason": [
         "A importação do conjunto de dados falhou por razão desconhecida"
       ],
+      "Original value": [""],
+      "Week starting sunday": [""],
+      "Week starting monday": [""],
+      "Week ending saturday": [""],
+      "Week_ending sunday": [""],
       "Unknown Presto Error": ["Erro Presto desconhecido"],
       "We can't seem to resolve the column \"%(column_name)s\" at line %(location)s.": [
         "Não é possível resolver a coluna \"%(column_name)s\" na linha %(location)s."
@@ -790,18 +788,19 @@
       "An error occurred while pruning logs ": [
         "Ocorreu um erro ao otimizar os logs"
       ],
-      "\n            <b><a href=\"%(url)s\">Explore in Superset</a></b><p></p>\n            <img src=\"cid:%(msgid)s\">\n            ": [
-        "\n            <b><a href=\"%(url)s\">Explorar no Superset</a></b><p></p>\n            <img src=\"cid:%(msgid)s\">\n            "
-      ],
+      "\n            Error: %(text)s\n            ": [""],
       "%(prefix)s %(title)s": ["%(prefix)s %(title)s"],
-      "\n            *%(name)s*\n\n            <%(url)s|Explore in Superset>\n            ": [
-        "\n            *%(name)s*\n\n            <%(url)s|Explorar no Superset>\n            "
+      "\n            *%(name)s*\n\n            Error: %(text)s\n            ": [
+        ""
       ],
       "\n        *%(name)s*\n\n        <%(url)s|Explore in Superset>\n        ": [
         "\n        *%(name)s*\n\n        <%(url)s|Explorar no Superset>\n        "
       ],
       "<b><a href=\"%(url)s\">Explore in Superset</a></b><p></p>": [
         "<b><a href=\"%(url)s\">Explorar no Superset</a></b><p></p>"
+      ],
+      "\n            <b><a href=\"%(url)s\">Explore in Superset</a></b><p></p>\n            <img src=\"cid:%(msgid)s\">\n            ": [
+        "\n            <b><a href=\"%(url)s\">Explorar no Superset</a></b><p></p>\n            <img src=\"cid:%(msgid)s\">\n            "
       ],
       "%(name)s.csv": ["%(name)s.csv"],
       "\n        *%(slice_name)s*\n\n        <%(slice_url_user_friendly)s|Explore in Superset>\n        ": [
@@ -839,9 +838,6 @@
       "[Superset] Access to the datasource %(name)s was granted": [
         "[Superset] O acesso à fonte de dados %(name) s foi concedido"
       ],
-      "Unable to find such a holiday: [{}]": [
-        "Não foi possível achar o feriado: [{}]"
-      ],
       "Referenced columns not available in DataFrame.": [
         "Colunas referenciadas não disponível em DataFrame."
       ],
@@ -873,6 +869,10 @@
       "Invalid geohash string": ["Texto geohash inválido"],
       "Invalid longitude/latitude": ["Longitute/latitude inválida"],
       "Invalid geodetic string": ["Texto geodetic inválido"],
+      "Column \"%(column)s\" is not numeric or does not exists in the query results.": [
+        ""
+      ],
+      "`rename_columns` must have the same length as `columns`.": [""],
       "`fbprophet` package not installed": [
         "Pacote `fbprophet` não instalado "
       ],
@@ -916,6 +916,9 @@
       "A SQL statement that defines whether the alert should get triggered or not. The query is expected to return either NULL or a number value.": [
         "Uma instrução SQL que define se um alerta deve ser disparado ou não. É esperado que a consulta retorne NULL ou um valor numérico."
       ],
+      "This feature is deprecated and will be removed on 2.0. Take a look at the replacement feature <a href='https://superset.apache.org/docs/installation/alerts-reports'>Alerts & Reports documentation</a>": [
+        ""
+      ],
       "annotation start time or end time is required.": [
         "Tempo de início ou tempo de fim da anotação é obrigatório."
       ],
@@ -935,7 +938,6 @@
       "Add Annotation Layer": ["Adicionar camada de anotação"],
       "Edit Annotation Layer": ["Editar camada de anotação"],
       "Name": ["Nome"],
-      "Dataset %(name)s already exists": ["Fonte de dados %(name)s já existe"],
       "Table [%{table}s] could not be found, please double check your database connection, schema, and table name, error: {}": [
         "Não foi possível localizar a tabela [%{table}s], por favor revise sua conexão com o banco de dados, esquema e nome da tabela. Erro: {}"
       ],
@@ -970,12 +972,12 @@
       "An unknown error occurred. Please contact your Superset administrator": [
         "Ocorreu um erro desconhecido. Por favor contate seu administrador Superset"
       ],
-      "Error occurred when opening the chart: %(error)s": [""],
       "You don't have the rights to ": ["Você não tem o direito de "],
       "alter this ": ["alterar este"],
       "chart": ["gráfico"],
       "create a ": ["criar um"],
       "Explore - %(table)s": ["Explorar - %(table)s"],
+      "Explore": ["Explorar"],
       "Chart [{}] has been saved": ["Gráfico [{}] foi salvo"],
       "Chart [{}] has been overwritten": ["Gráfico [{}] foi sobrescrito"],
       "dashboard": ["painel"],
@@ -1028,6 +1030,8 @@
       "Add CSS Template": ["Adicionar modelo CSS"],
       "Edit CSS Template": ["Editar modelo CSS"],
       "Template Name": ["Nome do modelo"],
+      "Request missing data field.": [""],
+      "Duplicate column name(s): %(columns)s": [""],
       "A human-friendly name": ["Um nome amigável aos humanos"],
       "Used internally to identify the plugin. Should be set to the package name from the pluginʼs package.json": [
         "Usado internamente para identificar o plugin. Deve ser configurado com o nome do pacote definido no package.json do plugin"
@@ -1066,6 +1070,7 @@
       "End Time": ["Fim do tempo"],
       "Pop Tab Link": ["Remover link da aba"],
       "Changed on": ["Alterado em"],
+      "The dataset associated with this chart no longer exists": [""],
       "Could not determine datasource type": [
         "Não foi possível determinar o tipo da fonte de dados"
       ],
@@ -1099,6 +1104,9 @@
       ],
       "Owners is a list of users who can alter the dashboard.": [
         "Os proprietários são uma lista de usuários que podem alterar o painel."
+      ],
+      "Roles is a list which defines access to the dashboard. These roles are always applied in addition to restrictions on dataset level access. If no roles defined then the dashboard is available to all roles.": [
+        ""
       ],
       "Determines whether or not this dashboard is visible in the list of all dashboards": [
         "Determina se este painel é visível ou não na lista de todos os paineis"
@@ -1383,7 +1391,6 @@
       "Explore the result set in the data exploration view": [
         "Explore os resutados na visão de exploração de dados"
       ],
-      "Explore": ["Explorar"],
       "This query took %s seconds to run, ": [
         "Essa consulta executou em %s segundos, "
       ],
@@ -1404,15 +1411,15 @@
       "cannot be used as a column name. The column name/alias \"__timestamp\"\n          is reserved for the main temporal expression, and column aliases ending with\n          double underscores followed by a numeric value (e.g. \"my_col__1\") are reserved\n          for deduplicating duplicate column names. Please use aliases to rename the\n          invalid column names.": [
         "não pode ser utilizado como um nome de coluna. O nome/alias da coluna \"__timestamp\"\n é reservado para a expressão temporal principal, e alias de coluna terminando com \n duplo underscore seguido por um valor numérico (ex. \"my_col__1\") são reservados para resolver nomes de colunas duplicados. Por favor use alias para renomear os\n nomes de coluna inválidos."
       ],
-      "Raw SQL": ["SQL puro"],
       "Source SQL": ["Fonte SQL"],
+      "Raw SQL": ["SQL puro"],
       "SQL": ["SQL"],
       "No query history yet...": ["Ainda não há histórico de consultas ..."],
-      "It seems you don't have access to any database": [
-        "Parece que você não tem acesso a qualquer banco de dados"
-      ],
       "An error occurred when refreshing queries": [
         "Ocorreu um erro ao atualizar as consultas"
+      ],
+      "It seems you don't have access to any database": [
+        "Parece que você não tem acesso a qualquer banco de dados"
       ],
       "Filter by user": ["Filtrar por usuário"],
       "Filter by database": ["Filtrar por banco de dados"],
@@ -1431,9 +1438,11 @@
       "An error occurred saving dataset": [
         "Ocorreu um erro ao salvar o conjunto de dados"
       ],
-      ".CSV": [".CSV"],
-      "Clipboard": ["Prancheta"],
+      "Download to CSV": [""],
       "Filter results": ["Filtrar resultados"],
+      "It appears that the number of rows in the query results displayed\n           was limited on the server side to\n           the %s limit.": [
+        "Aparentemente o número de linhas apresentado do resultado da consulta\n foi limitado no lado do servidor em %s linhas."
+      ],
       "Database error": ["Erro do banco de dados"],
       "was created": ["foi criado"],
       "Query in a new tab": ["Consulta em uma nova guia"],
@@ -1490,9 +1499,6 @@
       "You must run the query successfully first": [
         "Você deve primeiro executar a consulta com sucesso"
       ],
-      "It appears that the number of rows in the query results displayed\n           was limited on the server side to\n           the %s limit.": [
-        "Aparentemente o número de linhas apresentado do resultado da consulta\n foi limitado no lado do servidor em %s linhas."
-      ],
       "CREATE TABLE AS": ["CREATE TABLE AS"],
       "CREATE VIEW AS": ["CREATE VIEW AS"],
       "Estimate the cost before running a query": [
@@ -1507,6 +1513,8 @@
       "Hide tool bar": ["Esconder barra de ferramentas"],
       "Close all other tabs": ["Fechar todas as outras abas"],
       "Duplicate tab": ["Duplicar aba"],
+      "New tab (Ctrl + q)": [""],
+      "New tab (Ctrl + t)": [""],
       "Copy partition query to clipboard": [
         "Copie a consulta de partição para a área de transferência"
       ],
@@ -1523,14 +1531,6 @@
       "Show CREATE VIEW statement": ["Mostrar instrução CREATE VIEW"],
       "CREATE VIEW statement": ["Instrução CREATE VIEW"],
       "Remove table preview": ["Remover a visualização da tabela"],
-      "Assign a set of parameters as": [
-        "Atribuir um conjunto de parâmetros como"
-      ],
-      "below (example:": ["abaixo (exemplo:"],
-      "), and they become available in your SQL (example:": [
-        "), e eles ficam disponíveis no seu SQL (exemplo:"
-      ],
-      ") by using": [") usando"],
       "Edit template parameters": ["Editar parâmetros de template"],
       "Invalid JSON": ["JSON inválido"],
       "Create a new chart": ["Criar novo gráfico"],
@@ -1543,11 +1543,6 @@
       "An error occurred while loading the SQL": [
         "Ocorreu um erro ao carregar o SQL"
       ],
-      "Updating chart was stopped": ["A atualização do mapa foi interrompida"],
-      "An error occurred while rendering the visualization: %s": [
-        "Ocorreu um erro ao renderizar a visualização: %s"
-      ],
-      "Network error.": ["Erro de rede."],
       "every": ["todo"],
       "every month": ["todo mês"],
       "every day of the month": ["todo dia do mês"],
@@ -1611,22 +1606,7 @@
       "NOV": ["NOV"],
       "DEC": ["DEZ"],
       "OK": ["OK"],
-      "Click to see difference": ["Clique para ver a diferença"],
-      "Altered": ["Alterado"],
-      "Chart changes": ["Mudanças do gráfico"],
-      "Superset chart": ["Gráfico do Superset"],
-      "Check out this chart in dashboard:": ["Veja esse gráfico no painel:"],
-      "Select ...": ["Selecione ..."],
-      "Loaded data cached": ["Dados carregados em cache"],
-      "Loaded from cache": ["Carregado do cache"],
-      "Click to force-refresh": ["Clique para forçar a atualização"],
-      "cached": ["cacheado"],
       "Certified by %s": ["Certificado por %s"],
-      "Copy to clipboard": ["Copiar para área de transferência"],
-      "Copied!": ["Copiado!"],
-      "Sorry, your browser does not support copying. Use Ctrl / Cmd + C!": [
-        "Desculpe, o seu navegador não suporta a cópia. Use Ctrl / Cmd + C!"
-      ],
       "Error while fetching schema list": ["Erro ao buscar a lista de esquema"],
       "Error while fetching database list": [
         "Erro ao buscar a lista do banco de dados"
@@ -1638,6 +1618,20 @@
       "Schema:": ["Esquema:"],
       "datasource": ["fonte de dados"],
       "schema": ["esquema"],
+      "Click to see difference": ["Clique para ver a diferença"],
+      "Altered": ["Alterado"],
+      "Chart changes": ["Mudanças do gráfico"],
+      "Superset chart": ["Gráfico do Superset"],
+      "Check out this chart in dashboard:": ["Veja esse gráfico no painel:"],
+      "Select ...": ["Selecione ..."],
+      "Loaded data cached": ["Dados carregados em cache"],
+      "Loaded from cache": ["Carregado do cache"],
+      "Click to force-refresh": ["Clique para forçar a atualização"],
+      "cached": ["cacheado"],
+      "Copy to clipboard": ["Copiar para área de transferência"],
+      "Sorry, your browser does not support copying. Use Ctrl / Cmd + C!": [
+        "Desculpe, o seu navegador não suporta a cópia. Use Ctrl / Cmd + C!"
+      ],
       "delete": ["deletar"],
       "Type \"%s\" to confirm": ["Digite \"%s\" para confirmar"],
       "DELETE": ["DELETAR"],
@@ -1646,20 +1640,6 @@
         "Você não tem os direitos de alterar este título."
       ],
       "Unexpected error": ["Erro inesperado"],
-      "Click to favorite/unfavorite": ["Clique para favoritar/desfavoritar"],
-      "An error occurred while fetching dashboards": [
-        "Ocorreu um erro ao buscar os paineis"
-      ],
-      "Error while fetching table list": ["Erro ao buscar a lista de tabelas"],
-      "Select table or type table name": [
-        "Selecione uma tabela ou digite o nome da tabela"
-      ],
-      "Type to search ...": ["Escreva para pesquisar ..."],
-      "Select table ": ["Selecione a tabela "],
-      "Force refresh table list": ["Forçar a atualização da lista de tabelas"],
-      "See table schema": ["Ver esquema da tabela"],
-      "%s%s": ["%s%s"],
-      "Share dashboard": ["Compartilhar dashboard"],
       "This may be triggered by:": ["Isso pode ser disparado por:"],
       "Please reach out to the Chart Owner for assistance.": [
         "Por favor contate o dono do gráfico para assistência."
@@ -1683,6 +1663,7 @@
         "Estamos tendo problema ao carregar esses resultados. As consultas estão configuradas para expirar depois de %s segundos."
       ],
       "Timeout error": ["Erro de expiração"],
+      "Click to favorite/unfavorite": ["Clique para favoritar/desfavoritar"],
       "Cell content": ["Conteúdo da célula"],
       "The import was successful": ["Importação com sucesso"],
       "OVERWRITE": ["SOBRESCREVER"],
@@ -1690,12 +1671,22 @@
       "Import": ["Importar"],
       "Import %s": ["Importar %s"],
       "Last Updated %s": ["Última atualização %s"],
+      "Sort:": [""],
       "%s Selected": ["%s selecionado(s)"],
       "Deselect all": ["Desmarcar todos"],
       "%s-%s of %s": ["%s-%s de %s"],
       "Settings": ["Configurações"],
       "About": ["Sobre"],
       "SQL query": ["Consulta SQL"],
+      "Error while fetching table list": ["Erro ao buscar a lista de tabelas"],
+      "Select table or type table name": [
+        "Selecione uma tabela ou digite o nome da tabela"
+      ],
+      "Type to search ...": ["Escreva para pesquisar ..."],
+      "Select table ": ["Selecione a tabela "],
+      "Force refresh table list": ["Forçar a atualização da lista de tabelas"],
+      "See table schema": ["Ver esquema da tabela"],
+      "%s%s": ["%s%s"],
       "There is not enough space for this component. Try decreasing its width, or increasing the destination width.": [
         "Não há espaço suficiente para este componente. Tente diminuir sua largura or aumentar a largura de seu destino."
       ],
@@ -1773,16 +1764,16 @@
         "É obrigatório um esquema de cores válido"
       ],
       "The dashboard has been saved": ["O painel foi salvo"],
-      "Apply": ["Aplicar"],
-      "Dashboard properties": ["Propriedades do painel"],
-      "Basic information": ["Informações básicas"],
-      "URL slug": ["Identificador da URL"],
-      "A readable URL for your dashboard": ["Uma URL legível para seu painel"],
       "Access": ["Acessar"],
       "Owners is a list of users who can alter the dashboard. Searchable by name or username.": [
         "Donos é uma lista usuários que podem alterar este painel. Pode ser pesquisado através do nome ou nome de usuário."
       ],
       "Colors": ["Cores"],
+      "Apply": ["Aplicar"],
+      "Dashboard properties": ["Propriedades do painel"],
+      "Basic information": ["Informações básicas"],
+      "URL slug": ["Identificador da URL"],
+      "A readable URL for your dashboard": ["Uma URL legível para seu painel"],
       "Advanced": ["Avançado"],
       "JSON metadata": ["Metadados JSON"],
       "This dashboard is not published, it will not show up in the list of dashboards. Click here to publish this dashboard.": [
@@ -1833,7 +1824,6 @@
       "Force refresh": ["Forçar atualização"],
       "Toggle chart description": ["Alternar descrição do gráfico"],
       "View chart in Explore": ["Ver gráfico em Explorar"],
-      "Share chart": ["Compartilhar gráfico"],
       "Export CSV": ["Exportar CSV"],
       "Applied Filters (%d)": ["Filtros aplicados (%d)"],
       "Incompatible Filters (%d)": ["Filtros incompatíveis (%d)"],
@@ -1860,30 +1850,29 @@
       "Row": ["Linha"],
       "Tabs": ["Abas"],
       "Preview": ["Pré-visualizar"],
-      "Yes, cancel": [""],
-      "Keep editing": [""],
-      "Select parent filters": ["Selecione os filtros pais"],
-      "Reset all": ["Reiniciar todos"],
-      "You have removed this filter.": ["Você removeu este filtro."],
-      "Restore filter": ["Restaurar filtro"],
-      "Filter name": ["Nome do filtro"],
-      "Name is required": ["Nome é obrigatório"],
-      "Datasource is required": ["Fonte de dados é obrigatória"],
-      "Field": ["Campo"],
-      "Parent filter": ["Filtro pai"],
-      "None": ["Nenhum"],
-      "Apply changes instantly": ["Aplicar mudanças instantaneamente"],
-      "Allow multiple selections": ["Permitir múltipla seleção"],
-      "Inverse selection": ["Seleção invertida"],
-      "Required": ["Obrigatório"],
-      "Are you sure you want to cancel?": [
-        "Você tem certeza que deseja prosseguir?"
+      "Sorry, your browser does not support copying.": [
+        "Desculpe, seu browser não suporta copiar."
       ],
-      "will not be saved.": [""],
-      "Filter configuration and scoping": ["Configuração de filtro e escopo"],
+      "Sorry, something went wrong. Try again later.": [""],
+      "Select parent filters": ["Selecione os filtros pais"],
+      "Clear all": [""],
+      "All Filters (${filterValues.length})": [""],
+      "Filter Sets (${filterSetFilterValues.length})": [""],
+      "This filter set is identical to: \"%s\"": [""],
+      "Remove invalid filters": [""],
+      "Rebuild": [""],
+      "This filter doesn't exist in dashboard. It will not be applied.": [""],
+      "Filter metadata changed in dashboard. It will not be applied.": [""],
+      "None": ["Nenhum"],
       "Add filter": ["Adicionar filtro"],
       "(Removed)": ["(Removido)"],
       "Undo?": ["Desfazer?"],
+      "Filter name": ["Nome do filtro"],
+      "Name is required": ["Nome é obrigatório"],
+      "Datasource is required": ["Fonte de dados é obrigatória"],
+      "Parent filter": ["Filtro pai"],
+      "Apply changes instantly": ["Aplicar mudanças instantaneamente"],
+      "You have removed this filter.": ["Você removeu este filtro."],
       "Scoping": ["Escopo"],
       "Apply to all panels": ["Aplicar para todos os paineis"],
       "Apply to specific panels": ["Aplicar para paineis específicos"],
@@ -1893,8 +1882,15 @@
       "All panels with this column will be affected by this filter": [
         "Todos os paineis com esta coluna serão afetados por este filtro"
       ],
+      "Yes, cancel": [""],
+      "Keep editing": [""],
+      "Are you sure you want to cancel?": [
+        "Você tem certeza que deseja prosseguir?"
+      ],
+      "will not be saved.": [""],
       "All filters": ["Todos os filtros"],
       "All charts": ["Todos os gráficos"],
+      "Tab title": [""],
       "Warning! Changing the dataset may break the chart if the metadata does not exist.": [
         "Alerta! Mudar esse conjunto de dados pode quebrar o gráfico se os metadados não existirem."
       ],
@@ -1954,6 +1950,9 @@
         "A duração de tempo em segundos antes do cache ser invalidado"
       ],
       "Hours offset": ["Offset de horas"],
+      "The number of hours, negative or positive, to shift the time column. This can be used to move UTC time to local time.": [
+        ""
+      ],
       "Spatial": ["Espacial"],
       "virtual": ["virtual"],
       "Dataset name": ["nome do conjunto de dados"],
@@ -2001,11 +2000,6 @@
       "Confirm save": ["Confirmar salvamento"],
       "Edit Dataset ": ["Editar conjunto de dados"],
       "Use legacy datasource editor": ["Usar editor legado de fonte de dados"],
-      "Time range": ["Faixa de tempo"],
-      "Time column": ["Coluna de tempo"],
-      "Time grain": ["Grão de tempo"],
-      "Origin": ["Origem"],
-      "Time granularity": ["Granularidade de tempo"],
       "A reference to the [Time] configuration, taking granularity into account": [
         "Uma referência à configuração [Time], levando em consideração a granularidade"
       ],
@@ -2089,20 +2083,20 @@
       "Sorry, An error occurred": ["Desculpe, ocorreu um erro"],
       "No data": ["Sem dados"],
       "View samples": ["View amostras"],
-      "Search Metrics & Columns": ["Pesquisar métricas e colunas"],
-      "Showing %s of %s": ["Mostrando %s de %s"],
       "New chart": ["Novo gráfico"],
       "Edit properties": ["Editar propriedades"],
       "View query": ["Ver consulta"],
       "Run in SQL Lab": ["Executar no SQL Lab"],
       "Height": ["Altura"],
       "Width": ["Largura"],
-      "Export to .json": ["Exportar para .json"],
-      "Export to .csv format": ["Exportar para o formato .csv"],
+      "Loading...": [""],
       "%s - untitled": ["%s - sem título"],
       "Edit chart properties": ["Editar propriedades do gráfico"],
       "Control labeled ": ["Controle etiquetado "],
       "Open Datasource tab": ["Abrir aba da fonte de dados"],
+      "\n                This filter was inherited from the dashboard's context.\n                It won't be saved when saving the chart.\n              ": [
+        "\nEste filtro foi herdado do contexto do painel.\n Não será salvo ao salvar o gráfico."
+      ],
       "You do not have permission to edit this chart": [
         "Você não tem permissão para editar esse gráfico"
       ],
@@ -2129,6 +2123,11 @@
       "Save as ...": ["Salvar como ..."],
       "Chart name": ["Nome do gráfico"],
       "Add to dashboard": ["Adicionar ao painel"],
+      "Search Metrics & Columns": ["Pesquisar métricas e colunas"],
+      "Showing %s of %s": ["Mostrando %s de %s"],
+      "This section allows you to configure how to use the slice\n               to generate annotations.": [
+        ""
+      ],
       "Display configuration": ["Mostrar configuração"],
       "Configure your how you overlay is displayed here.": [
         "Configure como seu overlay é mostrado aqui."
@@ -2163,9 +2162,6 @@
       "More dataset related options": [
         "Mais opções relacionadas ao conjunto de dados"
       ],
-      "Superset supports smart date parsing. Strings like `3 weeks ago`, `last sunday`, or `2 weeks from now` can be used.": [
-        "Superst suporta interpretação de data inteligente. Texto como `3 weeks ago`, `last sunday`, ou `2 weeks from now` podem ser usados."
-      ],
       "Default": ["Padrão"],
       "(optional) default value for the filter, when using the multiple option, you can use a semicolon-delimited list of options.": [
         "(opcional) valor padrão para o filtro, quando usando a opção múltipla, você pode usar uma lista de opções delimitada por ponto e vírgula."
@@ -2174,6 +2170,7 @@
       "Metric to sort the results by": ["Métrica para ordernar os resultados"],
       "Sort ascending": ["Ordenar ascendente"],
       "Check for sorting ascending": ["Marque para ordenar ascendente"],
+      "Allow multiple selections": ["Permitir múltipla seleção"],
       "Multiple selections allowed, otherwise filter is limited to a single value": [
         "Seleção múltipla permitida, caso contrário o filtro é limitado a um valor singular"
       ],
@@ -2181,6 +2178,7 @@
       "By default, each filter loads at most 1000 choices at the initial page load. Check this box if you have more than 1000 filter values and want to enable dynamically searching that loads filter values as users type (may add stress to your database).": [
         "Por padrão, cada filtro carrega no máximo 1000 opções na carga inicial da página. Marque essa opção se você tem mais de 1000 valores de filtro e quer habilitar a busca dinâmica que carrega os valores de filtro conforme os usuários digitam (pode impactar no seu banco de dados)."
       ],
+      "Required": ["Obrigatório"],
       "User must select a value for this filter": [
         "O usuário deve selecionar um valor para este filtro"
       ],
@@ -2216,11 +2214,9 @@
       "CANCEL": ["CANCELAR"],
       "APPLY": ["APLICAR"],
       "Edit time range": ["Editar intervalo de tempo"],
-      "Configure advanced time range": [
-        "Configurar intervalo de tempo avançado"
-      ],
-      "START": ["INICIAR"],
-      "END": ["FIM"],
+      "START (INCLUSIVE)": [""],
+      "Start date included in time range": [""],
+      "END (EXCLUSIVE)": [""],
       "Configure Time Range: Previous...": [
         "Configurar intervalo de tempo: Anterior..."
       ],
@@ -2234,6 +2230,14 @@
       "Anchor to": [""],
       "NOW": ["AGORA"],
       "Date/Time": ["Data/Tempo"],
+      "Return to specific datetime.": [""],
+      "Syntax": [""],
+      "Moves the given set of dates by a specified interval.": [""],
+      "Truncates the specified date to the accuracy specified by the date unit.": [
+        ""
+      ],
+      "Get the last date by the date unit.": [""],
+      "Get the specify date for the holiday": [""],
       "Simple": ["Simples"],
       "Custom SQL": ["SQL personalizado"],
       "No such column found. To filter on a metric, try the Custom SQL tab.": [
@@ -2252,9 +2256,6 @@
       "choose WHERE or HAVING...": ["escolha WHERE ou HAVING..."],
       "Filters by columns": ["filtra pelas colunas"],
       "Filters by metrics": ["fitra pelas métricas"],
-      "\n                This filter was inherited from the dashboard's context.\n                It won't be saved when saving the chart.\n              ": [
-        "\nEste filtro foi herdado do contexto do painel.\n Não será salvo ao salvar o gráfico."
-      ],
       "%s aggregates(s)": ["%s agregado(s)"],
       "%s saved metric(s)": ["%s métrica(s) salva(s)"],
       "Saved": ["Salvo"],
@@ -2333,6 +2334,7 @@
       "Pandas resample rule": ["Regra de resample do Pandas"],
       "Method": ["Método"],
       "Pandas resample method": ["Método resample do Pandas"],
+      "Chosen non-numeric column": [""],
       "Favorites": ["Favoritos"],
       "Created content": ["Conteúdo criado"],
       "Recent activity": ["Atividade recente"],
@@ -2511,6 +2513,7 @@
       ],
       "Modified by": ["Modificado por"],
       "Owner": ["Proprietário"],
+      "All": [""],
       "An error occurred while fetching chart owners values: %s": [
         "Ocorreu um erro ao se obter os valores dos donos dos gráficos: %s "
       ],
@@ -2567,9 +2570,6 @@
       "Are you sure you want to delete the selected dashboards?": [
         "Você tem certeza que quer deletar os paineis selecionados?"
       ],
-      "Sorry, your browser does not support copying.": [
-        "Desculpe, seu browser não suporta copiar."
-      ],
       "SQL Copied!": ["SQL copiado!"],
       "The passwords for the databases below are needed in order to import them. Please note that the \"Secure Extra\" and \"Certificate\" sections of the database configuration are not present in export files, and should be added manually after the import if they are needed.": [
         "As senhas para os bancos de dados abaixo são necessárias para importá-los. Por favor note que as seções \"Secure Extra\" e \"Certificate\" da configuração do banco de dados não estão presentes em arquivos de exportação, e devem ser adicionadas manualmente após a importação se forem necessárias."
@@ -2596,8 +2596,6 @@
       "Please enter a SQLAlchemy URI to test": [
         "Por favor entre com a URI do SQLAlchemy para teste"
       ],
-      "Connection looks good!": ["A conexão está boa!"],
-      "ERROR: Connection failed. ": ["ERRO: Falha na conexão."],
       "Sorry there was an error fetching database information: %s": [
         "Desculpe, houve um erro ao se obter as informações do banco de dados: %s"
       ],
@@ -2611,7 +2609,6 @@
       ],
       "Test connection": ["Conexão de teste"],
       "Refer to the ": ["Refira-se a "],
-      "SQLAlchemy docs": ["documentação do SQLAnchemy"],
       " for more information on how to structure your URI.": [
         " para mais informações sobre como estruturar sua URI."
       ],
@@ -2621,8 +2618,11 @@
         "Opera o banco de dados em modo assíncrono, significando que as consultas são executadas em trabalhadores remotos ao invés do servidor web. Isso assume que você tem um trabalhador Celery configurado assim como um backend de resultados. Veja a documentação de instalação para mais informações."
       ],
       "SQL Lab settings": ["Configurações do SQL Lab"],
-      "Allow users to run non-SELECT statements (UPDATE, DELETE, CREATE, ...)": [
-        "Permitir que usuários executem instruções não SELECT (UPDATE, DELETE, CREATE, ...)"
+      "Allow this database to be queried in SQL Lab": [""],
+      "Allow creation of new tables based on queries": [""],
+      "Allow creation of new views based on queries": [""],
+      "Allow manipulation of the database using non-SELECT statements such as UPDATE, DELETE, CREATE, etc.": [
+        ""
       ],
       "Allow multi schema metadata fetch": [
         "Permitir busca de metadados multi esquema"
@@ -2668,9 +2668,6 @@
       ],
       "5. The allows_virtual_table_explore field is a boolean specifying whether or not the Explore button in SQL Lab results is shown.": [
         "5. O campo allows_virtual_table_explore é um boolean especificando se o botão 'Explorar' nos resultados do SQL Lab deve ser mostrado."
-      ],
-      "Error while saving dataset: %s": [
-        "Erro ao salvar conjunto de dados: %s"
       ],
       "Add dataset": ["Adicionar conjunto de dados"],
       "The passwords for the databases below are needed in order to import them together with the datasets. Please note that the \"Secure Extra\" and \"Certificate\" sections of the database configuration are not present in export files, and should be added manually after the import if they are needed.": [
@@ -2728,6 +2725,7 @@
       "An error occurred while fetching database values: %s": [
         "Ocorreu um erro ao se obter os valores de banco de dados: %s"
       ],
+      "Time range": ["Faixa de tempo"],
       "Search by query text": ["Pesquisar por texto da consulta"],
       "Query preview": ["Pré-visualização da consulta"],
       "Previous": ["Anterior"],
@@ -2770,9 +2768,6 @@
       ],
       "Recently edited charts, dashboards, and saved queries will appear here": [
         "Gráficos editados, paineis e consultas salvas vistas recentemente vão aparecer aqui"
-      ],
-      "${tableName\n                        .split('')\n                        .slice(0, tableName.length - 1)\n                        .join('')}\n                    ": [
-        "${tableName\n                        .split('')\n                        .slice(0, tableName.length - 1)\n                        .join('')}\n                    "
       ],
       "You don't have any favorites yet!": [
         "Você não tem nenhum favorito ainda!"

@@ -42,7 +42,15 @@
     "./node_modules/*superset-ui*/**/src/**/*",
     "./node_modules/*superset-ui*/**/types/**/*",
     // and the type defs of their dependencies
-    "./node_modules/*superset-ui*/**/node_modules/**/*.d.ts"
+    "./node_modules/*superset-ui*/**/node_modules/**/*.d.ts",
+    //
+    "./node_modules/*smartnow*/**/src/**/*",
+    "./node_modules/*smartnow*/**/types/**/*",
+    // and the type defs of their dependencies
+    "./node_modules/*smartnow*/**/node_modules/**/*.d.ts"
   ],
-  "exclude": ["./node_modules/*superset-ui*/**/node_modules/@superset-ui/**/*"]
+  "exclude": [
+    "./node_modules/*superset-ui*/**/node_modules/@superset-ui/**/*",
+    "./node_modules/*smartnow*/**/node_modules/@superset-ui/**/*"
+  ]
 }

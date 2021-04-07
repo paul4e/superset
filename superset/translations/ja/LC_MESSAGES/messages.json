@@ -156,12 +156,6 @@
       "Time Series - Paired t-test": [""],
       "Time Series - Nightingale Rose Chart": ["時系列 - 折れ線グラフ"],
       "Partition Diagram": [""],
-      "Choose either fields to [Group By] and [Metrics] and/or [Percentage Metrics], or [Columns], not both": [
-        "[Group By]と[Metrics]または[列]のいずれかを選択します"
-      ],
-      "Box Plot": ["ボックスプロット"],
-      "Distribution - NVD3 - Pie Chart": ["円グラフ"],
-      "iFrame": [""],
       "Deleted %(num)d annotation layer": [""],
       "All Text": [""],
       "Deleted %(num)d annotation": [""],
@@ -198,9 +192,13 @@
         ""
       ],
       "`width` must be greater or equal to 0": [""],
-      "`row_limit` must be greater than or equal to 1": [""],
+      "`row_limit` must be greater than or equal to 0": [""],
       "`row_offset` must be greater than or equal to 0": [""],
       "There are associated alerts or reports: %s,": [""],
+      "Time string is unclear. Please specify [%(human_readable)s ago] or [%(human_readable)s later].": [
+        ""
+      ],
+      "Cannot parse time string [%(human_readable)s]": [""],
       "Database does not exist": [""],
       "Dashboards do not exist": ["ダッシュボード"],
       "Datasource type is required when datasource_id is given": [""],
@@ -303,6 +301,8 @@
       ],
       "Empty query?": [""],
       "Metric '%(metric)s' does not exist": [""],
+      "Filter value list cannot be empty": [""],
+      "Must specify a value for filters with comparison operators": [""],
       "Invalid filter operation type: %(op)s": [""],
       "Error in jinja expression in WHERE clause: %(msg)s": [""],
       "Error in jinja expression in HAVING clause: %(msg)s": [""],
@@ -410,9 +410,6 @@
       "Invalid connection string, a valid string usually follows: driver://user:password@database-host/database-name": [
         ""
       ],
-      "SQLite database cannot be used as a data source for security reasons.": [
-        ""
-      ],
       "Field cannot be decoded by JSON. %(msg)s": [""],
       "The metadata_params in Extra field is not configured correctly. The key %(key)s is invalid.": [
         ""
@@ -437,6 +434,7 @@
       "Could not load database driver: {}": ["サーバーに接続できませんでした"],
       "Deleted %(num)d dataset": [""],
       "Null or Empty": [""],
+      "Dataset %(name)s already exists": [""],
       "Database not allowed to change": [""],
       "One or more columns do not exist": [""],
       "One or more columns are duplicated": [""],
@@ -454,6 +452,11 @@
       "Dataset(s) could not be bulk deleted.": [""],
       "Changing this dataset is forbidden": [""],
       "Import dataset failed for an unknown reason": [""],
+      "Original value": [""],
+      "Week starting sunday": [""],
+      "Week starting monday": [""],
+      "Week ending saturday": [""],
+      "Week_ending sunday": [""],
       "Unknown Presto Error": [""],
       "We can't seem to resolve the column \"%(column_name)s\" at line %(location)s.": [
         ""
@@ -502,13 +505,20 @@
         ""
       ],
       "%(prefix)s %(title)s": [""],
-      "\n            *%(name)s*\n\n            <%(url)s|Explore in Superset>\n            ": [
+      "\n            *%(name)s*\n\n            Error: %(text)s\n            ": [
         ""
       ],
+      "\n                *%(name)s*\n\n                <%(url)s|Explore in Superset>\n                ": [
+        ""
+      ],
+      "%(dialect)s cannot be used as a data source for security reasons.": [""],
       "\n        *%(name)s*\n\n        <%(url)s|Explore in Superset>\n        ": [
         ""
       ],
       "<b><a href=\"%(url)s\">Explore in Superset</a></b><p></p>": [""],
+      "\n            <b><a href=\"%(url)s\">Explore in Superset</a></b><p></p>\n            <img src=\"cid:%(msgid)s\">\n            ": [
+        ""
+      ],
       "%(name)s.csv": [""],
       "\n        *%(slice_name)s*\n\n        <%(slice_url_user_friendly)s|Explore in Superset>\n        ": [
         ""
@@ -543,7 +553,7 @@
       "[Superset] Access to the datasource %(name)s was granted": [
         "[Superset]　データソース　%(name)s へのアクセスは許可されました"
       ],
-      "Unable to find such a holiday: [{}]": [""],
+      "Unable to find such a holiday: [%(holiday)s]": [""],
       "Referenced columns not available in DataFrame.": [""],
       "Column referenced by aggregate is undefined: %(column)s": [""],
       "Operator undefined for aggregator: %(name)s": [""],
@@ -557,6 +567,10 @@
       "Invalid geohash string": [""],
       "Invalid longitude/latitude": [""],
       "Invalid geodetic string": [""],
+      "Column \"%(column)s\" is not numeric or does not exists in the query results.": [
+        ""
+      ],
+      "`rename_columns` must have the same length as `columns`.": [""],
       "`fbprophet` package not installed": [""],
       "Time grain missing": ["時間単位"],
       "Unsupported time grain: %(time_grain)s": [""],
@@ -586,6 +600,9 @@
       "A SQL statement that defines whether the alert should get triggered or not. The query is expected to return either NULL or a number value.": [
         ""
       ],
+      "This feature is deprecated and will be removed on 2.0. Take a look at the replacement feature <a href='https://superset.apache.org/docs/installation/alerts-reports'>Alerts & Reports documentation</a>": [
+        ""
+      ],
       "annotation start time or end time is required.": [""],
       "Annotation end time must be no earlier than start time.": [""],
       "Annotations": [""],
@@ -601,7 +618,6 @@
       "Add Annotation Layer": [""],
       "Edit Annotation Layer": [""],
       "Name": ["名前"],
-      "Dataset %(name)s already exists": [""],
       "Table [%{table}s] could not be found, please double check your database connection, schema, and table name, error: {}": [
         ""
       ],
@@ -628,12 +644,12 @@
       "An unknown error occurred. Please contact your Superset administrator": [
         ""
       ],
-      "Error occurred when opening the chart: %(error)s": [""],
       "You don't have the rights to ": [""],
       "alter this ": [""],
       "chart": ["チャートを移動"],
       "create a ": ["作成日"],
       "Explore - %(table)s": [""],
+      "Explore": [""],
       "Chart [{}] has been saved": [""],
       "Chart [{}] has been overwritten": [""],
       "dashboard": ["ダッシュボード"],
@@ -671,6 +687,8 @@
       "Add CSS Template": ["CSSテンプレート"],
       "Edit CSS Template": ["CSSテンプレート"],
       "Template Name": ["テンプレート名"],
+      "Request missing data field.": [""],
+      "Duplicate column name(s): %(columns)s": [""],
       "A human-friendly name": [""],
       "Used internally to identify the plugin. Should be set to the package name from the pluginʼs package.json": [
         ""
@@ -701,6 +719,7 @@
       "End Time": ["終了時間"],
       "Pop Tab Link": ["新しいタブでクエリ"],
       "Changed on": ["変更日"],
+      "The dataset associated with this chart no longer exists": [""],
       "Could not determine datasource type": [""],
       "Could not find viz object": [""],
       "Show Chart": ["データベースを表示"],
@@ -973,11 +992,10 @@
       "cannot be used as a column name. The column name/alias \"__timestamp\"\n          is reserved for the main temporal expression, and column aliases ending with\n          double underscores followed by a numeric value (e.g. \"my_col__1\") are reserved\n          for deduplicating duplicate column names. Please use aliases to rename the\n          invalid column names.": [
         ""
       ],
-      "Raw SQL": [""],
       "Source SQL": [""],
+      "Raw SQL": [""],
       "SQL": [""],
       "No query history yet...": [""],
-      "It seems you don't have access to any database": [""],
       "An error occurred when refreshing queries": [""],
       "Filter by user": ["フィルタ値"],
       "Filter by database": ["データベースリンクを編集"],
@@ -1035,9 +1053,7 @@
       "Stop query": ["クエリを保存"],
       "Schedule the query periodically": [""],
       "You must run the query successfully first": [""],
-      "It appears that the number of rows in the query results displayed\n           was limited on the server side to\n           the %s limit.": [
-        ""
-      ],
+      "Autocomplete": [""],
       "CREATE TABLE AS": [""],
       "CREATE VIEW AS": [""],
       "Estimate the cost before running a query": [""],
@@ -1050,6 +1066,8 @@
       "Hide tool bar": [""],
       "Close all other tabs": [""],
       "Duplicate tab": [""],
+      "New tab (Ctrl + q)": [""],
+      "New tab (Ctrl + t)": [""],
       "Copy partition query to clipboard": [""],
       "latest partition:": [""],
       "Keys for table": [""],
@@ -1062,10 +1080,6 @@
       "Show CREATE VIEW statement": [""],
       "CREATE VIEW statement": [""],
       "Remove table preview": [""],
-      "Assign a set of parameters as": [""],
-      "below (example:": [""],
-      "), and they become available in your SQL (example:": [""],
-      ") by using": [""],
       "Edit template parameters": [""],
       "Invalid JSON": [""],
       "Create a new chart": ["作成したもの"],
@@ -1076,9 +1090,6 @@
       "Choose a visualization type": ["可視化タイプを選んでください"],
       "Create new chart": ["作成したもの"],
       "An error occurred while loading the SQL": [""],
-      "Updating chart was stopped": [""],
-      "An error occurred while rendering the visualization: %s": [""],
-      "Network error.": [""],
       "every": [""],
       "every month": ["月"],
       "every day of the month": [""],
@@ -1142,6 +1153,16 @@
       "NOV": [""],
       "DEC": [""],
       "OK": [""],
+      "Certified by %s": [""],
+      "Error while fetching schema list": [""],
+      "Error while fetching database list": [""],
+      "Database:": [""],
+      "Select a database": [""],
+      "Force refresh schema list": [""],
+      "Select a schema (%s)": [""],
+      "Schema:": [""],
+      "datasource": ["データソース"],
+      "schema": ["スキーマ"],
       "Click to see difference": [""],
       "Altered": [""],
       "Chart changes": ["最終更新日"],
@@ -1154,19 +1175,9 @@
       "Loaded from cache": [""],
       "Click to force-refresh": [""],
       "cached": [""],
-      "Certified by %s": [""],
       "Copy to clipboard": [""],
-      "Copied!": [""],
+      "Copied to clipboard!": [""],
       "Sorry, your browser does not support copying. Use Ctrl / Cmd + C!": [""],
-      "Error while fetching schema list": [""],
-      "Error while fetching database list": [""],
-      "Database:": [""],
-      "Select a database": [""],
-      "Force refresh schema list": [""],
-      "Select a schema (%s)": [""],
-      "Schema:": [""],
-      "datasource": ["データソース"],
-      "schema": ["スキーマ"],
       "delete": ["削除"],
       "Type \"%s\" to confirm": [""],
       "DELETE": [""],
@@ -1419,6 +1430,9 @@
       "Cache timeout": [""],
       "The duration of time in seconds before the cache is invalidated": [""],
       "Hours offset": [""],
+      "The number of hours, negative or positive, to shift the time column. This can be used to move UTC time to local time.": [
+        ""
+      ],
       "Spatial": [""],
       "virtual": [""],
       "Dataset name": ["データソース"],
@@ -1532,8 +1546,8 @@
       "Run in SQL Lab": ["SQLツール"],
       "Height": ["高さ"],
       "Width": ["幅"],
-      "Export to .json": ["jsonで出力"],
-      "Export to .csv format": ["csvで出力"],
+      "Copy chart URL to clipboard": [""],
+      "Loading...": [""],
       "%s - untitled": [""],
       "Edit chart properties": ["チャートを編集"],
       "Control labeled ": [""],
@@ -1560,6 +1574,11 @@
       "Save as ...": ["別名で保存"],
       "Chart name": ["グラフ様式"],
       "Add to dashboard": ["新しいダッシュボードに追加"],
+      "Search Metrics & Columns": [""],
+      "Showing %s of %s": [""],
+      "This section allows you to configure how to use the slice\n               to generate annotations.": [
+        ""
+      ],
       "Display configuration": [""],
       "Configure your how you overlay is displayed here.": [""],
       "Style": [""],
@@ -1582,9 +1601,7 @@
       "Edit dataset": ["データベースリンクを編集"],
       "View in SQL Lab": ["SQLツール"],
       "More dataset related options": [""],
-      "Superset supports smart date parsing. Strings like `3 weeks ago`, `last sunday`, or `2 weeks from now` can be used.": [
-        ""
-      ],
+      "The dataset linked to this chart may have been deleted.": [""],
       "Default": [""],
       "(optional) default value for the filter, when using the multiple option, you can use a semicolon-delimited list of options.": [
         ""
@@ -1593,6 +1610,7 @@
       "Metric to sort the results by": [""],
       "Sort ascending": [""],
       "Check for sorting ascending": [""],
+      "Allow multiple selections": ["複数の選択を許可する"],
       "Multiple selections allowed, otherwise filter is limited to a single value": [
         ""
       ],
@@ -1600,6 +1618,7 @@
       "By default, each filter loads at most 1000 choices at the initial page load. Check this box if you have more than 1000 filter values and want to enable dynamically searching that loads filter values as users type (may add stress to your database).": [
         ""
       ],
+      "Required": ["必須"],
       "User must select a value for this filter": [""],
       "Filter configuration": ["フィルタ項目"],
       "Error while fetching data": ["データの取得中にエラーが発生しました"],
@@ -1716,6 +1735,8 @@
       "Pandas resample rule": [""],
       "Method": [""],
       "Pandas resample method": [""],
+      "Chosen non-numeric column": [""],
+      "%s option": [""],
       "Favorites": ["お気に入り"],
       "Created content": ["作成したもの"],
       "Recent activity": ["近況"],
@@ -1914,7 +1935,6 @@
       "dialect+driver://username:password@host:port/database": [""],
       "Test connection": ["アクション"],
       "Refer to the ": [""],
-      "SQLAlchemy docs": [""],
       " for more information on how to structure your URI.": [""],
       "Performance": [""],
       "Chart cache timeout": ["グラフ様式"],
@@ -2042,7 +2062,7 @@
       "Recently edited charts, dashboards, and saved queries will appear here": [
         ""
       ],
-      "${tableName\n                        .split('')\n                        .slice(0, tableName.length - 1)\n                        .join('')}\n                    ": [
+      "${tableName\n                      .split('')\n                      .slice(0, tableName.length - 1)\n                      .join('')}\n                    ": [
         ""
       ],
       "You don't have any favorites yet!": [""],
