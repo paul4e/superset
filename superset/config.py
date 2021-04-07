@@ -331,7 +331,7 @@ DEFAULT_FEATURE_FLAGS: Dict[str, bool] = {
     "DISPLAY_MARKDOWN_HTML": True,
     # When True, this escapes HTML (rather than rendering it) in Markdown components
     "ESCAPE_MARKDOWN_HTML": False,
-    "DASHBOARD_NATIVE_FILTERS": True,
+    "DASHBOARD_NATIVE_FILTERS": False,
     "GLOBAL_ASYNC_QUERIES": False,
     "VERSIONED_EXPORT": False,
     # Note that: RowLevelSecurityFilter is only given by default to the Admin role
@@ -385,7 +385,20 @@ GET_FEATURE_FLAGS_FUNC: Optional[Callable[[Dict[str, bool]], Dict[str, bool]]] =
 #
 
 # This is merely a default
-EXTRA_CATEGORICAL_COLOR_SCHEMES: List[Dict[str, Any]] = []
+EXTRA_CATEGORICAL_COLOR_SCHEMES: List[Dict[str, Any]] = [
+    {
+        "id": 'caja-de-ande-color-scheme-cat',
+        "description": 'Esquema de colores Caja de Ande',
+        "label": 'Caja de Ande',
+        "colors": [
+            "#d1992a",
+            "#16458e",
+            "#96c11e",
+            "#949494",'#DDAA77', '#7799BB', '#88AA77',
+            '#552288', '#5AAA46', '#CC7788', '#EEDD55', '#9977BB', '#BBAA44', '#DDCCDD'
+        ]
+    }
+]
 
 # EXTRA_SEQUENTIAL_COLOR_SCHEMES is used for adding custom sequential color schemes
 # EXTRA_SEQUENTIAL_COLOR_SCHEMES =  [
@@ -400,7 +413,20 @@ EXTRA_CATEGORICAL_COLOR_SCHEMES: List[Dict[str, Any]] = []
 #     }]
 
 # This is merely a default
-EXTRA_SEQUENTIAL_COLOR_SCHEMES: List[Dict[str, Any]] = []
+EXTRA_SEQUENTIAL_COLOR_SCHEMES: List[Dict[str, Any]] = [
+    {
+        "id": 'caja-de-ande-color-scheme-seq',
+        "description": 'Esquema de colores Caja de Ande',
+        "label": 'Caja de Ande',
+        "colors": [
+            "#d1992a",
+            "#16458e",
+            "#96c11e",
+            "#949494",'#DDAA77', '#7799BB', '#88AA77',
+            '#552288', '#5AAA46', '#CC7788', '#EEDD55', '#9977BB', '#BBAA44', '#DDCCDD'
+        ]
+    }
+]
 
 # ---------------------------------------------------
 # Thumbnail config (behind feature flag)
