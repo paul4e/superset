@@ -217,6 +217,10 @@
       "Time Series - Paired t-test": [""],
       "Time Series - Nightingale Rose Chart": [""],
       "Partition Diagram": [""],
+      "Choose either fields to [Group By] and [Metrics] and/or [Percentage Metrics], or [Columns], not both": [
+        ""
+      ],
+      "Box Plot": [""],
       "Deleted %(num)d annotation layer": [""],
       "All Text": [""],
       "Deleted %(num)d annotation": [""],
@@ -249,13 +253,8 @@
         ""
       ],
       "`width` must be greater or equal to 0": [""],
-      "`row_limit` must be greater than or equal to 0": [""],
       "`row_offset` must be greater than or equal to 0": [""],
       "There are associated alerts or reports: %s,": [""],
-      "Time string is unclear. Please specify [%(human_readable)s ago] or [%(human_readable)s later].": [
-        ""
-      ],
-      "Cannot parse time string [%(human_readable)s]": [""],
       "Database does not exist": [""],
       "Dashboards do not exist": ["ダッシュボードは存在しません"],
       "Datasource type is required when datasource_id is given": [""],
@@ -755,7 +754,6 @@
       "\n            *%(name)s*\n\n            %(description)s\n\n            <%(url)s|Explore in Superset>\n            ": [
         ""
       ],
-      "%(dialect)s cannot be used as a data source for security reasons.": [""],
       "\n        *%(name)s*\n\n        <%(url)s|Explore in Superset>\n        ": [
         ""
       ],
@@ -798,7 +796,7 @@
       "[Superset] Access to the datasource %(name)s was granted": [
         "[Superset]　データソース　%(name)s へのアクセスは許可されました"
       ],
-      "Unable to find such a holiday: [%(holiday)s]": [""],
+      "Unable to find such a holiday: [{}]": [""],
       "Referenced columns not available in DataFrame.": [""],
       "Column referenced by aggregate is undefined: %(column)s": [""],
       "Operator undefined for aggregator: %(name)s": [""],
@@ -843,9 +841,6 @@
         ""
       ],
       "A SQL statement that defines whether the alert should get triggered or not. The query is expected to return either NULL or a number value.": [
-        ""
-      ],
-      "This feature is deprecated and will be removed on 2.0. Take a look at the replacement feature <a href='https://superset.apache.org/docs/installation/alerts-reports'>Alerts & Reports documentation</a>": [
         ""
       ],
       "annotation start time or end time is required.": [""],
@@ -1158,6 +1153,10 @@
       "dttm": [""],
       "Add item": [""],
       "The query couldn't be loaded": [""],
+      "Your query was saved": ["クエリは保存されました"],
+      "Your query could not be saved": ["クエリを保存できませんでした"],
+      "Your query was updated": ["クエリは保存されました"],
+      "Your query could not be updated": ["クエリを保存できませんでした"],
       "Your query has been scheduled. To see details of your query, navigate to Saved queries": [
         ""
       ],
@@ -1262,8 +1261,8 @@
       "cannot be used as a column name. The column name/alias \"__timestamp\"\n          is reserved for the main temporal expression, and column aliases ending with\n          double underscores followed by a numeric value (e.g. \"my_col__1\") are reserved\n          for deduplicating duplicate column names. Please use aliases to rename the\n          invalid column names.": [
         ""
       ],
-      "Source SQL": [""],
       "Raw SQL": [""],
+      "Source SQL": [""],
       "SQL": [""],
       "No query history yet...": ["クエリ履歴はまだありません。"],
       "An error occurred when refreshing queries": [""],
@@ -1330,7 +1329,9 @@
       "Stop query": ["クエリを中止"],
       "Schedule the query periodically": [""],
       "You must run the query successfully first": [""],
-      "Autocomplete": [""],
+      "It appears that the number of rows in the query results displayed\n           was limited on the server side to\n           the %s limit.": [
+        ""
+      ],
       "CREATE TABLE AS": [""],
       "CREATE VIEW AS": [""],
       "Estimate the cost before running a query": [""],
@@ -1343,8 +1344,6 @@
       "Hide tool bar": [""],
       "Close all other tabs": [""],
       "Duplicate tab": [""],
-      "New tab (Ctrl + q)": [""],
-      "New tab (Ctrl + t)": [""],
       "Copy partition query to clipboard": [""],
       "latest partition:": [""],
       "Keys for table": [""],
@@ -1357,6 +1356,10 @@
       "Show CREATE VIEW statement": ["CREATE VIEW文を表示"],
       "CREATE VIEW statement": ["CREATE VIEW文"],
       "Remove table preview": [""],
+      "Assign a set of parameters as": [""],
+      "below (example:": [""],
+      "), and they become available in your SQL (example:": [""],
+      ") by using": [""],
       "Edit template parameters": [""],
       "Invalid JSON": [""],
       "No stored results found, you need to re-run your query": [""],
@@ -1781,9 +1784,6 @@
       "Cache timeout": [""],
       "The duration of time in seconds before the cache is invalidated": [""],
       "Hours offset": [""],
-      "The number of hours, negative or positive, to shift the time column. This can be used to move UTC time to local time.": [
-        ""
-      ],
       "Spatial": [""],
       "virtual": [""],
       "Dataset name": [""],
@@ -2019,7 +2019,6 @@
       "Metric to sort the results by": [""],
       "Sort ascending": [""],
       "Check for sorting ascending": [""],
-      "Allow multiple selections": ["複数の選択を許可する"],
       "Multiple selections allowed, otherwise filter is limited to a single value": [
         ""
       ],
@@ -2027,7 +2026,6 @@
       "By default, each filter loads at most 1000 choices at the initial page load. Check this box if you have more than 1000 filter values and want to enable dynamically searching that loads filter values as users type (may add stress to your database).": [
         ""
       ],
-      "Required": ["必須"],
       "User must select a value for this filter": [""],
       "Filter configuration": ["フィルタ構成"],
       "Simple": [""],
@@ -2353,7 +2351,7 @@
       "Import databases": ["データベースのインポート"],
       "Asynchronous query execution": ["非同期でのクエリ実行"],
       "AQE": [""],
-      "Allow data manipulation language": [""],
+      "Allow Data Manipulation Language": [""],
       "DML": [""],
       "CSV upload": [""],
       "Delete database": ["データベースを削除"],
@@ -2393,6 +2391,7 @@
       "This is used to provide connection information for systems like Hive, Presto, and BigQuery, which do not conform to the username:password syntax normally used by SQLAlchemy.": [
         ""
       ],
+      "Root Certificate": [""],
       "Optional CA_BUNDLE contents to validate HTTPS requests. Only available on certain database engines.": [
         ""
       ],
@@ -2400,7 +2399,7 @@
       "If Presto, all the queries in SQL Lab are going to be executed as the currently logged on user who must have permission to run them. If Hive and hive.server2.enable.doAs is enabled, will run the queries as service account, but impersonate the currently logged on user via hive.server2.proxy.user property.": [
         ""
       ],
-      "Allow data upload": [""],
+      "Allow Data Upload": [""],
       "If selected, please set the schemas allowed for data upload in Extra.": [
         ""
       ],
@@ -2518,7 +2517,7 @@
       "Recently edited charts, dashboards, and saved queries will appear here": [
         "最近編集したグラフ、ダッシュボード、保存したクエリがここに表示されます"
       ],
-      "${tableName\n                      .split('')\n                      .slice(0, tableName.length - 1)\n                      .join('')}\n                    ": [
+      "${tableName\n                        .split('')\n                        .slice(0, tableName.length - 1)\n                        .join('')}\n                    ": [
         ""
       ],
       "You don't have any favorites yet!": ["まだお気に入りはありません!"],
