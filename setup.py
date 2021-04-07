@@ -151,7 +151,7 @@ setup(
         "teradata": ["sqlalchemy-teradata==0.9.0.dev0"],
         "thumbnails": ["Pillow>=7.0.0, <8.0.0"],
         "vertica": ["sqlalchemy-vertica-python>=0.5.9, < 0.6"],
-        "crate": ["crate-smartnow==1.5, <1.1"]
+        "crate": ["crate-smartnow[sqlalchemy]>=1.6, <2.0"],
     },
     python_requires="~=3.7",
     author="Apache Software Foundation",

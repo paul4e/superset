@@ -303,7 +303,7 @@ xlrd==1.2.0
 # via importlib-metadata
 geojson==2.5.0            
 # via -r requirements/development.in
-crate-smartnow==1.5       
+crate-smartnow==1.6       
 # via -r requirements/development.in
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
