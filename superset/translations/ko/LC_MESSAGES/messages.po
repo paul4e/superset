@@ -2783,6 +2783,15 @@ msgstr ""
 msgid "Duplicate column name(s): %(columns)s"
 msgstr ""
 
+#: superset/views/datasource.py:45
+msgid "Request missing data field."
+msgstr ""
+
+#: superset/views/datasource.py:81
+#, python-format
+msgid "Duplicate column name(s): %(columns)s"
+msgstr ""
+
 #: superset/views/dynamic_plugins.py:42
 msgid "A human-friendly name"
 msgstr ""
@@ -5423,6 +5432,22 @@ msgstr ""
 
 #: superset-frontend/src/dashboard/components/nativeFilters/FiltersConfigModal/FiltersConfigForm/FilterScope/FilterScope.tsx:92
 msgid "All panels with this column will be affected by this filter"
+msgstr ""
+
+#: superset-frontend/src/dashboard/components/nativeFilters/FiltersConfigModal/Footer/CancelConfirmationAlert.tsx:55
+msgid "Yes, cancel"
+msgstr ""
+
+#: superset-frontend/src/dashboard/components/nativeFilters/FiltersConfigModal/Footer/CancelConfirmationAlert.tsx:63
+msgid "Keep editing"
+msgstr ""
+
+#: superset-frontend/src/dashboard/components/nativeFilters/FiltersConfigModal/Footer/Footer.tsx:69
+msgid "Are you sure you want to cancel?"
+msgstr ""
+
+#: superset-frontend/src/dashboard/components/nativeFilters/FiltersConfigModal/Footer/Footer.tsx:70
+msgid "will not be saved."
 msgstr ""
 
 #: superset-frontend/src/dashboard/components/nativeFilters/FiltersConfigModal/Footer/CancelConfirmationAlert.tsx:55

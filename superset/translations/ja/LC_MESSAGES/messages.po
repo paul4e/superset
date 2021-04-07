@@ -1584,6 +1584,11 @@ msgstr "タイトルまたはスラッグ"
 msgid "Role"
 msgstr ""
 
+#: superset/dashboards/filters.py:153
+#, fuzzy
+msgid "Role"
+msgstr "プロファイル"
+
 #: superset/dashboards/commands/exceptions.py:37
 msgid "Must be unique"
 msgstr "一意である必要があります"
@@ -1623,6 +1628,11 @@ msgstr "不明な理由でダッシュボードのインポートに失敗しま
 #: superset/dashboards/commands/exceptions.py:81
 msgid "You don't have access to this dashboard."
 msgstr "このダッシュボードにアクセスできません。"
+
+#: superset/dashboards/commands/exceptions.py:81
+#, fuzzy
+msgid "You don't have access to this dashboard."
+msgstr "このダッシュボードを編集する権限がありません"
 
 #: superset/dashboards/commands/importers/v0.py:303
 msgid "No data in file"
@@ -3841,6 +3851,11 @@ msgstr "データ ソースの作成中にエラーが発生しました"
 msgid "An error occurred while fetching function names."
 msgstr "関数名の取得中にエラーが発生しました。"
 
+#: superset-frontend/src/SqlLab/actions/sqlLab.js:1352
+#, fuzzy
+msgid "An error occurred while fetching function names."
+msgstr "ダッシュボードの取得中にエラーが発生しました: %s"
+
 #: superset-frontend/src/SqlLab/components/App.jsx:76
 msgid ""
 "SQL Lab uses your browser's local storage to store queries and results.\n"
@@ -4877,6 +4892,10 @@ msgstr "すべての選択を解除"
 msgid "No Data"
 msgstr ""
 
+#: superset-frontend/src/components/ListView/ListView.tsx:393
+msgid "No Data"
+msgstr ""
+
 #: superset-frontend/src/components/ListView/ListView.tsx:414
 #: superset-frontend/src/components/TableView/TableView.tsx:183
 #, python-format
@@ -4927,6 +4946,37 @@ msgstr "テーブルリストを強制更新"
 #: superset-frontend/src/components/TableSelector/index.tsx:383
 msgid "See table schema"
 msgstr "テーブルスキーマを参照"
+
+#: superset-frontend/src/components/URLShortLinkButton/index.jsx:59
+#: superset-frontend/src/explore/components/ExploreActionButtons.tsx:114
+#, python-format
+msgid "%s%s"
+msgstr ""
+
+#: superset-frontend/src/components/TableSelector/index.tsx:171
+msgid "Error while fetching table list"
+msgstr ""
+
+#: superset-frontend/src/components/TableSelector/index.tsx:313
+#: superset-frontend/src/components/TableSelector/index.tsx:330
+msgid "Select table or type table name"
+msgstr ""
+
+#: superset-frontend/src/components/TableSelector/index.tsx:344
+msgid "Type to search ..."
+msgstr ""
+
+#: superset-frontend/src/components/TableSelector/index.tsx:346
+msgid "Select table "
+msgstr "データソースを選択"
+
+#: superset-frontend/src/components/TableSelector/index.tsx:366
+msgid "Force refresh table list"
+msgstr ""
+
+#: superset-frontend/src/components/TableSelector/index.tsx:376
+msgid "See table schema"
+msgstr ""
 
 #: superset-frontend/src/components/URLShortLinkButton/index.jsx:59
 #: superset-frontend/src/explore/components/ExploreActionButtons.tsx:114
@@ -5641,6 +5691,22 @@ msgstr "キャンセルしてもよろしいですか？"
 #: superset-frontend/src/dashboard/components/nativeFilters/FiltersConfigModal/Footer/Footer.tsx:70
 msgid "will not be saved."
 msgstr "保存されません。"
+
+#: superset-frontend/src/dashboard/components/nativeFilters/FiltersConfigModal/Footer/CancelConfirmationAlert.tsx:55
+msgid "Yes, cancel"
+msgstr "はい、キャンセルします"
+
+#: superset-frontend/src/dashboard/components/nativeFilters/FiltersConfigModal/Footer/CancelConfirmationAlert.tsx:63
+msgid "Keep editing"
+msgstr "編集を続ける"
+
+#: superset-frontend/src/dashboard/components/nativeFilters/FiltersConfigModal/Footer/Footer.tsx:69
+msgid "Are you sure you want to cancel?"
+msgstr "キャンセルしてもよろしいですか？"
+
+#: superset-frontend/src/dashboard/components/nativeFilters/FiltersConfigModal/Footer/Footer.tsx:70
+msgid "will not be saved."
+msgstr "保存されません"
 
 #: superset-frontend/src/dashboard/util/getFilterFieldNodesTree.js:44
 msgid "All filters"
@@ -8404,7 +8470,7 @@ msgstr "SQL Labクエリ"
 msgid "${tableName}"
 msgstr ""
 
-#: superset-frontend/src/views/CRUD/welcome/SavedQueries.tsx:125
+#: superset-frontend/src/views/CRUD/welcome/SavedQueries.tsx:120
 msgid "query"
 msgstr "クエリ"
 

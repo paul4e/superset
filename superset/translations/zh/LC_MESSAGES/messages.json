@@ -152,7 +152,6 @@
         "桑基图里面有一个循环，请提供一棵树。这是一个错误的链接：{}"
       ],
       "Directed Force Layout": ["有向图"],
-      "Pick exactly 2 columns to 'Group By'": ["为 “Group By” 选择两个列"],
       "Country Map": ["国家地图"],
       "World Map": ["世界地图"],
       "Filters": ["过滤"],
@@ -885,6 +884,9 @@
       "Owners is a list of users who can alter the dashboard.": [
         "所有者是可以更改看板的用户列表。"
       ],
+      "Roles is a list which defines access to the dashboard. These roles are always applied in addition to restrictions on dataset level access. If no roles defined then the dashboard is available to all roles.": [
+        ""
+      ],
       "Determines whether or not this dashboard is visible in the list of all dashboards": [
         "确定此看板在所有看板列表中是否可见"
       ],
@@ -1167,10 +1169,11 @@
       "cannot be used as a column name. The column name/alias \"__timestamp\"\n          is reserved for the main temporal expression, and column aliases ending with\n          double underscores followed by a numeric value (e.g. \"my_col__1\") are reserved\n          for deduplicating duplicate column names. Please use aliases to rename the\n          invalid column names.": [
         "不能作为一个列名称使用。列名/别名 \"__timestamp\"\n          是为主要的时间表达式保留的，列别名以双下划线结尾\n          并后跟一个数值（例如 \"my_col__1\")。 这是为了\n          保留用于消除重复的列名。请使用别名来\n          重命名无效的列名。"
       ],
-      "Raw SQL": ["行 SQL"],
       "Source SQL": ["源 SQL"],
+      "Raw SQL": ["行 SQL"],
       "SQL": ["SQL"],
       "No query history yet...": ["暂无历史查询..."],
+      "An error occurred when refreshing queries": ["创建数据源时发生错误"],
       "It seems you don't have access to any database": [
         "貌似您没有访问到任何数据库"
       ],
@@ -1367,7 +1370,6 @@
       "cached": ["已缓存"],
       "Certified by %s": ["认证人 %s"],
       "Copy to clipboard": ["复制到剪贴板"],
-      "Copied!": ["复制成功！"],
       "Sorry, your browser does not support copying. Use Ctrl / Cmd + C!": [
         "抱歉，您的浏览器不支持复制操作。使用 Ctrl / Cmd + C！"
       ],
@@ -1797,8 +1799,7 @@
       "Run in SQL Lab": ["在 SQL 工具箱中执行"],
       "Height": ["高度"],
       "Width": ["宽度"],
-      "Export to .json": ["导出到 .json"],
-      "Export to .csv format": ["导出为 .csv 格式"],
+      "Loading...": ["加载中..."],
       "%s - untitled": ["%s  - 无标题"],
       "Edit chart properties": ["编辑图表属性"],
       "Control labeled ": ["控件名称为 "],
@@ -1995,6 +1996,7 @@
       "Pandas resample rule": ["Pandas 重新采样的规则"],
       "Method": ["方法"],
       "Pandas resample method": ["Pandas 重新采样的填充方法"],
+      "Chosen non-numeric column": [""],
       "Favorites": ["收藏"],
       "Created content": ["创建的内容"],
       "Recent activity": ["近期活动"],
@@ -2158,6 +2160,7 @@
       ],
       "Modified by": ["修改人"],
       "Owner": ["所有者"],
+      "All": ["所有"],
       "An error occurred while fetching chart owners values: %s": [
         "获取图表所有者时出错 %s"
       ],
