@@ -24,12 +24,26 @@ import {
   getTimeFormatterRegistry,
   smartDateFormatter,
   smartDateVerboseFormatter,
+  createD3NumberFormatter
 } from '@superset-ui/core';
+
+
+var newFormat = createD3NumberFormatter({ 
+  locale: { 
+    decimal: '.', 
+    thousands: ',', 
+    grouping: [3, 2, 2, 2, 2, 2, 2, 2, 2, 2], 
+    currency: ['₡', ''], 
+  }, 
+  formatString: '₡,.2f', 
+}) 
 
 export default function setupFormatters() {
   getNumberFormatterRegistry()
     // Add shims for format strings that are deprecated or common typos.
     // Temporary solution until performing a db migration to fix this.
+    //.registerValue('₡,.2f', getNumberFormatter('₡,.2f') )
+    .registerValue('₡,.2f', newFormat )
     .registerValue(',0', getNumberFormatter(',.4~f'))
     .registerValue('null', getNumberFormatter(',.4~f'))
     .registerValue('%', getNumberFormatter('.0%'))
