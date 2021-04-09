@@ -85,8 +85,5 @@ testCSV.csv
 apache-superset-*.tar.gz*
 release.json
 
-# Translation binaries
-messages.mo
-
 docker/requirements-local.txt
 run.py
