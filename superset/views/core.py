@@ -440,6 +440,9 @@ class Superset(BaseSupersetView):  # pylint: disable=too-many-public-methods
                 viz_obj.get_csv(), headers=generate_download_headers("csv")
             )
 
+        if response_type == utils.ChartDataResultFormat.XLSX:            
+            return viz_obj.gen_df_xlsx_downloadable()
+
         if response_type == utils.ChartDataResultType.QUERY:
             return self.get_query_string_response(viz_obj)
 

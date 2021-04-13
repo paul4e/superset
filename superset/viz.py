@@ -82,6 +82,10 @@ from superset.utils.hashing import md5_sha_from_str
 
 import dataclasses  # isort:skip
 
+import uuid
+import tempfile
+import os
+from flask import send_file
 
 if TYPE_CHECKING:
     from superset.connectors.base.models import BaseDatasource
@@ -623,6 +627,12 @@ class BaseViz:
         df = self.get_df_payload()["df"]  # leverage caching logic
         include_index = not isinstance(df.index, pd.RangeIndex)
         return csv.df_to_escaped_csv(df, index=include_index, **config["CSV_EXPORT"],sep=';')
+
+    def gen_df_xlsx_downloadable(self):
+        df = self.get_df_payload()["df"]  # leverage caching logic
+        filepath = os.path.join(tempfile.gettempdir(), "{}.xlsx".format(uuid.uuid1()))
+        df.to_excel(filepath, index=False)
+        return send_file(filepath, as_attachment=True)
 
     def get_data(self, df: pd.DataFrame) -> VizData:
         return df.to_dict(orient="records")
