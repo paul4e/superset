@@ -59,6 +59,11 @@ export default function ExploreActionButtons({
     resultType: 'results',
     resultFormat: 'json',
   });
+  const doExportXLSX = exportChart.bind(this, {
+    formData: latestQueryFormData,
+    resultType: 'results',
+    resultFormat: 'xlsx',
+  });
 
   return (
     <div
@@ -102,6 +107,20 @@ export default function ExploreActionButtons({
           rel="noopener noreferrer"
         >
           <i className="fa fa-file-text-o" /> .csv
+        </div>
+      )}
+      {latestQueryFormData && (
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={doExportXLSX}
+          className={exportToCSVClasses}
+          // className="btn btn-default btn-sm"
+          title={t('Export to .xsl format')}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i className="fa fa-file-text-o" /> .xlsx
         </div>
       )}
       <ConnectedDisplayQueryButton
