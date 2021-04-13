@@ -88,6 +88,10 @@ from superset.views.filters import FilterRelatedOwners
 from superset import app
 
 import pandas as pd
+import uuid
+import tempfile
+import os
+from flask import send_file
 
 logger = logging.getLogger(__name__)
 
@@ -496,6 +500,15 @@ class ChartRestApi(BaseSupersetModelRestApi):
             
             
             return CsvResponse(df, headers=generate_download_headers("csv"))
+                 
+        if result_format == ChartDataResultFormat.XLSX:
+          # return the first result
+          data = result["queries"][0]["data"]
+          # expects a csv string format data
+          df = pd.read_csv(StringIO(data), sep=';')
+          filepath = os.path.join(tempfile.gettempdir(), "{}.xlsx".format(uuid.uuid1()))
+          df.to_excel(filepath, index=False)
+          return send_file(filepath, as_attachment=True)
 
         if result_format == ChartDataResultFormat.JSON:
             response_data = simplejson.dumps(
@@ -554,6 +567,7 @@ class ChartRestApi(BaseSupersetModelRestApi):
             500:
               $ref: '#/components/responses/500'
         """
+        
         json_body = None
         if request.is_json:
             json_body = request.json

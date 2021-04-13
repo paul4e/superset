@@ -150,10 +150,10 @@ class QueryContext:
                 df[col] = df[col].infer_objects()
 
     def get_data(self, df: pd.DataFrame,) -> Union[str, List[Dict[str, Any]]]:
-        if self.result_format == ChartDataResultFormat.CSV:
+        if self.result_format == ChartDataResultFormat.CSV or self.result_format == ChartDataResultFormat.XLSX:
             include_index = not isinstance(df.index, pd.RangeIndex)
             result = csv.df_to_escaped_csv(
-                df, index=include_index, **config["CSV_EXPORT"]
+                df, index=include_index, **config["CSV_EXPORT"], sep=';'
             )
             return result or ""
 
