@@ -21,8 +21,8 @@ import PropTypes from 'prop-types';
 import { Row, Col, FormControl } from 'react-bootstrap';
 import { Behavior, t, getChartMetadataRegistry } from '@superset-ui/core';
 import { useDynamicPluginContext } from 'src/components/DynamicPlugins';
-import { Tooltip } from 'src/common/components/Tooltip';
-import Modal from 'src/common/components/Modal';
+import Modal from 'src/components/Modal';
+import { Tooltip } from 'src/components/Tooltip';
 import Label from 'src/components/Label';
 import ControlHeader from '../ControlHeader';
 import './VizTypeControl.less';
@@ -107,6 +107,11 @@ function VizSupportValidation({ vizType }) {
   );
 }
 
+const nativeFilterGate = behaviors =>
+  !behaviors.includes(Behavior.NATIVE_FILTER) ||
+  (isFeatureEnabled(FeatureFlag.DASHBOARD_CROSS_FILTERS) &&
+    behaviors.includes(Behavior.INTERACTIVE_CHART));
+
 const VizTypeControl = props => {
   const [showModal, setShowModal] = useState(false);
   const [filter, setFilter] = useState('');
@@ -168,11 +173,7 @@ const VizTypeControl = props => {
   const filteredTypes = DEFAULT_ORDER.filter(type => registry.has(type))
     .filter(type => {
       const behaviors = registry.get(type)?.behaviors || [];
-      return (
-        (isFeatureEnabled(FeatureFlag.DASHBOARD_CROSS_FILTERS) &&
-          behaviors.includes(Behavior.CROSS_FILTER)) ||
-        !behaviors.length
-      );
+      return nativeFilterGate(behaviors);
     })
     .map(type => ({
       key: type,
@@ -183,11 +184,7 @@ const VizTypeControl = props => {
         .entries()
         .filter(entry => {
           const behaviors = entry.value?.behaviors || [];
-          return (
-            (isFeatureEnabled(FeatureFlag.DASHBOARD_CROSS_FILTERS) &&
-              behaviors.includes(Behavior.CROSS_FILTER)) ||
-            !behaviors.length
-          );
+          return nativeFilterGate(behaviors);
         })
         .filter(({ key }) => !typesWithDefaultOrder.has(key)),
     )
