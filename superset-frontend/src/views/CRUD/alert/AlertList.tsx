@@ -374,7 +374,7 @@ function AlertList({
         id: 'created_by',
         input: 'select',
         operator: FilterOperator.relationOneMany,
-        unfilteredLabel: 'All',
+        unfilteredLabel: 'Todos',
         fetchSelects: createFetchRelated(
           'report',
           'created_by',
@@ -390,7 +390,7 @@ function AlertList({
         id: 'last_state',
         input: 'select',
         operator: FilterOperator.equals,
-        unfilteredLabel: 'Any',
+        unfilteredLabel: 'Todos',
         selects: [
           { label: t(`${AlertState.success}`), value: AlertState.success },
           { label: t(`${AlertState.working}`), value: AlertState.working },

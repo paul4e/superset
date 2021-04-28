@@ -1871,6 +1871,7 @@
         "데이터 베이스 목록을 가져오는 도중 에러가 발생하였습니다."
       ],
       "Status": ["상태"],
+      "Any": [""],
       "${AlertState.success}": [""],
       "${AlertState.working}": [""],
       "${AlertState.error}": [""],
@@ -1959,6 +1960,7 @@
       "Edit template": ["템플릿 불러오기"],
       "Delete template": ["템플릿 불러오기"],
       "Annotation layer": ["주석 레이어"],
+      "All": [""],
       "An error occurred while fetching dataset datasource values: %s": [
         "데이터 베이스 목록을 가져오는 도중 에러가 발생하였습니다."
       ],

@@ -1797,6 +1797,7 @@
       "Run in SQL Lab": ["Exposer dans SQL Lab"],
       "Height": ["Hauteur"],
       "Width": ["Largeur"],
+      "Export to .xsl format": [""],
       "%s - untitled": ["%s - sans titre"],
       "Edit chart properties": ["Modifier les propriétés du graphique"],
       "Control labeled ": [""],
@@ -2052,6 +2053,7 @@
         "Une erreur s'est produit durant le rendu de la visualisation : %s"
       ],
       "Status": ["Status"],
+      "Any": [""],
       "${AlertState.success}": [""],
       "${AlertState.working}": [""],
       "${AlertState.error}": [""],
@@ -2140,6 +2142,7 @@
       "Edit template": ["Chargé un modèle"],
       "Delete template": ["Chargé un modèle"],
       "Annotation layer": ["Couches d'annotation"],
+      "All": [""],
       "An error occurred while fetching dataset datasource values: %s": [
         "Une erreur s'est produite durant la création de la source de donnée"
       ],

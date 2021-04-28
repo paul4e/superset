@@ -402,7 +402,7 @@ const DatasetList: FunctionComponent<DatasetListProps> = ({
         id: 'owners',
         input: 'select',
         operator: FilterOperator.relationManyMany,
-        unfilteredLabel: 'All',
+        unfilteredLabel: 'Todos',
         fetchSelects: createFetchRelated(
           'dataset',
           'owners',
@@ -421,7 +421,7 @@ const DatasetList: FunctionComponent<DatasetListProps> = ({
         id: 'database',
         input: 'select',
         operator: FilterOperator.relationManyMany,
-        unfilteredLabel: 'All',
+        unfilteredLabel: 'Todos',
         fetchSelects: createFetchRelated(
           'dataset',
           'database',
@@ -436,7 +436,7 @@ const DatasetList: FunctionComponent<DatasetListProps> = ({
         id: 'schema',
         input: 'select',
         operator: FilterOperator.equals,
-        unfilteredLabel: 'All',
+        unfilteredLabel: 'Todos',
         fetchSelects: createFetchDistinct(
           'dataset',
           'schema',
@@ -451,7 +451,7 @@ const DatasetList: FunctionComponent<DatasetListProps> = ({
         id: 'sql',
         input: 'select',
         operator: FilterOperator.datasetIsNullOrEmpty,
-        unfilteredLabel: 'All',
+        unfilteredLabel: 'Todos',
         selects: [
           { label: 'Virtual', value: false },
           { label: 'Physical', value: true },

@@ -1721,6 +1721,7 @@
       "Run in SQL Lab": ["Ejecutar en Laboratiorio SQL"],
       "Height": ["Altura"],
       "Width": ["Anchura"],
+      "Export to .xsl format": ["Exportar a Excel"],
       "%s - untitled": ["%s - sin título"],
       "Edit chart properties": ["Editar propiedades del gráfico"],
       "Control labeled ": [""],
@@ -1963,12 +1964,13 @@
       "Execution log": ["Registro Acciones"],
       "Actions": ["Acciones"],
       "Bulk select": ["Seleccionar varios"],
-      "No %s yet": ["No hay %s disponibles aún"],
+      "No %s yet": ["No hay %s disponibles"],
       "Created by": ["Creado por"],
       "An error occurred while fetching created by values: %s": [
         "Ha ocurrido un error cargando los valores creados por: %s"
       ],
       "Status": ["Estado"],
+      "Any": ["Todos"],
       "${AlertState.success}": [""],
       "${AlertState.working}": [""],
       "${AlertState.error}": [""],
@@ -2061,6 +2063,7 @@
       "Edit template": ["Cargar una plantilla"],
       "Delete template": ["Cargar una plantilla"],
       "Annotation layer": ["Capas de Anotación"],
+      "All": ["Todos"],
       "An error occurred while fetching dataset datasource values: %s": [
         "Se produjo un error al cargar la información de la base de datos: %s"
       ],
@@ -2288,13 +2291,13 @@
       "${tableName\n                        .split('')\n                        .slice(0, tableName.length - 1)\n                        .join('')}\n                    ": [
         ""
       ],
-      "You don't have any favorites yet!": [""],
+      "You don't have any favorites yet!": ["Aún no tienes favoritos!"],
       "SQL LAB QUERIES": ["Consultas del Laboratorio SQL"],
       "${tableName}": ["Nombre Tabla"],
       "query": ["consulta"],
       "Share": [""],
       "Last run %s": [""],
-      "Recents": [""],
+      "Recents": ["Recientes"],
       "Select start and end date": ["Seleciona fecha de inicio y de fin"],
       "Type or Select [%s]": ["Escribe o Seleciona [%s]"],
       "Filter configuration for the filter box": [""],

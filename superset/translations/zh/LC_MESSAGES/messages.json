@@ -1800,6 +1800,7 @@
       "Run in SQL Lab": ["在 SQL 工具箱中执行"],
       "Height": ["高度"],
       "Width": ["宽度"],
+      "Export to .xsl format": [""],
       "%s - untitled": ["%s  - 无标题"],
       "Edit chart properties": ["编辑图表属性"],
       "Control labeled ": ["控件名称为 "],

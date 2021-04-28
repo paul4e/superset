@@ -19,6 +19,7 @@
 import React from 'react';
 import { styledMount as mount } from 'spec/helpers/theming';
 import EmptyState from 'src/views/CRUD/welcome/EmptyState';
+import { t } from "@superset-ui/core";
 
 describe('EmptyState', () => {
   const variants = [
@@ -68,12 +69,12 @@ describe('EmptyState', () => {
       const textContainer = wrapper.find('.ant-empty-description');
       expect(textContainer.text()).toEqual(
         variant.tab === 'Favorite'
-          ? "You don't have any favorites yet!"
-          : `No ${
+          ? t("You don't have any favorites yet!")
+          : `No tienes ${
               variant.tableName === 'SAVED_QUERIES'
-                ? 'saved queries'
+                ? 'consultas guardadas'
                 : variant.tableName.toLowerCase()
-            } yet`,
+            } todavía`,
       );
       expect(wrapper.find('button')).toHaveLength(1);
     });

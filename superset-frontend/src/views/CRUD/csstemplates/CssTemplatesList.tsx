@@ -277,7 +277,7 @@ function CssTemplatesList({
         id: 'created_by',
         input: 'select',
         operator: FilterOperator.relationOneMany,
-        unfilteredLabel: 'All',
+        unfilteredLabel: 'Todos',
         fetchSelects: createFetchRelated(
           'css_template',
           'created_by',

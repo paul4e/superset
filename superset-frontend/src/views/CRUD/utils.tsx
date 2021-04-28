@@ -39,7 +39,7 @@ const createFetchResourceMethod = (method: string) => (
 ) => async (filterValue = '', pageIndex?: number, pageSize?: number) => {
   const resourceEndpoint = `/api/v1/${resource}/${method}/${relation}`;
   const options =
-    userId && pageIndex === 0 ? [{ label: 'me', value: userId }] : [];
+    userId && pageIndex === 0 ? [{ label: 'Propios', value: userId }] : [];
   try {
     const queryParams = rison.encode({
       ...(pageIndex ? { page: pageIndex } : {}),

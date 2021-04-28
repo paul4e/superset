@@ -1584,6 +1584,7 @@
       "Run in SQL Lab": ["Esponi in SQL Lab"],
       "Height": ["Altezza"],
       "Width": ["Larghezza"],
+      "Export to .xsl format": [""],
       "%s - untitled": ["%s - senza nome"],
       "Edit chart properties": [""],
       "Control labeled ": [""],
@@ -1811,6 +1812,7 @@
         "Errore nel rendering della visualizzazione: %s"
       ],
       "Status": [""],
+      "Any": [""],
       "${AlertState.success}": [""],
       "${AlertState.working}": [""],
       "${AlertState.error}": [""],
@@ -1899,6 +1901,7 @@
       "Edit template": ["Template CSS"],
       "Delete template": [""],
       "Annotation layer": ["Azione"],
+      "All": [""],
       "An error occurred while fetching dataset datasource values: %s": [
         "Errore nel creare il datasource"
       ],

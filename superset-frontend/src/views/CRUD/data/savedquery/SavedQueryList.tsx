@@ -416,7 +416,7 @@ function SavedQueryList({
         id: 'database',
         input: 'select',
         operator: FilterOperator.relationOneMany,
-        unfilteredLabel: 'All',
+        unfilteredLabel: 'Todos',
         fetchSelects: createFetchRelated(
           'saved_query',
           'database',
@@ -436,7 +436,7 @@ function SavedQueryList({
         id: 'schema',
         input: 'select',
         operator: FilterOperator.equals,
-        unfilteredLabel: 'All',
+        unfilteredLabel: 'Todos',
         fetchSelects: createFetchDistinct(
           'saved_query',
           'schema',

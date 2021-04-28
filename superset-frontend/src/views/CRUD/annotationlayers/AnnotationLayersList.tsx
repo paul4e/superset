@@ -291,7 +291,7 @@ function AnnotationLayersList({
         id: 'created_by',
         input: 'select',
         operator: FilterOperator.relationOneMany,
-        unfilteredLabel: 'All',
+        unfilteredLabel: 'Todos',
         fetchSelects: createFetchRelated(
           'annotation_layer',
           'created_by',

@@ -249,22 +249,22 @@ msgid ""
 "statement. Then, try running your query again."
 msgstr ""
 
-#: superset/viz.py:125 superset/viz_sip38.py:126
+#: superset/viz.py:129 superset/viz_sip38.py:126
 msgid "Viz is missing a datasource"
 msgstr ""
 
-#: superset/viz.py:231
+#: superset/viz.py:235
 msgid ""
 "Applied rolling window did not return any data. Please make sure the "
 "source query satisfies the minimum periods defined in the rolling window."
 msgstr ""
 
-#: superset/utils/date_parser.py:257 superset/viz.py:370
+#: superset/utils/date_parser.py:257 superset/viz.py:374
 #: superset/viz_sip38.py:376
 msgid "From date cannot be larger than to date"
 msgstr "시작 날짜가 끝 날짜보다 클 수 없습니다"
 
-#: superset/viz.py:520
+#: superset/viz.py:524
 msgid "Cached value not found"
 msgstr "캐시된 값을 찾을 수 없습니다."
 
@@ -672,17 +672,17 @@ msgstr ""
 msgid "Name must be unique"
 msgstr ""
 
-#: superset/charts/api.py:451
+#: superset/charts/api.py:461
 #, python-format
 msgid "Deleted %(num)d chart"
 msgid_plural "Deleted %(num)d charts"
 msgstr[0] ""
 
-#: superset/charts/api.py:548
+#: superset/charts/api.py:569
 msgid "Request is not JSON"
 msgstr ""
 
-#: superset/charts/api.py:556 superset/charts/api.py:624
+#: superset/charts/api.py:577 superset/charts/api.py:645
 #, python-format
 msgid "Request is incorrect: %(error)s"
 msgstr "부적절한 요청입니다 : %(error)s"
@@ -2583,14 +2583,14 @@ msgstr ""
 msgid "You have no permission to approve this request"
 msgstr ""
 
-#: superset/views/core.py:639
+#: superset/views/core.py:642
 #, python-format
 msgid ""
 "Cannot import dashboard: %(db_error)s.\n"
 "Make sure to create the database before importing the dashboard."
 msgstr ""
 
-#: superset/views/core.py:650
+#: superset/views/core.py:653
 msgid "An unknown error occurred. Please contact your Superset administrator"
 msgstr ""
 
@@ -2598,108 +2598,108 @@ msgstr ""
 msgid "[Missing Dataset]"
 msgstr ""
 
-#: superset/views/core.py:766 superset/views/core.py:772
-#: superset/views/core.py:928 superset/views/core.py:946
+#: superset/views/core.py:769 superset/views/core.py:775
+#: superset/views/core.py:931 superset/views/core.py:949
 msgid "You don't have the rights to "
 msgstr ""
 
-#: superset/views/core.py:766 superset/views/core.py:929
+#: superset/views/core.py:769 superset/views/core.py:932
 msgid "alter this "
 msgstr ""
 
 #: superset-frontend/src/views/CRUD/chart/ChartList.tsx:129
 #: superset-frontend/src/views/CRUD/chart/ChartList.tsx:600
 #: superset-frontend/src/views/CRUD/welcome/ChartTable.tsx:64
-#: superset/views/core.py:766 superset/views/core.py:772
+#: superset/views/core.py:769 superset/views/core.py:775
 msgid "chart"
 msgstr ""
 
-#: superset/views/core.py:772 superset/views/core.py:947
+#: superset/views/core.py:775 superset/views/core.py:950
 msgid "create a "
 msgstr ""
 
-#: superset/views/core.py:818
+#: superset/views/core.py:821
 #, python-format
 msgid "Explore - %(table)s"
 msgstr ""
 
 #: superset-frontend/src/SqlLab/components/ExploreCtasResultsButton.jsx:99
 #: superset-frontend/src/SqlLab/components/ExploreResultsButton.jsx:163
-#: superset/views/core.py:820
+#: superset/views/core.py:823
 msgid "Explore"
 msgstr ""
 
-#: superset/views/core.py:904
+#: superset/views/core.py:907
 msgid "Chart [{}] has been saved"
 msgstr ""
 
-#: superset/views/core.py:908
+#: superset/views/core.py:911
 msgid "Chart [{}] has been overwritten"
 msgstr ""
 
 #: superset-frontend/src/views/CRUD/dashboard/DashboardList.tsx:102
 #: superset-frontend/src/views/CRUD/dashboard/DashboardList.tsx:563
 #: superset-frontend/src/views/CRUD/welcome/DashboardTable.tsx:55
-#: superset/views/core.py:930 superset/views/core.py:948
+#: superset/views/core.py:933 superset/views/core.py:951
 msgid "dashboard"
 msgstr "대시보드"
 
-#: superset/views/core.py:935
+#: superset/views/core.py:938
 msgid "Chart [{}] was added to dashboard [{}]"
 msgstr ""
 
-#: superset/views/core.py:957
+#: superset/views/core.py:960
 msgid "Dashboard [{}] just got created and chart [{}] was added to it"
 msgstr ""
 
-#: superset/views/core.py:1185
+#: superset/views/core.py:1188
 msgid ""
 "This dashboard was changed recently. Please reload dashboard to get "
 "latest version."
 msgstr ""
 
-#: superset/views/core.py:1278
+#: superset/views/core.py:1281
 #, python-format
 msgid "Could not load database driver: %(driver_name)s"
 msgstr ""
 
-#: superset/views/core.py:1287
+#: superset/views/core.py:1290
 msgid ""
 "Invalid connection string, a valid string usually follows:\n"
 "'DRIVER://USER:PASSWORD@DB-HOST/DATABASE-NAME'"
 msgstr ""
 
-#: superset/views/core.py:1644
+#: superset/views/core.py:1647
 msgid ""
 "Malformed request. slice_id or table_name and db_name arguments are "
 "expected"
 msgstr ""
 
-#: superset/views/core.py:1654
+#: superset/views/core.py:1657
 #, python-format
 msgid "Chart %(id)s not found"
 msgstr ""
 
-#: superset/views/core.py:1667
+#: superset/views/core.py:1670
 #, python-format
 msgid "Table %(table)s wasn't found in the database %(db)s"
 msgstr ""
 
-#: superset/views/core.py:1937
+#: superset/views/core.py:1940
 #, python-format
 msgid "Can't find User '%(name)s', please ask your admin to create one."
 msgstr ""
 
-#: superset/views/core.py:1949
+#: superset/views/core.py:1952
 #, python-format
 msgid "Can't find DruidCluster with cluster_name = '%(name)s'"
 msgstr ""
 
-#: superset/views/core.py:2192
+#: superset/views/core.py:2195
 msgid "Data could not be deserialized. You may want to re-run the query."
 msgstr ""
 
-#: superset/views/core.py:2296
+#: superset/views/core.py:2299
 #, python-format
 msgid ""
 "%(validator)s was unable to check your query.\n"
@@ -2707,23 +2707,23 @@ msgid ""
 "Exception: %(ex)s"
 msgstr ""
 
-#: superset/views/core.py:2350
+#: superset/views/core.py:2353
 msgid ""
 "Failed to start remote query on a worker. Tell your administrator to "
 "verify the availability of the message queue."
 msgstr ""
 
-#: superset/views/core.py:2514 superset/views/core.py:2516
+#: superset/views/core.py:2517 superset/views/core.py:2519
 msgid "Query record was not created as expected."
 msgstr ""
 
-#: superset/views/core.py:2553
+#: superset/views/core.py:2556
 #, python-format
 msgid "The parameter %(parameters)s in your query is undefined."
 msgid_plural "The following parameters in your query are undefined: %(parameters)s."
 msgstr[0] ""
 
-#: superset/views/core.py:2821
+#: superset/views/core.py:2824
 #, python-format
 msgid "%(user)s's profile"
 msgstr ""
@@ -6163,8 +6163,12 @@ msgstr ""
 msgid "Export to .JSON format"
 msgstr ""
 
-#: superset-frontend/src/explore/components/ExploreActionButtons.jsx:100
+#: superset-frontend/src/explore/components/ExploreActionButtons.jsx:105
 msgid "Export to .csv format"
+msgstr ""
+
+#: superset-frontend/src/explore/components/ExploreActionButtons.jsx:119
+msgid "Export to .xsl format"
 msgstr ""
 
 #: superset-frontend/src/explore/components/ExploreChartHeader.jsx:102
@@ -7068,6 +7072,13 @@ msgstr "데이터 베이스 목록을 가져오는 도중 에러가 발생하였
 msgid "Status"
 msgstr "상태"
 
+#: superset-frontend/src/views/CRUD/alert/AlertList.tsx:388
+#: superset-frontend/src/views/CRUD/chart/ChartList.tsx:459
+#: superset-frontend/src/views/CRUD/dashboard/DashboardList.tsx:405
+#: superset-frontend/src/views/CRUD/dashboard/DashboardList.tsx:417
+msgid "Any"
+msgstr ""
+
 #: superset-frontend/src/views/CRUD/alert/AlertList.tsx:390
 msgid "${AlertState.success}"
 msgstr ""
@@ -7453,6 +7464,28 @@ msgstr "템플릿 불러오기"
 #: superset-frontend/src/views/CRUD/annotationlayers/AnnotationLayersList.tsx:323
 msgid "Annotation layer"
 msgstr "주석 레이어"
+
+#: superset-frontend/src/views/CRUD/annotationlayers/AnnotationLayersList.tsx:291
+#: superset-frontend/src/views/CRUD/chart/ChartList.tsx:374
+#: superset-frontend/src/views/CRUD/chart/ChartList.tsx:395
+#: superset-frontend/src/views/CRUD/chart/ChartList.tsx:416
+#: superset-frontend/src/views/CRUD/chart/ChartList.tsx:440
+#: superset-frontend/src/views/CRUD/csstemplates/CssTemplatesList.tsx:277
+#: superset-frontend/src/views/CRUD/dashboard/DashboardList.tsx:363
+#: superset-frontend/src/views/CRUD/dashboard/DashboardList.tsx:384
+#: superset-frontend/src/views/CRUD/data/database/DatabaseList.tsx:362
+#: superset-frontend/src/views/CRUD/data/database/DatabaseList.tsx:381
+#: superset-frontend/src/views/CRUD/data/dataset/DatasetList.tsx:394
+#: superset-frontend/src/views/CRUD/data/dataset/DatasetList.tsx:413
+#: superset-frontend/src/views/CRUD/data/dataset/DatasetList.tsx:428
+#: superset-frontend/src/views/CRUD/data/dataset/DatasetList.tsx:443
+#: superset-frontend/src/views/CRUD/data/query/QueryList.tsx:342
+#: superset-frontend/src/views/CRUD/data/query/QueryList.tsx:359
+#: superset-frontend/src/views/CRUD/data/query/QueryList.tsx:376
+#: superset-frontend/src/views/CRUD/data/savedquery/SavedQueryList.tsx:364
+#: superset-frontend/src/views/CRUD/data/savedquery/SavedQueryList.tsx:384
+msgid "All"
+msgstr ""
 
 #: superset-frontend/src/views/CRUD/annotationlayers/AnnotationLayersList.tsx:296
 #: superset-frontend/src/views/CRUD/csstemplates/CssTemplatesList.tsx:282
