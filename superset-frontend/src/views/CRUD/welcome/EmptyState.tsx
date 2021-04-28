@@ -132,7 +132,7 @@ export default function EmptyState({ tableName, tab }: EmptyStateProps) {
         image="/static/assets/images/star-circle.svg"
         description={
           <span className="no-favorites">
-            {t("You don't have any favorites yet!")}
+            {"Aún no tienes favoritos!"}
           </span>
         }
       >

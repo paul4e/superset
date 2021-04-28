@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-04-07 09:58-0600\n"
+"POT-Creation-Date: 2021-04-26 20:10-0600\n"
 "PO-Revision-Date: 2018-02-23 13:55-0300\n"
 "Last-Translator: \n"
 "Language: pt_BR\n"
@@ -26,7 +26,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.0\n"
+"Generated-By: Babel 2.8.0\n"
 
 #: superset/app.py:225
 msgid "Home"
@@ -246,11 +246,11 @@ msgstr ""
 " uma única instrução SELECT. Por favor garanta que sua consulta tenha uma"
 " única instrução SELECT. Depois tente rodar novamente sua consulta."
 
-#: superset/viz.py:125 superset/viz_sip38.py:126
+#: superset/viz.py:129 superset/viz_sip38.py:126
 msgid "Viz is missing a datasource"
 msgstr "Está faltando uma fonte de dados para a Viz"
 
-#: superset/viz.py:231
+#: superset/viz.py:235
 msgid ""
 "Applied rolling window did not return any data. Please make sure the "
 "source query satisfies the minimum periods defined in the rolling window."
@@ -258,25 +258,25 @@ msgstr ""
 "A janela de tempo não retornou nenhum dado. Por favor garanta que a fonte"
 " de dados satisfaça minimamente os períodos definidos na janela de tempo."
 
-#: superset/utils/date_parser.py:257 superset/viz.py:370
+#: superset/utils/date_parser.py:257 superset/viz.py:374
 #: superset/viz_sip38.py:376
 msgid "From date cannot be larger than to date"
 msgstr "Desde a data não pode ser maior do que até a data"
 
-#: superset/viz.py:520
+#: superset/viz.py:524
 msgid "Cached value not found"
 msgstr "Valor em cache não encontrado"
 
-#: superset/common/query_context.py:394 superset/viz.py:535
+#: superset/common/query_context.py:394 superset/viz.py:539
 #, python-format
 msgid "Columns missing in datasource: %(invalid_columns)s"
 msgstr "Colunas faltando na fonte de dados: %(invalid_columns)s"
 
-#: superset/viz.py:647 superset/viz_sip38.py:598
+#: superset/viz.py:657 superset/viz_sip38.py:598
 msgid "Table View"
 msgstr "Visão de tabela"
 
-#: superset/viz.py:669
+#: superset/viz.py:679
 msgid ""
 "You cannot use [Columns] in combination with [Group "
 "By]/[Metrics]/[Percentage Metrics]. Please choose one or the other."
@@ -284,164 +284,164 @@ msgstr ""
 "Você não pode usar [Columns] em combinação com [Group "
 "By]/[Metrics]/[Percentage Metrics]. Por favor escolha um ou o outro."
 
-#: superset/viz.py:706 superset/viz_sip38.py:611
+#: superset/viz.py:716 superset/viz_sip38.py:611
 msgid "Pick a granularity in the Time section or uncheck 'Include Time'"
 msgstr "Escolha uma granularidade na seção Tempo ou desmarque 'Incluir hora'"
 
-#: superset/viz.py:779 superset/viz_sip38.py:713
+#: superset/viz.py:789 superset/viz_sip38.py:713
 msgid "Time Table View"
 msgstr "Visão da tabela de tempo"
 
-#: superset/viz.py:788 superset/viz.py:1684 superset/viz_sip38.py:722
+#: superset/viz.py:798 superset/viz.py:1694 superset/viz_sip38.py:722
 #: superset/viz_sip38.py:1605
 msgid "Pick at least one metric"
 msgstr "Escolha pelo menos uma métrica"
 
-#: superset/viz.py:792 superset/viz_sip38.py:726
+#: superset/viz.py:802 superset/viz_sip38.py:726
 msgid "When using 'Group By' you are limited to use a single metric"
 msgstr "Ao usar 'Group By' você está limitado a usar uma única métrica"
 
-#: superset/viz.py:821 superset/viz_sip38.py:755
+#: superset/viz.py:831 superset/viz_sip38.py:755
 msgid "Pivot Table"
 msgstr "Tabela pivot"
 
-#: superset/viz.py:838 superset/viz_sip38.py:771
+#: superset/viz.py:848 superset/viz_sip38.py:771
 msgid "Please choose at least one 'Group by' field "
 msgstr "Por favor escolha pelo menos um campo 'Group by'"
 
-#: superset/viz.py:850 superset/viz_sip38.py:783
+#: superset/viz.py:860 superset/viz_sip38.py:783
 msgid "Please choose at least one metric"
 msgstr "Escolha pelo menos uma métrica"
 
-#: superset/viz.py:852 superset/viz_sip38.py:785
+#: superset/viz.py:862 superset/viz_sip38.py:785
 msgid "Group By' and 'Columns' can't overlap"
 msgstr "Group By' e 'Columns' não podem colidir"
 
-#: superset/viz.py:947 superset/viz_sip38.py:837
+#: superset/viz.py:957 superset/viz_sip38.py:837
 msgid "Treemap"
 msgstr "Treemap"
 
-#: superset/viz.py:979 superset/viz_sip38.py:869
+#: superset/viz.py:989 superset/viz_sip38.py:869
 msgid "Calendar Heatmap"
 msgstr "Calendário Heatmap"
 
-#: superset/viz.py:1059 superset/viz_sip38.py:1030
+#: superset/viz.py:1069 superset/viz_sip38.py:1030
 msgid "Bubble Chart"
 msgstr "Gráfico de bolhas"
 
-#: superset/viz.py:1081 superset/viz_sip38.py:1046
+#: superset/viz.py:1091 superset/viz_sip38.py:1046
 msgid "Please use 3 different metric labels"
 msgstr "Por favor use 3 diferentes descrições de métrica"
 
-#: superset/viz.py:1083 superset/viz_sip38.py:1048
+#: superset/viz.py:1093 superset/viz_sip38.py:1048
 msgid "Pick a metric for x, y and size"
 msgstr "Escolha uma métrica para x, y e tamanho"
 
-#: superset/viz.py:1110 superset/viz_sip38.py:1075
+#: superset/viz.py:1120 superset/viz_sip38.py:1075
 msgid "Bullet Chart"
 msgstr "Gráfico de bala"
 
-#: superset/viz.py:1120 superset/viz_sip38.py:1085
+#: superset/viz.py:1130 superset/viz_sip38.py:1085
 msgid "Pick a metric to display"
 msgstr "Escolha uma métrica para exibir"
 
-#: superset/viz.py:1138 superset/viz_sip38.py:1101
+#: superset/viz.py:1148 superset/viz_sip38.py:1101
 msgid "Big Number with Trendline"
 msgstr "Número grande com Trendline"
 
-#: superset/viz.py:1146 superset/viz.py:1180 superset/viz_sip38.py:1109
+#: superset/viz.py:1156 superset/viz.py:1190 superset/viz_sip38.py:1109
 #: superset/viz_sip38.py:1140
 msgid "Pick a metric!"
 msgstr "Escolha uma métrica!"
 
-#: superset/viz.py:1172 superset/viz_sip38.py:1132
+#: superset/viz.py:1182 superset/viz_sip38.py:1132
 msgid "Big Number"
 msgstr "Número grande"
 
-#: superset/viz.py:1194 superset/viz_sip38.py:1154
+#: superset/viz.py:1204 superset/viz_sip38.py:1154
 msgid "Time Series - Line Chart"
 msgstr "Série temporal - Gráfico de linhas"
 
-#: superset/viz.py:1264 superset/viz.py:1524 superset/viz_sip38.py:1219
+#: superset/viz.py:1274 superset/viz.py:1534 superset/viz_sip38.py:1219
 #: superset/viz_sip38.py:1433
 msgid "Pick a time granularity for your time series"
 msgstr "Escolha uma granularidade de tempo para suas séries temporais"
 
-#: superset/viz.py:1323 superset/viz_sip38.py:1275
+#: superset/viz.py:1333 superset/viz_sip38.py:1275
 msgid ""
 "An enclosed time range (both start and end) must be specified when using "
 "a Time Comparison."
 msgstr "Uma faixa de tempo (com início e fim) deve ser especificada quand"
 
-#: superset/viz.py:1393 superset/viz_sip38.py:1345
+#: superset/viz.py:1403 superset/viz_sip38.py:1345
 msgid "Time Series - Multiple Line Charts"
 msgstr "Série temporal - gráficos de múltiplas linhas"
 
-#: superset/viz.py:1466 superset/viz_sip38.py:1375
+#: superset/viz.py:1476 superset/viz_sip38.py:1375
 msgid "Time Series - Dual Axis Line Chart"
 msgstr "Série temporal - gráfico de linha de dois eixos"
 
-#: superset/viz.py:1476 superset/viz_sip38.py:1385
+#: superset/viz.py:1486 superset/viz_sip38.py:1385
 msgid "Pick a metric for left axis!"
 msgstr "Escolha uma métrica para o eixo esquerdo!"
 
-#: superset/viz.py:1478 superset/viz_sip38.py:1387
+#: superset/viz.py:1488 superset/viz_sip38.py:1387
 msgid "Pick a metric for right axis!"
 msgstr "Escolha uma métrica para o eixo direito!"
 
-#: superset/viz.py:1481 superset/viz_sip38.py:1390
+#: superset/viz.py:1491 superset/viz_sip38.py:1390
 msgid "Please choose different metrics on left and right axis"
 msgstr "Escolha diferentes métricas no eixo esquerdo e direito"
 
-#: superset/viz.py:1541 superset/viz_sip38.py:1450
+#: superset/viz.py:1551 superset/viz_sip38.py:1450
 msgid "Time Series - Bar Chart"
 msgstr "Série temporal - Gráfico de barras"
 
-#: superset/viz.py:1550 superset/viz_sip38.py:1459
+#: superset/viz.py:1560 superset/viz_sip38.py:1459
 msgid "Time Series - Period Pivot"
 msgstr "Série temporal - Pivô de período"
 
-#: superset/viz.py:1597 superset/viz_sip38.py:1506
+#: superset/viz.py:1607 superset/viz_sip38.py:1506
 msgid "Time Series - Percent Change"
 msgstr "Série temporal - Mudança de porcentagem"
 
-#: superset/viz.py:1605 superset/viz_sip38.py:1514
+#: superset/viz.py:1615 superset/viz_sip38.py:1514
 msgid "Time Series - Stacked"
 msgstr "Série temporal - empilhadas"
 
-#: superset/viz.py:1615 superset/viz_sip38.py:1543
+#: superset/viz.py:1625 superset/viz_sip38.py:1543
 msgid "Histogram"
 msgstr "Histograma"
 
-#: superset/viz.py:1625 superset/viz_sip38.py:1552
+#: superset/viz.py:1635 superset/viz_sip38.py:1552
 msgid "Must have at least one numeric column specified"
 msgstr "Deve ter pelo menos uma coluna numérica"
 
-#: superset/viz.py:1671 superset/viz_sip38.py:1596
+#: superset/viz.py:1681 superset/viz_sip38.py:1596
 msgid "Distribution - Bar Chart"
 msgstr "Distribuição - Gráfico de barras"
 
-#: superset/viz.py:1681
+#: superset/viz.py:1691
 msgid "Can't have overlap between Series and Breakdowns"
 msgstr "Não pode haver sobreposição entre Series e Breakdowns"
 
-#: superset/viz.py:1686 superset/viz_sip38.py:1607
+#: superset/viz.py:1696 superset/viz_sip38.py:1607
 msgid "Pick at least one field for [Series]"
 msgstr "Escolha pelo menos um campo para [Series]"
 
-#: superset/viz.py:1741 superset/viz_sip38.py:1663
+#: superset/viz.py:1751 superset/viz_sip38.py:1663
 msgid "Sunburst"
 msgstr "Sunburst"
 
-#: superset/viz.py:1787 superset/viz_sip38.py:1707
+#: superset/viz.py:1797 superset/viz_sip38.py:1707
 msgid "Sankey"
 msgstr "Sankey"
 
-#: superset/viz.py:1795
+#: superset/viz.py:1805
 msgid "Pick exactly 2 columns as [Source / Target]"
 msgstr "Escolha exatamente 2 colunas como [Origem / Alvo]"
 
-#: superset/viz.py:1839 superset/viz_sip38.py:1740
+#: superset/viz.py:1849 superset/viz_sip38.py:1740
 msgid ""
 "There's a loop in your Sankey, please provide a tree. Here's a faulty "
 "link: {}"
@@ -449,135 +449,135 @@ msgstr ""
 "Há um loop em seu Sankey, por favor, forneça uma árvore. Aqui está um "
 "link defeituoso: {}"
 
-#: superset/viz.py:1852 superset/viz.py:1875 superset/viz_sip38.py:1753
+#: superset/viz.py:1862 superset/viz.py:1885 superset/viz_sip38.py:1753
 #: superset/viz_sip38.py:1774
 msgid "Directed Force Layout"
 msgstr "Layout de Força Dirigida"
 
-#: superset/viz.py:1859 superset/viz_sip38.py:1760
+#: superset/viz.py:1869 superset/viz_sip38.py:1760
 #, fuzzy
 msgid "Pick exactly 2 columns to 'Group By'"
 msgstr "Escolha exatamente 2 colunas como [Origem / Alvo]"
 
-#: superset/viz.py:1908 superset/viz_sip38.py:1806
+#: superset/viz.py:1918 superset/viz_sip38.py:1806
 msgid "Country Map"
 msgstr "Mapa do País"
 
-#: superset/viz.py:1937 superset/viz_sip38.py:1827
+#: superset/viz.py:1947 superset/viz_sip38.py:1827
 msgid "World Map"
 msgstr "Mapa mundial"
 
 #: superset-frontend/src/dashboard/components/nativeFilters/FilterBar.tsx:438
-#: superset-frontend/src/explore/controls.jsx:468 superset/viz.py:1995
+#: superset-frontend/src/explore/controls.jsx:468 superset/viz.py:2005
 #: superset/viz_sip38.py:1877
 msgid "Filters"
 msgstr "Filtros"
 
-#: superset/viz.py:2013 superset/viz_sip38.py:1895
+#: superset/viz.py:2023 superset/viz_sip38.py:1895
 msgid "Invalid filter configuration, please select a column"
 msgstr "Configuração de filtro inválida, por favor selecione uma coluna"
 
-#: superset/viz.py:2057 superset/viz_sip38.py:1956
+#: superset/viz.py:2067 superset/viz_sip38.py:1956
 msgid "Parallel Coordinates"
 msgstr "Coordenadas paralelas"
 
-#: superset/viz.py:2079 superset/viz_sip38.py:1972
+#: superset/viz.py:2089 superset/viz_sip38.py:1972
 msgid "Heatmap"
 msgstr "Mapa de calor"
 
-#: superset/viz.py:2135 superset/viz_sip38.py:2021
+#: superset/viz.py:2145 superset/viz_sip38.py:2021
 msgid "Horizon Charts"
 msgstr "Gráficos Horizon"
 
-#: superset/viz.py:2147 superset/viz_sip38.py:2033
+#: superset/viz.py:2157 superset/viz_sip38.py:2033
 msgid "Mapbox"
 msgstr "Mapbox"
 
-#: superset/viz.py:2159 superset/viz_sip38.py:2045
+#: superset/viz.py:2169 superset/viz_sip38.py:2045
 msgid "[Longitude] and [Latitude] must be set"
 msgstr "[Longitude] e [Latitude] devem ser configuradas"
 
-#: superset/viz.py:2166 superset/viz_sip38.py:2052
+#: superset/viz.py:2176 superset/viz_sip38.py:2052
 msgid "Must have a [Group By] column to have 'count' as the [Label]"
 msgstr "Deve ter uma coluna [Group By] para ter 'count' como [Label]"
 
-#: superset/viz.py:2186 superset/viz_sip38.py:2072
+#: superset/viz.py:2196 superset/viz_sip38.py:2072
 msgid "Choice of [Label] must be present in [Group By]"
 msgstr "A escolha de [Label] deve estar presente em [Group By]"
 
-#: superset/viz.py:2194 superset/viz_sip38.py:2079
+#: superset/viz.py:2204 superset/viz_sip38.py:2079
 msgid "Choice of [Point Radius] must be present in [Group By]"
 msgstr "A escolha de [Raio do ponto] deve estar presente em [Grupo]"
 
-#: superset/viz.py:2202 superset/viz_sip38.py:2086
+#: superset/viz.py:2212 superset/viz_sip38.py:2086
 msgid "[Longitude] and [Latitude] columns must be present in [Group By]"
 msgstr "[Longitude] e as colunas [Latitude] devem estar presentes em [Group By]"
 
-#: superset/viz.py:2282 superset/viz_sip38.py:2166
+#: superset/viz.py:2292 superset/viz_sip38.py:2166
 msgid "Deck.gl - Multiple Layers"
 msgstr "Deck.gl - Múltiplas camadas"
 
-#: superset/viz.py:2322 superset/viz.py:2354 superset/viz_sip38.py:2222
+#: superset/viz.py:2332 superset/viz.py:2364 superset/viz_sip38.py:2222
 msgid "Bad spatial key"
 msgstr "Chave espacial ruim"
 
-#: superset/viz.py:2340 superset/viz_sip38.py:2208
+#: superset/viz.py:2350 superset/viz_sip38.py:2208
 #, python-format
 msgid "Invalid spatial point encountered: %s"
 msgstr "Ponto espacial encontrado inválido: %s"
 
-#: superset/viz.py:2376 superset/viz_sip38.py:2244
+#: superset/viz.py:2386 superset/viz_sip38.py:2244
 msgid ""
 "Encountered invalid NULL spatial entry,"
 "                                        please consider filtering those "
 "out"
 msgstr "Encontrada entrada espacial inválida NULL, por favor considere filtrá-la."
 
-#: superset/viz.py:2466 superset/viz_sip38.py:2315
+#: superset/viz.py:2476 superset/viz_sip38.py:2315
 msgid "Deck.gl - Scatter plot"
 msgstr "Deck.gl - Scatter plot"
 
-#: superset/viz.py:2515 superset/viz_sip38.py:2362
+#: superset/viz.py:2525 superset/viz_sip38.py:2362
 msgid "Deck.gl - Screen Grid"
 msgstr "Deck.gl - Grade de tela"
 
-#: superset/viz.py:2541 superset/viz_sip38.py:2388
+#: superset/viz.py:2551 superset/viz_sip38.py:2388
 msgid "Deck.gl - 3D Grid"
 msgstr "Deck.gl - Grade 3D"
 
-#: superset/viz.py:2571 superset/viz_sip38.py:2415
+#: superset/viz.py:2581 superset/viz_sip38.py:2415
 msgid "Deck.gl - Paths"
 msgstr "Deck.gl - Paths"
 
-#: superset/viz.py:2619 superset/viz_sip38.py:2460
+#: superset/viz.py:2629 superset/viz_sip38.py:2460
 msgid "Deck.gl - Polygon"
 msgstr "Deck.gl - Polígono"
 
-#: superset/viz.py:2648 superset/viz_sip38.py:2489
+#: superset/viz.py:2658 superset/viz_sip38.py:2489
 msgid "Deck.gl - 3D HEX"
 msgstr "Deck.gl - 3D HEX"
 
-#: superset/viz.py:2667 superset/viz_sip38.py:2505
+#: superset/viz.py:2677 superset/viz_sip38.py:2505
 msgid "Deck.gl - GeoJSON"
 msgstr "Deck.gl - GeoJSON"
 
-#: superset/viz.py:2686 superset/viz_sip38.py:2517
+#: superset/viz.py:2696 superset/viz_sip38.py:2517
 msgid "Deck.gl - Arc"
 msgstr "Deck.gl - Arc"
 
-#: superset/viz.py:2721 superset/viz_sip38.py:2552
+#: superset/viz.py:2731 superset/viz_sip38.py:2552
 msgid "Event flow"
 msgstr "Fluxo de eventos"
 
-#: superset/viz.py:2753 superset/viz_sip38.py:2584
+#: superset/viz.py:2763 superset/viz_sip38.py:2584
 msgid "Time Series - Paired t-test"
 msgstr "Série temporal - teste emparelhado t"
 
-#: superset/viz.py:2808 superset/viz_sip38.py:2639
+#: superset/viz.py:2818 superset/viz_sip38.py:2639
 msgid "Time Series - Nightingale Rose Chart"
 msgstr "Série temporal - gráfico de rosa de Nightingale"
 
-#: superset/viz.py:2843 superset/viz_sip38.py:2674
+#: superset/viz.py:2853 superset/viz_sip38.py:2674
 msgid "Partition Diagram"
 msgstr "Diagrama de Partição"
 
@@ -689,18 +689,18 @@ msgstr "A camada de anotação tem anotações associadas."
 msgid "Name must be unique"
 msgstr "O nome deve ser único"
 
-#: superset/charts/api.py:451
+#: superset/charts/api.py:461
 #, python-format
 msgid "Deleted %(num)d chart"
 msgid_plural "Deleted %(num)d charts"
 msgstr[0] "%(num)d gráfico deletado"
 msgstr[1] "%(num)d gráficos deletados"
 
-#: superset/charts/api.py:548
+#: superset/charts/api.py:569
 msgid "Request is not JSON"
 msgstr "Requisição incorreta: %(error)s"
 
-#: superset/charts/api.py:556 superset/charts/api.py:624
+#: superset/charts/api.py:577 superset/charts/api.py:645
 #, python-format
 msgid "Request is incorrect: %(error)s"
 msgstr "Requisição incorreta: %(error)s"
@@ -1706,7 +1706,7 @@ msgid "Database could not be updated."
 msgstr "Não foi possível atualizar o banco de dados."
 
 #: superset/databases/commands/exceptions.py:104
-#: superset/databases/commands/exceptions.py:120 superset/views/core.py:1295
+#: superset/databases/commands/exceptions.py:120 superset/views/core.py:1298
 msgid "Connection failed, please check your connection settings"
 msgstr ""
 
@@ -1726,7 +1726,7 @@ msgstr "Uma conexão de banco de dados insegura foi parada"
 msgid "Could not load database driver"
 msgstr "Não foi possível carregar o driver do banco de dados"
 
-#: superset/databases/commands/exceptions.py:132 superset/views/core.py:1303
+#: superset/databases/commands/exceptions.py:132 superset/views/core.py:1306
 msgid "Unexpected error occurred, please check your logs for details"
 msgstr "Ocorreu um erro inesperado, por favor veja seus logs para mais detalhes"
 
@@ -2209,7 +2209,7 @@ msgstr "Usar o botão de editar para alerar esse campo"
 msgid "Test Connection"
 msgstr "Conexão de teste"
 
-#: superset/utils/core.py:797
+#: superset/utils/core.py:798
 #, python-format
 msgid "[Superset] Access to the datasource %(name)s was granted"
 msgstr "[Superset] O acesso à fonte de dados %(name) s foi concedido"
@@ -2536,7 +2536,7 @@ msgstr "Papel %(r)s foi extendido para prover acesso à fonte de dados %(ds)s"
 msgid "You have no permission to approve this request"
 msgstr "Você não tem permissão para aprovar este pedido"
 
-#: superset/views/core.py:639
+#: superset/views/core.py:642
 #, python-format
 msgid ""
 "Cannot import dashboard: %(db_error)s.\n"
@@ -2545,70 +2545,70 @@ msgstr ""
 "Não foi possível importal o painel: %(db_error)s.\n"
 "Não esqueça de criar o banco de dados antes de importar o painel."
 
-#: superset/views/core.py:650
+#: superset/views/core.py:653
 msgid "An unknown error occurred. Please contact your Superset administrator"
 msgstr "Ocorreu um erro desconhecido. Por favor contate seu administrador Superset"
 
-#: superset/views/core.py:722
+#: superset/views/core.py:725
 #, fuzzy
 msgid "[Missing Dataset]"
 msgstr "Mudar conjunto de dados"
 
-#: superset/views/core.py:766 superset/views/core.py:772
-#: superset/views/core.py:928 superset/views/core.py:946
+#: superset/views/core.py:769 superset/views/core.py:775
+#: superset/views/core.py:931 superset/views/core.py:949
 msgid "You don't have the rights to "
 msgstr "Você não tem o direito de "
 
-#: superset/views/core.py:766 superset/views/core.py:929
+#: superset/views/core.py:769 superset/views/core.py:932
 msgid "alter this "
 msgstr "alterar este"
 
 #: superset-frontend/src/views/CRUD/chart/ChartList.tsx:129
 #: superset-frontend/src/views/CRUD/chart/ChartList.tsx:600
 #: superset-frontend/src/views/CRUD/welcome/ChartTable.tsx:64
-#: superset/views/core.py:766 superset/views/core.py:772
+#: superset/views/core.py:769 superset/views/core.py:775
 msgid "chart"
 msgstr "gráfico"
 
-#: superset/views/core.py:772 superset/views/core.py:947
+#: superset/views/core.py:775 superset/views/core.py:950
 msgid "create a "
 msgstr "criar um"
 
-#: superset/views/core.py:818
+#: superset/views/core.py:821
 #, python-format
 msgid "Explore - %(table)s"
 msgstr "Explorar - %(table)s"
 
 #: superset-frontend/src/SqlLab/components/ExploreCtasResultsButton.jsx:99
 #: superset-frontend/src/SqlLab/components/ExploreResultsButton.jsx:163
-#: superset/views/core.py:820
+#: superset/views/core.py:823
 msgid "Explore"
 msgstr "Explorar"
 
-#: superset/views/core.py:904
+#: superset/views/core.py:907
 msgid "Chart [{}] has been saved"
 msgstr "Gráfico [{}] foi salvo"
 
-#: superset/views/core.py:908
+#: superset/views/core.py:911
 msgid "Chart [{}] has been overwritten"
 msgstr "Gráfico [{}] foi sobrescrito"
 
 #: superset-frontend/src/views/CRUD/dashboard/DashboardList.tsx:102
 #: superset-frontend/src/views/CRUD/dashboard/DashboardList.tsx:563
 #: superset-frontend/src/views/CRUD/welcome/DashboardTable.tsx:55
-#: superset/views/core.py:930 superset/views/core.py:948
+#: superset/views/core.py:933 superset/views/core.py:951
 msgid "dashboard"
 msgstr "painel"
 
-#: superset/views/core.py:935
+#: superset/views/core.py:938
 msgid "Chart [{}] was added to dashboard [{}]"
 msgstr "Gráfico [{}] foi adicionado ao painel [{}]"
 
-#: superset/views/core.py:957
+#: superset/views/core.py:960
 msgid "Dashboard [{}] just got created and chart [{}] was added to it"
 msgstr "Painel [{}] acabou de ser criado e o gráfico [{}] foi adicionado a ele"
 
-#: superset/views/core.py:1185
+#: superset/views/core.py:1188
 msgid ""
 "This dashboard was changed recently. Please reload dashboard to get "
 "latest version."
@@ -2616,12 +2616,12 @@ msgstr ""
 "Este painel foi modificado recentemente. Por favor recarrege o painel "
 "para obter a última versão."
 
-#: superset/views/core.py:1278
+#: superset/views/core.py:1281
 #, python-format
 msgid "Could not load database driver: %(driver_name)s"
 msgstr "Não foi possível carregar o driver do banco de dados: %(driver_name)s"
 
-#: superset/views/core.py:1287
+#: superset/views/core.py:1290
 msgid ""
 "Invalid connection string, a valid string usually follows:\n"
 "'DRIVER://USER:PASSWORD@DB-HOST/DATABASE-NAME'"
@@ -2629,7 +2629,7 @@ msgstr ""
 "Texto de conexão inválido, um tempo válido geralmente segue:\n"
 "'DRIVER://USER:PASSWORD@DB-HOST/DATABASE-NAME'"
 
-#: superset/views/core.py:1644
+#: superset/views/core.py:1647
 msgid ""
 "Malformed request. slice_id or table_name and db_name arguments are "
 "expected"
@@ -2637,35 +2637,35 @@ msgstr ""
 "Requisição mal formada. Os argumentos slice_id ou table_name e db_name "
 "são esperados"
 
-#: superset/views/core.py:1654
+#: superset/views/core.py:1657
 #, python-format
 msgid "Chart %(id)s not found"
 msgstr "Gráfico %(id)s não encontrado"
 
-#: superset/views/core.py:1667
+#: superset/views/core.py:1670
 #, python-format
 msgid "Table %(table)s wasn't found in the database %(db)s"
 msgstr "Tabela %(table)s não foi encontrada no banco de dados %(db)s"
 
-#: superset/views/core.py:1937
+#: superset/views/core.py:1940
 #, python-format
 msgid "Can't find User '%(name)s', please ask your admin to create one."
 msgstr ""
 "Não foi possível encontrar o usuário '%(name)s', por favor peça a seu "
 "administrador para criar um."
 
-#: superset/views/core.py:1949
+#: superset/views/core.py:1952
 #, python-format
 msgid "Can't find DruidCluster with cluster_name = '%(name)s'"
 msgstr "Não é possível encontrar DruidCluster com cluster_name = '%(name)s'"
 
-#: superset/views/core.py:2192
+#: superset/views/core.py:2195
 msgid "Data could not be deserialized. You may want to re-run the query."
 msgstr ""
 "Os dados não puderam ser desserializados. Você pode querer executar a "
 "consulta novamente."
 
-#: superset/views/core.py:2296
+#: superset/views/core.py:2299
 #, python-format
 msgid ""
 "%(validator)s was unable to check your query.\n"
@@ -2676,7 +2676,7 @@ msgstr ""
 "Por favor revise sua consulta.\n"
 "Exceção: %(ex)s"
 
-#: superset/views/core.py:2350
+#: superset/views/core.py:2353
 msgid ""
 "Failed to start remote query on a worker. Tell your administrator to "
 "verify the availability of the message queue."
@@ -2684,18 +2684,18 @@ msgstr ""
 "Falha ao iniciar uma consulta remota em um trabalhador. Fale para seu "
 "administrador verificar a disponibilidade da fila de mensagens."
 
-#: superset/views/core.py:2514 superset/views/core.py:2516
+#: superset/views/core.py:2517 superset/views/core.py:2519
 msgid "Query record was not created as expected."
 msgstr "O registro de consulta não foi criado conforme o esperado."
 
-#: superset/views/core.py:2553
+#: superset/views/core.py:2556
 #, python-format
 msgid "The parameter %(parameters)s in your query is undefined."
 msgid_plural "The following parameters in your query are undefined: %(parameters)s."
 msgstr[0] "O parâmetro %(parameters)s na sua consulta está indefinido."
 msgstr[1] "Os seguintes parâmetros estão indefinidos na sua consulta: %(parameters)s"
 
-#: superset/views/core.py:2821
+#: superset/views/core.py:2824
 #, python-format
 msgid "%(user)s's profile"
 msgstr "Perfil do %(user)s"
@@ -6127,15 +6127,19 @@ msgstr "Altura"
 msgid "Width"
 msgstr "Largura"
 
-#: superset-frontend/src/explore/components/ExploreActionButtons.jsx:87
+#: superset-frontend/src/explore/components/ExploreActionButtons.jsx:92
 #, fuzzy
 msgid "Export to .json"
 msgstr "Exportar para YAML"
 
-#: superset-frontend/src/explore/components/ExploreActionButtons.jsx:100
+#: superset-frontend/src/explore/components/ExploreActionButtons.jsx:105
 #, fuzzy
 msgid "Export to .csv format"
 msgstr "Exportar para o formato .csv"
+
+#: superset-frontend/src/explore/components/ExploreActionButtons.jsx:119
+msgid "Export to .xsl format"
+msgstr ""
 
 #: superset-frontend/src/explore/components/ExploreChartHeader.jsx:102
 #, python-format
@@ -7048,6 +7052,13 @@ msgstr "Ocorreu um erro ao obter valores de criado por: %s"
 msgid "Status"
 msgstr "Status"
 
+#: superset-frontend/src/views/CRUD/alert/AlertList.tsx:388
+#: superset-frontend/src/views/CRUD/chart/ChartList.tsx:459
+#: superset-frontend/src/views/CRUD/dashboard/DashboardList.tsx:405
+#: superset-frontend/src/views/CRUD/dashboard/DashboardList.tsx:417
+msgid "Any"
+msgstr ""
+
 #: superset-frontend/src/views/CRUD/alert/AlertList.tsx:390
 msgid "${AlertState.success}"
 msgstr "${AlertState.success}"
@@ -7435,6 +7446,28 @@ msgstr "Deletar modelo"
 #: superset-frontend/src/views/CRUD/annotationlayers/AnnotationLayersList.tsx:323
 msgid "Annotation layer"
 msgstr "Camada de anotação"
+
+#: superset-frontend/src/views/CRUD/annotationlayers/AnnotationLayersList.tsx:291
+#: superset-frontend/src/views/CRUD/chart/ChartList.tsx:374
+#: superset-frontend/src/views/CRUD/chart/ChartList.tsx:395
+#: superset-frontend/src/views/CRUD/chart/ChartList.tsx:416
+#: superset-frontend/src/views/CRUD/chart/ChartList.tsx:440
+#: superset-frontend/src/views/CRUD/csstemplates/CssTemplatesList.tsx:277
+#: superset-frontend/src/views/CRUD/dashboard/DashboardList.tsx:363
+#: superset-frontend/src/views/CRUD/dashboard/DashboardList.tsx:384
+#: superset-frontend/src/views/CRUD/data/database/DatabaseList.tsx:362
+#: superset-frontend/src/views/CRUD/data/database/DatabaseList.tsx:381
+#: superset-frontend/src/views/CRUD/data/dataset/DatasetList.tsx:394
+#: superset-frontend/src/views/CRUD/data/dataset/DatasetList.tsx:413
+#: superset-frontend/src/views/CRUD/data/dataset/DatasetList.tsx:428
+#: superset-frontend/src/views/CRUD/data/dataset/DatasetList.tsx:443
+#: superset-frontend/src/views/CRUD/data/query/QueryList.tsx:342
+#: superset-frontend/src/views/CRUD/data/query/QueryList.tsx:359
+#: superset-frontend/src/views/CRUD/data/query/QueryList.tsx:376
+#: superset-frontend/src/views/CRUD/data/savedquery/SavedQueryList.tsx:364
+#: superset-frontend/src/views/CRUD/data/savedquery/SavedQueryList.tsx:384
+msgid "All"
+msgstr ""
 
 #: superset-frontend/src/views/CRUD/annotationlayers/AnnotationLayersList.tsx:296
 #: superset-frontend/src/views/CRUD/csstemplates/CssTemplatesList.tsx:282

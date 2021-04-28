@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-04-07 09:58-0600\n"
+"POT-Creation-Date: 2021-04-26 20:10-0600\n"
 "PO-Revision-Date: 2016-05-02 08:49-0700\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: en\n"
@@ -26,7 +26,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.0\n"
+"Generated-By: Babel 2.8.0\n"
 
 #: superset/app.py:225
 msgid "Home"
@@ -235,331 +235,331 @@ msgid ""
 "statement. Then, try running your query again."
 msgstr ""
 
-#: superset/viz.py:125 superset/viz_sip38.py:126
+#: superset/viz.py:129 superset/viz_sip38.py:126
 msgid "Viz is missing a datasource"
 msgstr ""
 
-#: superset/viz.py:231
+#: superset/viz.py:235
 msgid ""
 "Applied rolling window did not return any data. Please make sure the "
 "source query satisfies the minimum periods defined in the rolling window."
 msgstr ""
 
-#: superset/utils/date_parser.py:257 superset/viz.py:370
+#: superset/utils/date_parser.py:257 superset/viz.py:374
 #: superset/viz_sip38.py:376
 msgid "From date cannot be larger than to date"
 msgstr ""
 
-#: superset/viz.py:520
+#: superset/viz.py:524
 msgid "Cached value not found"
 msgstr ""
 
-#: superset/common/query_context.py:394 superset/viz.py:535
+#: superset/common/query_context.py:394 superset/viz.py:539
 #, python-format
 msgid "Columns missing in datasource: %(invalid_columns)s"
 msgstr ""
 
-#: superset/viz.py:647 superset/viz_sip38.py:598
+#: superset/viz.py:657 superset/viz_sip38.py:598
 msgid "Table View"
 msgstr ""
 
-#: superset/viz.py:669
+#: superset/viz.py:679
 msgid ""
 "You cannot use [Columns] in combination with [Group "
 "By]/[Metrics]/[Percentage Metrics]. Please choose one or the other."
 msgstr ""
 
-#: superset/viz.py:706 superset/viz_sip38.py:611
+#: superset/viz.py:716 superset/viz_sip38.py:611
 msgid "Pick a granularity in the Time section or uncheck 'Include Time'"
 msgstr ""
 
-#: superset/viz.py:779 superset/viz_sip38.py:713
+#: superset/viz.py:789 superset/viz_sip38.py:713
 msgid "Time Table View"
 msgstr ""
 
-#: superset/viz.py:788 superset/viz.py:1684 superset/viz_sip38.py:722
+#: superset/viz.py:798 superset/viz.py:1694 superset/viz_sip38.py:722
 #: superset/viz_sip38.py:1605
 msgid "Pick at least one metric"
 msgstr ""
 
-#: superset/viz.py:792 superset/viz_sip38.py:726
+#: superset/viz.py:802 superset/viz_sip38.py:726
 msgid "When using 'Group By' you are limited to use a single metric"
 msgstr ""
 
-#: superset/viz.py:821 superset/viz_sip38.py:755
+#: superset/viz.py:831 superset/viz_sip38.py:755
 msgid "Pivot Table"
 msgstr ""
 
-#: superset/viz.py:838 superset/viz_sip38.py:771
+#: superset/viz.py:848 superset/viz_sip38.py:771
 msgid "Please choose at least one 'Group by' field "
 msgstr ""
 
-#: superset/viz.py:850 superset/viz_sip38.py:783
+#: superset/viz.py:860 superset/viz_sip38.py:783
 msgid "Please choose at least one metric"
 msgstr ""
 
-#: superset/viz.py:852 superset/viz_sip38.py:785
+#: superset/viz.py:862 superset/viz_sip38.py:785
 msgid "Group By' and 'Columns' can't overlap"
 msgstr ""
 
-#: superset/viz.py:947 superset/viz_sip38.py:837
+#: superset/viz.py:957 superset/viz_sip38.py:837
 msgid "Treemap"
 msgstr ""
 
-#: superset/viz.py:979 superset/viz_sip38.py:869
+#: superset/viz.py:989 superset/viz_sip38.py:869
 msgid "Calendar Heatmap"
 msgstr ""
 
-#: superset/viz.py:1059 superset/viz_sip38.py:1030
+#: superset/viz.py:1069 superset/viz_sip38.py:1030
 msgid "Bubble Chart"
 msgstr ""
 
-#: superset/viz.py:1081 superset/viz_sip38.py:1046
+#: superset/viz.py:1091 superset/viz_sip38.py:1046
 msgid "Please use 3 different metric labels"
 msgstr ""
 
-#: superset/viz.py:1083 superset/viz_sip38.py:1048
+#: superset/viz.py:1093 superset/viz_sip38.py:1048
 msgid "Pick a metric for x, y and size"
 msgstr ""
 
-#: superset/viz.py:1110 superset/viz_sip38.py:1075
+#: superset/viz.py:1120 superset/viz_sip38.py:1075
 msgid "Bullet Chart"
 msgstr ""
 
-#: superset/viz.py:1120 superset/viz_sip38.py:1085
+#: superset/viz.py:1130 superset/viz_sip38.py:1085
 msgid "Pick a metric to display"
 msgstr ""
 
-#: superset/viz.py:1138 superset/viz_sip38.py:1101
+#: superset/viz.py:1148 superset/viz_sip38.py:1101
 msgid "Big Number with Trendline"
 msgstr ""
 
-#: superset/viz.py:1146 superset/viz.py:1180 superset/viz_sip38.py:1109
+#: superset/viz.py:1156 superset/viz.py:1190 superset/viz_sip38.py:1109
 #: superset/viz_sip38.py:1140
 msgid "Pick a metric!"
 msgstr ""
 
-#: superset/viz.py:1172 superset/viz_sip38.py:1132
+#: superset/viz.py:1182 superset/viz_sip38.py:1132
 msgid "Big Number"
 msgstr ""
 
-#: superset/viz.py:1194 superset/viz_sip38.py:1154
+#: superset/viz.py:1204 superset/viz_sip38.py:1154
 msgid "Time Series - Line Chart"
 msgstr ""
 
-#: superset/viz.py:1264 superset/viz.py:1524 superset/viz_sip38.py:1219
+#: superset/viz.py:1274 superset/viz.py:1534 superset/viz_sip38.py:1219
 #: superset/viz_sip38.py:1433
 msgid "Pick a time granularity for your time series"
 msgstr ""
 
-#: superset/viz.py:1323 superset/viz_sip38.py:1275
+#: superset/viz.py:1333 superset/viz_sip38.py:1275
 msgid ""
 "An enclosed time range (both start and end) must be specified when using "
 "a Time Comparison."
 msgstr ""
 
-#: superset/viz.py:1393 superset/viz_sip38.py:1345
+#: superset/viz.py:1403 superset/viz_sip38.py:1345
 msgid "Time Series - Multiple Line Charts"
 msgstr ""
 
-#: superset/viz.py:1466 superset/viz_sip38.py:1375
+#: superset/viz.py:1476 superset/viz_sip38.py:1375
 msgid "Time Series - Dual Axis Line Chart"
 msgstr ""
 
-#: superset/viz.py:1476 superset/viz_sip38.py:1385
+#: superset/viz.py:1486 superset/viz_sip38.py:1385
 msgid "Pick a metric for left axis!"
 msgstr ""
 
-#: superset/viz.py:1478 superset/viz_sip38.py:1387
+#: superset/viz.py:1488 superset/viz_sip38.py:1387
 msgid "Pick a metric for right axis!"
 msgstr ""
 
-#: superset/viz.py:1481 superset/viz_sip38.py:1390
+#: superset/viz.py:1491 superset/viz_sip38.py:1390
 msgid "Please choose different metrics on left and right axis"
 msgstr ""
 
-#: superset/viz.py:1541 superset/viz_sip38.py:1450
+#: superset/viz.py:1551 superset/viz_sip38.py:1450
 msgid "Time Series - Bar Chart"
 msgstr ""
 
-#: superset/viz.py:1550 superset/viz_sip38.py:1459
+#: superset/viz.py:1560 superset/viz_sip38.py:1459
 msgid "Time Series - Period Pivot"
 msgstr ""
 
-#: superset/viz.py:1597 superset/viz_sip38.py:1506
+#: superset/viz.py:1607 superset/viz_sip38.py:1506
 msgid "Time Series - Percent Change"
 msgstr ""
 
-#: superset/viz.py:1605 superset/viz_sip38.py:1514
+#: superset/viz.py:1615 superset/viz_sip38.py:1514
 msgid "Time Series - Stacked"
 msgstr ""
 
-#: superset/viz.py:1615 superset/viz_sip38.py:1543
+#: superset/viz.py:1625 superset/viz_sip38.py:1543
 msgid "Histogram"
 msgstr ""
 
-#: superset/viz.py:1625 superset/viz_sip38.py:1552
+#: superset/viz.py:1635 superset/viz_sip38.py:1552
 msgid "Must have at least one numeric column specified"
 msgstr ""
 
-#: superset/viz.py:1671 superset/viz_sip38.py:1596
+#: superset/viz.py:1681 superset/viz_sip38.py:1596
 msgid "Distribution - Bar Chart"
 msgstr ""
 
-#: superset/viz.py:1681
+#: superset/viz.py:1691
 msgid "Can't have overlap between Series and Breakdowns"
 msgstr ""
 
-#: superset/viz.py:1686 superset/viz_sip38.py:1607
+#: superset/viz.py:1696 superset/viz_sip38.py:1607
 msgid "Pick at least one field for [Series]"
 msgstr ""
 
-#: superset/viz.py:1741 superset/viz_sip38.py:1663
+#: superset/viz.py:1751 superset/viz_sip38.py:1663
 msgid "Sunburst"
 msgstr ""
 
-#: superset/viz.py:1787 superset/viz_sip38.py:1707
+#: superset/viz.py:1797 superset/viz_sip38.py:1707
 msgid "Sankey"
 msgstr ""
 
-#: superset/viz.py:1795
+#: superset/viz.py:1805
 msgid "Pick exactly 2 columns as [Source / Target]"
 msgstr ""
 
-#: superset/viz.py:1839 superset/viz_sip38.py:1740
+#: superset/viz.py:1849 superset/viz_sip38.py:1740
 msgid ""
 "There's a loop in your Sankey, please provide a tree. Here's a faulty "
 "link: {}"
 msgstr ""
 
-#: superset/viz.py:1852 superset/viz.py:1875 superset/viz_sip38.py:1753
+#: superset/viz.py:1862 superset/viz.py:1885 superset/viz_sip38.py:1753
 #: superset/viz_sip38.py:1774
 msgid "Directed Force Layout"
 msgstr ""
 
-#: superset/viz.py:1859 superset/viz_sip38.py:1760
+#: superset/viz.py:1869 superset/viz_sip38.py:1760
 msgid "Pick exactly 2 columns to 'Group By'"
 msgstr ""
 
-#: superset/viz.py:1908 superset/viz_sip38.py:1806
+#: superset/viz.py:1918 superset/viz_sip38.py:1806
 msgid "Country Map"
 msgstr ""
 
-#: superset/viz.py:1937 superset/viz_sip38.py:1827
+#: superset/viz.py:1947 superset/viz_sip38.py:1827
 msgid "World Map"
 msgstr ""
 
 #: superset-frontend/src/dashboard/components/nativeFilters/FilterBar.tsx:438
-#: superset-frontend/src/explore/controls.jsx:468 superset/viz.py:1995
+#: superset-frontend/src/explore/controls.jsx:468 superset/viz.py:2005
 #: superset/viz_sip38.py:1877
 msgid "Filters"
 msgstr ""
 
-#: superset/viz.py:2013 superset/viz_sip38.py:1895
+#: superset/viz.py:2023 superset/viz_sip38.py:1895
 msgid "Invalid filter configuration, please select a column"
 msgstr ""
 
-#: superset/viz.py:2057 superset/viz_sip38.py:1956
+#: superset/viz.py:2067 superset/viz_sip38.py:1956
 msgid "Parallel Coordinates"
 msgstr ""
 
-#: superset/viz.py:2079 superset/viz_sip38.py:1972
+#: superset/viz.py:2089 superset/viz_sip38.py:1972
 msgid "Heatmap"
 msgstr ""
 
-#: superset/viz.py:2135 superset/viz_sip38.py:2021
+#: superset/viz.py:2145 superset/viz_sip38.py:2021
 msgid "Horizon Charts"
 msgstr ""
 
-#: superset/viz.py:2147 superset/viz_sip38.py:2033
+#: superset/viz.py:2157 superset/viz_sip38.py:2033
 msgid "Mapbox"
 msgstr ""
 
-#: superset/viz.py:2159 superset/viz_sip38.py:2045
+#: superset/viz.py:2169 superset/viz_sip38.py:2045
 msgid "[Longitude] and [Latitude] must be set"
 msgstr ""
 
-#: superset/viz.py:2166 superset/viz_sip38.py:2052
+#: superset/viz.py:2176 superset/viz_sip38.py:2052
 msgid "Must have a [Group By] column to have 'count' as the [Label]"
 msgstr ""
 
-#: superset/viz.py:2186 superset/viz_sip38.py:2072
+#: superset/viz.py:2196 superset/viz_sip38.py:2072
 msgid "Choice of [Label] must be present in [Group By]"
 msgstr ""
 
-#: superset/viz.py:2194 superset/viz_sip38.py:2079
+#: superset/viz.py:2204 superset/viz_sip38.py:2079
 msgid "Choice of [Point Radius] must be present in [Group By]"
 msgstr ""
 
-#: superset/viz.py:2202 superset/viz_sip38.py:2086
+#: superset/viz.py:2212 superset/viz_sip38.py:2086
 msgid "[Longitude] and [Latitude] columns must be present in [Group By]"
 msgstr ""
 
-#: superset/viz.py:2282 superset/viz_sip38.py:2166
+#: superset/viz.py:2292 superset/viz_sip38.py:2166
 msgid "Deck.gl - Multiple Layers"
 msgstr ""
 
-#: superset/viz.py:2322 superset/viz.py:2354 superset/viz_sip38.py:2222
+#: superset/viz.py:2332 superset/viz.py:2364 superset/viz_sip38.py:2222
 msgid "Bad spatial key"
 msgstr ""
 
-#: superset/viz.py:2340 superset/viz_sip38.py:2208
+#: superset/viz.py:2350 superset/viz_sip38.py:2208
 #, python-format
 msgid "Invalid spatial point encountered: %s"
 msgstr ""
 
-#: superset/viz.py:2376 superset/viz_sip38.py:2244
+#: superset/viz.py:2386 superset/viz_sip38.py:2244
 msgid ""
 "Encountered invalid NULL spatial entry,"
 "                                        please consider filtering those "
 "out"
 msgstr ""
 
-#: superset/viz.py:2466 superset/viz_sip38.py:2315
+#: superset/viz.py:2476 superset/viz_sip38.py:2315
 msgid "Deck.gl - Scatter plot"
 msgstr ""
 
-#: superset/viz.py:2515 superset/viz_sip38.py:2362
+#: superset/viz.py:2525 superset/viz_sip38.py:2362
 msgid "Deck.gl - Screen Grid"
 msgstr ""
 
-#: superset/viz.py:2541 superset/viz_sip38.py:2388
+#: superset/viz.py:2551 superset/viz_sip38.py:2388
 msgid "Deck.gl - 3D Grid"
 msgstr ""
 
-#: superset/viz.py:2571 superset/viz_sip38.py:2415
+#: superset/viz.py:2581 superset/viz_sip38.py:2415
 msgid "Deck.gl - Paths"
 msgstr ""
 
-#: superset/viz.py:2619 superset/viz_sip38.py:2460
+#: superset/viz.py:2629 superset/viz_sip38.py:2460
 msgid "Deck.gl - Polygon"
 msgstr ""
 
-#: superset/viz.py:2648 superset/viz_sip38.py:2489
+#: superset/viz.py:2658 superset/viz_sip38.py:2489
 msgid "Deck.gl - 3D HEX"
 msgstr ""
 
-#: superset/viz.py:2667 superset/viz_sip38.py:2505
+#: superset/viz.py:2677 superset/viz_sip38.py:2505
 msgid "Deck.gl - GeoJSON"
 msgstr ""
 
-#: superset/viz.py:2686 superset/viz_sip38.py:2517
+#: superset/viz.py:2696 superset/viz_sip38.py:2517
 msgid "Deck.gl - Arc"
 msgstr ""
 
-#: superset/viz.py:2721 superset/viz_sip38.py:2552
+#: superset/viz.py:2731 superset/viz_sip38.py:2552
 msgid "Event flow"
 msgstr ""
 
-#: superset/viz.py:2753 superset/viz_sip38.py:2584
+#: superset/viz.py:2763 superset/viz_sip38.py:2584
 msgid "Time Series - Paired t-test"
 msgstr ""
 
-#: superset/viz.py:2808 superset/viz_sip38.py:2639
+#: superset/viz.py:2818 superset/viz_sip38.py:2639
 msgid "Time Series - Nightingale Rose Chart"
 msgstr ""
 
-#: superset/viz.py:2843 superset/viz_sip38.py:2674
+#: superset/viz.py:2853 superset/viz_sip38.py:2674
 msgid "Partition Diagram"
 msgstr ""
 
@@ -668,18 +668,18 @@ msgstr ""
 msgid "Name must be unique"
 msgstr ""
 
-#: superset/charts/api.py:451
+#: superset/charts/api.py:461
 #, python-format
 msgid "Deleted %(num)d chart"
 msgid_plural "Deleted %(num)d charts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: superset/charts/api.py:548
+#: superset/charts/api.py:569
 msgid "Request is not JSON"
 msgstr ""
 
-#: superset/charts/api.py:556 superset/charts/api.py:624
+#: superset/charts/api.py:577 superset/charts/api.py:645
 #, python-format
 msgid "Request is incorrect: %(error)s"
 msgstr ""
@@ -1599,7 +1599,7 @@ msgid "Database could not be updated."
 msgstr ""
 
 #: superset/databases/commands/exceptions.py:104
-#: superset/databases/commands/exceptions.py:120 superset/views/core.py:1295
+#: superset/databases/commands/exceptions.py:120 superset/views/core.py:1298
 msgid "Connection failed, please check your connection settings"
 msgstr ""
 
@@ -1619,7 +1619,7 @@ msgstr ""
 msgid "Could not load database driver"
 msgstr ""
 
-#: superset/databases/commands/exceptions.py:132 superset/views/core.py:1303
+#: superset/databases/commands/exceptions.py:132 superset/views/core.py:1306
 msgid "Unexpected error occurred, please check your logs for details"
 msgstr ""
 
@@ -2073,7 +2073,7 @@ msgstr ""
 msgid "Test Connection"
 msgstr ""
 
-#: superset/utils/core.py:797
+#: superset/utils/core.py:798
 #, python-format
 msgid "[Superset] Access to the datasource %(name)s was granted"
 msgstr ""
@@ -2391,123 +2391,123 @@ msgstr ""
 msgid "You have no permission to approve this request"
 msgstr ""
 
-#: superset/views/core.py:639
+#: superset/views/core.py:642
 #, python-format
 msgid ""
 "Cannot import dashboard: %(db_error)s.\n"
 "Make sure to create the database before importing the dashboard."
 msgstr ""
 
-#: superset/views/core.py:650
+#: superset/views/core.py:653
 msgid "An unknown error occurred. Please contact your Superset administrator"
 msgstr ""
 
-#: superset/views/core.py:722
+#: superset/views/core.py:725
 msgid "[Missing Dataset]"
 msgstr ""
 
-#: superset/views/core.py:766 superset/views/core.py:772
-#: superset/views/core.py:928 superset/views/core.py:946
+#: superset/views/core.py:769 superset/views/core.py:775
+#: superset/views/core.py:931 superset/views/core.py:949
 msgid "You don't have the rights to "
 msgstr ""
 
-#: superset/views/core.py:766 superset/views/core.py:929
+#: superset/views/core.py:769 superset/views/core.py:932
 msgid "alter this "
 msgstr ""
 
 #: superset-frontend/src/views/CRUD/chart/ChartList.tsx:129
 #: superset-frontend/src/views/CRUD/chart/ChartList.tsx:600
 #: superset-frontend/src/views/CRUD/welcome/ChartTable.tsx:64
-#: superset/views/core.py:766 superset/views/core.py:772
+#: superset/views/core.py:769 superset/views/core.py:775
 msgid "chart"
 msgstr ""
 
-#: superset/views/core.py:772 superset/views/core.py:947
+#: superset/views/core.py:775 superset/views/core.py:950
 msgid "create a "
 msgstr ""
 
-#: superset/views/core.py:818
+#: superset/views/core.py:821
 #, python-format
 msgid "Explore - %(table)s"
 msgstr ""
 
 #: superset-frontend/src/SqlLab/components/ExploreCtasResultsButton.jsx:99
 #: superset-frontend/src/SqlLab/components/ExploreResultsButton.jsx:163
-#: superset/views/core.py:820
+#: superset/views/core.py:823
 msgid "Explore"
 msgstr ""
 
-#: superset/views/core.py:904
+#: superset/views/core.py:907
 msgid "Chart [{}] has been saved"
 msgstr ""
 
-#: superset/views/core.py:908
+#: superset/views/core.py:911
 msgid "Chart [{}] has been overwritten"
 msgstr ""
 
 #: superset-frontend/src/views/CRUD/dashboard/DashboardList.tsx:102
 #: superset-frontend/src/views/CRUD/dashboard/DashboardList.tsx:563
 #: superset-frontend/src/views/CRUD/welcome/DashboardTable.tsx:55
-#: superset/views/core.py:930 superset/views/core.py:948
+#: superset/views/core.py:933 superset/views/core.py:951
 msgid "dashboard"
 msgstr ""
 
-#: superset/views/core.py:935
+#: superset/views/core.py:938
 msgid "Chart [{}] was added to dashboard [{}]"
 msgstr ""
 
-#: superset/views/core.py:957
+#: superset/views/core.py:960
 msgid "Dashboard [{}] just got created and chart [{}] was added to it"
 msgstr ""
 
-#: superset/views/core.py:1185
+#: superset/views/core.py:1188
 msgid ""
 "This dashboard was changed recently. Please reload dashboard to get "
 "latest version."
 msgstr ""
 
-#: superset/views/core.py:1278
+#: superset/views/core.py:1281
 #, python-format
 msgid "Could not load database driver: %(driver_name)s"
 msgstr ""
 
-#: superset/views/core.py:1287
+#: superset/views/core.py:1290
 msgid ""
 "Invalid connection string, a valid string usually follows:\n"
 "'DRIVER://USER:PASSWORD@DB-HOST/DATABASE-NAME'"
 msgstr ""
 
-#: superset/views/core.py:1644
+#: superset/views/core.py:1647
 msgid ""
 "Malformed request. slice_id or table_name and db_name arguments are "
 "expected"
 msgstr ""
 
-#: superset/views/core.py:1654
+#: superset/views/core.py:1657
 #, python-format
 msgid "Chart %(id)s not found"
 msgstr ""
 
-#: superset/views/core.py:1667
+#: superset/views/core.py:1670
 #, python-format
 msgid "Table %(table)s wasn't found in the database %(db)s"
 msgstr ""
 
-#: superset/views/core.py:1937
+#: superset/views/core.py:1940
 #, python-format
 msgid "Can't find User '%(name)s', please ask your admin to create one."
 msgstr ""
 
-#: superset/views/core.py:1949
+#: superset/views/core.py:1952
 #, python-format
 msgid "Can't find DruidCluster with cluster_name = '%(name)s'"
 msgstr ""
 
-#: superset/views/core.py:2192
+#: superset/views/core.py:2195
 msgid "Data could not be deserialized. You may want to re-run the query."
 msgstr ""
 
-#: superset/views/core.py:2296
+#: superset/views/core.py:2299
 #, python-format
 msgid ""
 "%(validator)s was unable to check your query.\n"
@@ -2515,24 +2515,24 @@ msgid ""
 "Exception: %(ex)s"
 msgstr ""
 
-#: superset/views/core.py:2350
+#: superset/views/core.py:2353
 msgid ""
 "Failed to start remote query on a worker. Tell your administrator to "
 "verify the availability of the message queue."
 msgstr ""
 
-#: superset/views/core.py:2514 superset/views/core.py:2516
+#: superset/views/core.py:2517 superset/views/core.py:2519
 msgid "Query record was not created as expected."
 msgstr ""
 
-#: superset/views/core.py:2553
+#: superset/views/core.py:2556
 #, python-format
 msgid "The parameter %(parameters)s in your query is undefined."
 msgid_plural "The following parameters in your query are undefined: %(parameters)s."
 msgstr[0] ""
 msgstr[1] ""
 
-#: superset/views/core.py:2821
+#: superset/views/core.py:2824
 #, python-format
 msgid "%(user)s's profile"
 msgstr ""
@@ -5706,12 +5706,16 @@ msgstr ""
 msgid "Width"
 msgstr ""
 
-#: superset-frontend/src/explore/components/ExploreActionButtons.jsx:87
+#: superset-frontend/src/explore/components/ExploreActionButtons.jsx:92
 msgid "Export to .json"
 msgstr ""
 
-#: superset-frontend/src/explore/components/ExploreActionButtons.jsx:100
+#: superset-frontend/src/explore/components/ExploreActionButtons.jsx:105
 msgid "Export to .csv format"
+msgstr ""
+
+#: superset-frontend/src/explore/components/ExploreActionButtons.jsx:119
+msgid "Export to .xsl format"
 msgstr ""
 
 #: superset-frontend/src/explore/components/ExploreChartHeader.jsx:102
@@ -6578,6 +6582,13 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
+#: superset-frontend/src/views/CRUD/alert/AlertList.tsx:388
+#: superset-frontend/src/views/CRUD/chart/ChartList.tsx:459
+#: superset-frontend/src/views/CRUD/dashboard/DashboardList.tsx:405
+#: superset-frontend/src/views/CRUD/dashboard/DashboardList.tsx:417
+msgid "Any"
+msgstr ""
+
 #: superset-frontend/src/views/CRUD/alert/AlertList.tsx:390
 msgid "${AlertState.success}"
 msgstr ""
@@ -6960,6 +6971,28 @@ msgstr ""
 #: superset-frontend/src/views/CRUD/annotationlayers/AnnotationLayersList.tsx:266
 #: superset-frontend/src/views/CRUD/annotationlayers/AnnotationLayersList.tsx:323
 msgid "Annotation layer"
+msgstr ""
+
+#: superset-frontend/src/views/CRUD/annotationlayers/AnnotationLayersList.tsx:291
+#: superset-frontend/src/views/CRUD/chart/ChartList.tsx:374
+#: superset-frontend/src/views/CRUD/chart/ChartList.tsx:395
+#: superset-frontend/src/views/CRUD/chart/ChartList.tsx:416
+#: superset-frontend/src/views/CRUD/chart/ChartList.tsx:440
+#: superset-frontend/src/views/CRUD/csstemplates/CssTemplatesList.tsx:277
+#: superset-frontend/src/views/CRUD/dashboard/DashboardList.tsx:363
+#: superset-frontend/src/views/CRUD/dashboard/DashboardList.tsx:384
+#: superset-frontend/src/views/CRUD/data/database/DatabaseList.tsx:362
+#: superset-frontend/src/views/CRUD/data/database/DatabaseList.tsx:381
+#: superset-frontend/src/views/CRUD/data/dataset/DatasetList.tsx:394
+#: superset-frontend/src/views/CRUD/data/dataset/DatasetList.tsx:413
+#: superset-frontend/src/views/CRUD/data/dataset/DatasetList.tsx:428
+#: superset-frontend/src/views/CRUD/data/dataset/DatasetList.tsx:443
+#: superset-frontend/src/views/CRUD/data/query/QueryList.tsx:342
+#: superset-frontend/src/views/CRUD/data/query/QueryList.tsx:359
+#: superset-frontend/src/views/CRUD/data/query/QueryList.tsx:376
+#: superset-frontend/src/views/CRUD/data/savedquery/SavedQueryList.tsx:364
+#: superset-frontend/src/views/CRUD/data/savedquery/SavedQueryList.tsx:384
+msgid "All"
 msgstr ""
 
 #: superset-frontend/src/views/CRUD/annotationlayers/AnnotationLayersList.tsx:296

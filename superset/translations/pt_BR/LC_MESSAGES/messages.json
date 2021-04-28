@@ -2051,6 +2051,7 @@
       "Run in SQL Lab": ["Executar no SQL Lab"],
       "Height": ["Altura"],
       "Width": ["Largura"],
+      "Export to .xsl format": [""],
       "%s - untitled": ["%s - sem título"],
       "Edit chart properties": ["Editar propriedades do gráfico"],
       "Control labeled ": ["Controle etiquetado "],
@@ -2331,6 +2332,7 @@
         "Ocorreu um erro ao obter valores de criado por: %s"
       ],
       "Status": ["Status"],
+      "Any": [""],
       "${AlertState.success}": ["${AlertState.success}"],
       "${AlertState.working}": ["${AlertState.working}"],
       "${AlertState.error}": ["${AlertState.error}"],
@@ -2443,6 +2445,7 @@
       "Edit template": ["Editar modelo"],
       "Delete template": ["Deletar modelo"],
       "Annotation layer": ["Camada de anotação"],
+      "All": [""],
       "An error occurred while fetching dataset datasource values: %s": [
         "Ocorreu um erro ao obter os valores de fonte de dados do conjunto de dados: %s"
       ],

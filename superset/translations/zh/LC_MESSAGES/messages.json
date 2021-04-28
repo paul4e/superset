@@ -1603,6 +1603,7 @@
       "Run in SQL Lab": ["在 SQL 工具箱中公开"],
       "Height": ["高度"],
       "Width": ["宽度"],
+      "Export to .xsl format": [""],
       "%s - untitled": ["%s  - 无标题"],
       "Edit chart properties": ["编辑图表属性"],
       "Control labeled ": [""],
@@ -1838,6 +1839,7 @@
         "渲染可视化时发生错误：%s"
       ],
       "Status": ["状态"],
+      "Any": [""],
       "${AlertState.success}": [""],
       "${AlertState.working}": [""],
       "${AlertState.error}": [""],
@@ -1926,6 +1928,7 @@
       "Edit template": ["加载一个模板"],
       "Delete template": ["加载一个模板"],
       "Annotation layer": ["注解层"],
+      "All": [""],
       "An error occurred while fetching dataset datasource values: %s": [
         "创建数据源时发生错误"
       ],

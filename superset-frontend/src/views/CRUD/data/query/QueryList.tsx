@@ -339,7 +339,7 @@ function QueryList({ addDangerToast, addSuccessToast }: QueryListProps) {
         id: 'database',
         input: 'select',
         operator: FilterOperators.relationOneMany,
-        unfilteredLabel: 'All',
+        unfilteredLabel: 'Todos',
         fetchSelects: createFetchRelated(
           'query',
           'database',
@@ -356,7 +356,7 @@ function QueryList({ addDangerToast, addSuccessToast }: QueryListProps) {
         id: 'status',
         input: 'select',
         operator: FilterOperators.equals,
-        unfilteredLabel: 'All',
+        unfilteredLabel: 'Todos',
         fetchSelects: createFetchDistinct(
           'query',
           'status',
@@ -373,7 +373,7 @@ function QueryList({ addDangerToast, addSuccessToast }: QueryListProps) {
         id: 'user',
         input: 'select',
         operator: FilterOperators.relationOneMany,
-        unfilteredLabel: 'All',
+        unfilteredLabel: 'Todos',
         fetchSelects: createFetchRelated(
           'query',
           'user',

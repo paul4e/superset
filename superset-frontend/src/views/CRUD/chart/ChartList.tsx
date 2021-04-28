@@ -371,7 +371,7 @@ function ChartList(props: ChartListProps) {
       id: 'owners',
       input: 'select',
       operator: FilterOperators.relationManyMany,
-      unfilteredLabel: 'All',
+      unfilteredLabel: 'Todos',
       fetchSelects: createFetchRelated(
         'chart',
         'owners',
@@ -392,7 +392,7 @@ function ChartList(props: ChartListProps) {
       id: 'created_by',
       input: 'select',
       operator: FilterOperators.relationOneMany,
-      unfilteredLabel: 'All',
+      unfilteredLabel: 'Todos',
       fetchSelects: createFetchRelated(
         'chart',
         'created_by',
@@ -413,7 +413,7 @@ function ChartList(props: ChartListProps) {
       id: 'viz_type',
       input: 'select',
       operator: FilterOperators.equals,
-      unfilteredLabel: 'All',
+      unfilteredLabel: 'Todos',
       selects: registry
         .keys()
         .map(k => ({ label: registry.get(k)?.name || k, value: k }))
@@ -437,7 +437,7 @@ function ChartList(props: ChartListProps) {
       id: 'datasource_id',
       input: 'select',
       operator: FilterOperators.equals,
-      unfilteredLabel: 'All',
+      unfilteredLabel: 'Todos',
       fetchSelects: createFetchDatasets(
         createErrorHandler(errMsg =>
           addDangerToast(
@@ -456,7 +456,7 @@ function ChartList(props: ChartListProps) {
       urlDisplay: 'favorite',
       input: 'select',
       operator: FilterOperators.chartIsFav,
-      unfilteredLabel: 'Any',
+      unfilteredLabel: 'Todos',
       selects: [
         { label: t('Yes'), value: true },
         { label: t('No'), value: false },

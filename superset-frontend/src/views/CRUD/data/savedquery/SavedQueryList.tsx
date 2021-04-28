@@ -361,7 +361,7 @@ function SavedQueryList({
         id: 'database',
         input: 'select',
         operator: 'rel_o_m',
-        unfilteredLabel: 'All',
+        unfilteredLabel: 'Todos',
         fetchSelects: createFetchRelated(
           'saved_query',
           'database',
@@ -381,7 +381,7 @@ function SavedQueryList({
         id: 'schema',
         input: 'select',
         operator: 'eq',
-        unfilteredLabel: 'All',
+        unfilteredLabel: 'Todos',
         fetchSelects: createFetchDistinct(
           'saved_query',
           'schema',

@@ -1526,6 +1526,7 @@
       "Run in SQL Lab": ["SQLツール"],
       "Height": ["高さ"],
       "Width": ["幅"],
+      "Export to .xsl format": [""],
       "%s - untitled": [""],
       "Edit chart properties": ["チャートを編集"],
       "Control labeled ": [""],
@@ -1744,6 +1745,7 @@
       "Created by": ["作成日"],
       "An error occurred while fetching created by values: %s": [""],
       "Status": ["状態"],
+      "Any": [""],
       "${AlertState.success}": [""],
       "${AlertState.working}": [""],
       "${AlertState.error}": [""],
@@ -1832,6 +1834,7 @@
       "Edit template": ["CSSテンプレート"],
       "Delete template": [""],
       "Annotation layer": ["回転"],
+      "All": [""],
       "An error occurred while fetching dataset datasource values: %s": [
         "データソースリストを取得中に何か問題が発生しました"
       ],

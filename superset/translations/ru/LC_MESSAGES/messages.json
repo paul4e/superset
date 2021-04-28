@@ -1691,6 +1691,7 @@
       "Run in SQL Lab": ["Открыть в SQL редакторе"],
       "Height": ["Высота"],
       "Width": ["Ширина"],
+      "Export to .xsl format": [""],
       "%s - untitled": ["%s - без названия"],
       "Edit chart properties": ["Редактирование свойств"],
       "Control labeled ": [""],
@@ -1946,6 +1947,7 @@
         "Произошла ошибка при построении графика: %s"
       ],
       "Status": ["Статус"],
+      "Any": [""],
       "${AlertState.success}": [""],
       "${AlertState.working}": [""],
       "${AlertState.error}": [""],
@@ -2034,6 +2036,7 @@
       "Edit template": ["Загрузить шаблон"],
       "Delete template": ["Загрузить шаблон"],
       "Annotation layer": ["Слои аннотаций"],
+      "All": [""],
       "An error occurred while fetching dataset datasource values: %s": [
         "Произошла ошибка при создании источника данных"
       ],

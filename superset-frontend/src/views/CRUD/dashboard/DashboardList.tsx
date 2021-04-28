@@ -360,7 +360,7 @@ function DashboardList(props: DashboardListProps) {
       id: 'owners',
       input: 'select',
       operator: FilterOperators.relationManyMany,
-      unfilteredLabel: 'All',
+      unfilteredLabel: 'Todos',
       fetchSelects: createFetchRelated(
         'dashboard',
         'owners',
@@ -381,7 +381,7 @@ function DashboardList(props: DashboardListProps) {
       id: 'created_by',
       input: 'select',
       operator: FilterOperators.relationOneMany,
-      unfilteredLabel: 'All',
+      unfilteredLabel: 'Todos',
       fetchSelects: createFetchRelated(
         'dashboard',
         'created_by',
@@ -402,7 +402,7 @@ function DashboardList(props: DashboardListProps) {
       id: 'published',
       input: 'select',
       operator: FilterOperators.equals,
-      unfilteredLabel: 'Any',
+      unfilteredLabel: 'Todos',
       selects: [
         { label: t('Published'), value: true },
         { label: t('Unpublished'), value: false },
@@ -414,7 +414,7 @@ function DashboardList(props: DashboardListProps) {
       urlDisplay: 'favorite',
       input: 'select',
       operator: FilterOperators.dashboardIsFav,
-      unfilteredLabel: 'Any',
+      unfilteredLabel: 'Todos',
       selects: [
         { label: t('Yes'), value: true },
         { label: t('No'), value: false },
