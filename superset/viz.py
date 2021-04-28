@@ -48,7 +48,7 @@ import pandas as pd
 import polyline
 import simplejson as json
 from dateutil import relativedelta as rdelta
-from flask import request
+from flask import request, send_file, g, make_response
 from flask_babel import lazy_gettext as _
 from geopy.point import Point
 from pandas.tseries.frequencies import to_offset
@@ -85,7 +85,8 @@ import dataclasses  # isort:skip
 import uuid
 import tempfile
 import os
-from flask import send_file
+
+from io import StringIO
 
 if TYPE_CHECKING:
     from superset.connectors.base.models import BaseDatasource
@@ -628,10 +629,75 @@ class BaseViz:
         include_index = not isinstance(df.index, pd.RangeIndex)
         return csv.df_to_escaped_csv(df, index=include_index, **config["CSV_EXPORT"],sep=';')
 
-    def gen_df_xlsx_downloadable(self):
-        df = self.get_df_payload()["df"]  # leverage caching logic
+    def gen_df_xlsx_downloadable(self) -> object:
+        user_data = g.user.__dict__
+        user_name = f"{user_data['first_name']} {user_data['last_name']}"
+
+        export_metadata = {
+            "Nombre del sistema": "Superset",
+            "Reporte generado por": user_name,
+            "Fecha de creación": datetime.today().strftime("%d/%m/%Y %H:%M:%S"),
+            "": ""
+        }
+        if self.form_data['time_range'] == 'No filter':
+            export_metadata["No se han aplicado filtros de fecha"] = ""
+        else:
+            time_range = self.form_data['time_range'].split(" : ")
+            export_metadata["Filtros de fecha aplicados sobre los datos"] = ""
+            export_metadata["Fecha de inicio"] = time_range[0]
+            export_metadata["Fecha de finalización"] = time_range[1]
+
+        export_metadata[" "] = ""
+
+        filtros_dict = {}
+
+        if not self.form_data['adhoc_filters']:
+            export_metadata["No se han aplicado filtros sobre los datos"] = ""
+        else:
+            export_metadata["Filtros aplicados sobre los datos"] = ""
+            tmp_cols = []
+            tmp_ops = []
+            tmp_vals = []
+            for f in self.form_data['adhoc_filters']:
+                tmp_cols.append(f['subject'])
+                tmp_ops.append(f['operator'])
+                tmp_vals.append(f['comparator'] if 'comparator' in f.keys() else None)
+
+                filtros_dict = {
+                    'Columnas': tmp_cols,
+                    'Comparación': tmp_ops,
+                    'Valores filtrados': tmp_vals
+                }
+
+        metadata_df = pd.DataFrame(list(export_metadata.items()))
+        filtros_df = pd.DataFrame(
+            filtros_dict,
+            columns=['Columnas', 'Comparación', 'Valores filtrados']
+        )
+
+        # return the first result
+        data = self.get_csv()
+
+        if data == '\n':
+            resp = make_response("No hay datos para exportar", 200)
+            resp.headers["Content-Type"] = "application/json; charset=utf-8"
+            return resp
+
+        # expects a csv string format data
+        str_data = StringIO(data)
+
+        df = pd.read_csv(str_data, sep=';')
+
         filepath = os.path.join(tempfile.gettempdir(), "{}.xlsx".format(uuid.uuid1()))
-        df.to_excel(filepath, index=False)
+
+        # writer = pd.ExcelWriter(filepath, engine='xlsxwriter')
+        with pd.ExcelWriter(filepath, engine='xlsxwriter') as writer:
+            df.to_excel(writer, sheet_name='Datos', index=False)
+            metadata_df.to_excel(writer, index=False,
+                                 sheet_name='Información Adicional', header=False)
+            filtros_df.to_excel(writer, index=False,
+                                sheet_name='Información Adicional', startrow=10)
+
         return send_file(filepath, as_attachment=True)
 
     def get_data(self, df: pd.DataFrame) -> VizData:

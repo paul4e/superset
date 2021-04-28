@@ -91,7 +91,6 @@ import pandas as pd
 import uuid
 import tempfile
 import os
-from flask import send_file
 
 logger = logging.getLogger(__name__)
 
@@ -502,13 +501,73 @@ class ChartRestApi(BaseSupersetModelRestApi):
             return CsvResponse(df, headers=generate_download_headers("csv"))
                  
         if result_format == ChartDataResultFormat.XLSX:
-          # return the first result
-          data = result["queries"][0]["data"]
-          # expects a csv string format data
-          df = pd.read_csv(StringIO(data), sep=';')
-          filepath = os.path.join(tempfile.gettempdir(), "{}.xlsx".format(uuid.uuid1()))
-          df.to_excel(filepath, index=False)
-          return send_file(filepath, as_attachment=True)
+            user_data = g.user.__dict__
+            user_name = f"{user_data['first_name']} {user_data['last_name']}"
+
+            qc = result["query_context"].queries[0].to_dict()
+
+            export_metadata = {
+                "Nombre del sistema": "Superset",
+                "Reporte generado por": user_name,
+                "Fecha de creación": datetime.today().strftime("%d/%m/%Y %H:%M:%S"),
+                "": ""
+            }
+            if not qc['from_dttm'] and not qc['to_dttm']:
+                export_metadata["No se han aplicado filtros de fecha"] = ""
+            else:
+                export_metadata["Filtros de fecha aplicados sobre los datos"] = ""
+                export_metadata["Fecha de inicio"] = qc['from_dttm']
+                export_metadata["Fecha de finalización"] = qc['to_dttm']
+
+            export_metadata[" "] = ""
+
+            filtros_dict = {}
+
+            if not qc['filter']:
+                export_metadata["No se han aplicado filtros sobre los datos"] = ""
+            else:
+                export_metadata["Filtros aplicados sobre los datos"] = ""
+                tmp_cols = []
+                tmp_ops = []
+                tmp_vals = []
+                for f in qc['filter']:
+                    tmp_cols.append(f['col'])
+                    tmp_ops.append(f['op'])
+                    tmp_vals.append(f['val'] if 'val' in f.keys() else None)
+
+                    filtros_dict = {
+                        'Columnas': tmp_cols,
+                        'Comparación': tmp_ops,
+                        'Valores filtrados': tmp_vals
+                    }
+
+            metadata_df = pd.DataFrame(list(export_metadata.items()))
+            filtros_df = pd.DataFrame(
+                filtros_dict,
+                columns=['Columnas', 'Comparación', 'Valores filtrados']
+            )
+
+            # return the first result
+            data = result["queries"][0]["data"]
+
+            if data is '\n':
+                resp = make_response("No hay datos para exportar", 200)
+                resp.headers["Content-Type"] = "application/json; charset=utf-8"
+                return resp
+
+            # expects a csv string format data
+            df = pd.read_csv(StringIO(data), sep=';')
+
+            filepath = os.path.join(tempfile.gettempdir(), "{}.xlsx".format(uuid.uuid1()))
+
+            # writer = pd.ExcelWriter(filepath, engine='xlsxwriter')
+            with pd.ExcelWriter(filepath, engine='xlsxwriter') as writer:
+                df.to_excel(writer, sheet_name='Datos', index=False)
+                metadata_df.to_excel(writer, index=False, sheet_name='Información Adicional', header=False)
+                filtros_df.to_excel(writer, index=False,
+                                     sheet_name='Información Adicional', startrow=10)
+
+            return send_file(filepath, as_attachment=True)
 
         if result_format == ChartDataResultFormat.JSON:
             response_data = simplejson.dumps(
