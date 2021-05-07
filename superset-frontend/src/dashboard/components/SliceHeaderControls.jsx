@@ -146,6 +146,7 @@ class SliceHeaderControls extends React.PureComponent {
         break;
       case MENU_KEYS.EXPORT_EXCEL:
         this.props.exportExcel(this.props.slice.slice_id);
+        break;
       case MENU_KEYS.RESIZE_LABEL:
         this.props.handleToggleFullSize();
         break;

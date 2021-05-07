@@ -649,23 +649,31 @@ class BaseViz:
 
         filtros_dict = {}
 
-        if not self.form_data['adhoc_filters']:
+        if not self.form_data['adhoc_filters'] and not self.form_data['extra_filters']:
             export_metadata["No se han aplicado filtros sobre los datos"] = ""
         else:
             export_metadata["Filtros aplicados sobre los datos"] = ""
             tmp_cols = []
             tmp_ops = []
             tmp_vals = []
-            for f in self.form_data['adhoc_filters']:
-                tmp_cols.append(f['subject'])
-                tmp_ops.append(utils.filter_operators[f['operator']])
-                tmp_vals.append(f['comparator'] if 'comparator' in f.keys() else None)
 
-                filtros_dict = {
-                    'Columnas': tmp_cols,
-                    'Comparación': tmp_ops,
-                    'Valores filtrados': tmp_vals
-                }
+            if 'adhoc_filters' in self.form_data.keys():
+                for f in self.form_data['adhoc_filters']:
+                    tmp_cols.append(f['subject'])
+                    tmp_ops.append(utils.filter_operators[f['operator']])
+                    tmp_vals.append(f['comparator'] if 'comparator' in f.keys() else None)
+
+            if 'extra_filters' in self.form_data.keys():
+                for f in self.form_data['extra_filters']:
+                    tmp_cols.append(f['col'])
+                    tmp_ops.append(utils.filter_operators[f['op']])
+                    tmp_vals.append(f['val'] if 'val' in f.keys() else None)
+
+            filtros_dict = {
+                'Columnas': tmp_cols,
+                'Comparación': tmp_ops,
+                'Valores filtrados': tmp_vals
+            }
 
         metadata_df = pd.DataFrame(list(export_metadata.items()))
         filtros_df = pd.DataFrame(
