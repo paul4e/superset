@@ -536,11 +536,11 @@ class ChartRestApi(BaseSupersetModelRestApi):
                     tmp_ops.append(filter_operators[f['op']])
                     tmp_vals.append(f['val'] if 'val' in f.keys() else None)
 
-                    filtros_dict = {
-                        'Columnas': tmp_cols,
-                        'Comparación': tmp_ops,
-                        'Valores filtrados': tmp_vals
-                    }
+                filtros_dict = {
+                    'Columnas': tmp_cols,
+                    'Comparación': tmp_ops,
+                    'Valores filtrados': tmp_vals
+                }
 
             metadata_df = pd.DataFrame(list(export_metadata.items()))
             filtros_df = pd.DataFrame(
