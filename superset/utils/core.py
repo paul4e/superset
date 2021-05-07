@@ -119,6 +119,20 @@ JS_MAX_INTEGER = 9007199254740991  # Largest int Java Script can handle 2^53-1
 
 InputType = TypeVar("InputType")
 
+filter_operators = {
+    'IS NULL': "Es nulo",
+    'IS NOT NULL': "No es nulo",
+    'LIKE': "Similar",
+    'NOT IN': "No se encuentra en",
+    'IN': "Se encuentra en",
+    '==': "Es igual a",
+    '!=': "Es diferente de",
+    '>': "Es mayor a",
+    '<': "Es menor a",
+    '>=': "Es mayor o igual a",
+    '<=': "Es menor o igual a"
+}
+
 
 class LenientEnum(Enum):
     """Enums with a `get` method that convert a enum value to `Enum` if it is a

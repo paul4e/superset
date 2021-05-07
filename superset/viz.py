@@ -660,7 +660,7 @@ class BaseViz:
             tmp_vals = []
             for f in self.form_data['adhoc_filters']:
                 tmp_cols.append(f['subject'])
-                tmp_ops.append(f['operator'])
+                tmp_ops.append(utils.filter_operators[f['operator']])
                 tmp_vals.append(f['comparator'] if 'comparator' in f.keys() else None)
 
                 filtros_dict = {

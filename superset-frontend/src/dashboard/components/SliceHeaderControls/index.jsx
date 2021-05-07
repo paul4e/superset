@@ -74,6 +74,7 @@ const MENU_KEYS = {
   TOGGLE_CHART_DESCRIPTION: 'toggle_chart_description',
   EXPLORE_CHART: 'explore_chart',
   EXPORT_CSV: 'export_csv',
+  EXPORT_EXCEL: 'export_excel',
   RESIZE_LABEL: 'resize_label',
   DOWNLOAD_AS_IMAGE: 'download_as_image',
 };
@@ -157,6 +158,8 @@ class SliceHeaderControls extends React.PureComponent {
       case MENU_KEYS.EXPORT_CSV:
         this.props.exportCSV(this.props.slice.slice_id);
         break;
+      case MENU_KEYS.EXPORT_EXCEL:
+        this.props.exportExcel(this.props.slice.slice_id);
       case MENU_KEYS.RESIZE_LABEL:
         this.props.handleToggleFullSize();
         break;
@@ -279,6 +282,10 @@ class SliceHeaderControls extends React.PureComponent {
 
         {this.props.supersetCanCSV && (
           <Menu.Item key={MENU_KEYS.EXPORT_CSV}>{t('Export CSV')}</Menu.Item>
+        )}
+
+        {this.props.supersetCanCSV && (
+          <Menu.Item key={MENU_KEYS.EXPORT_EXCEL}>{t('Export Excel')}</Menu.Item>
         )}
         {isFeatureEnabled(FeatureFlag.DASHBOARD_CROSS_FILTERS) &&
           isCrossFilter && (
