@@ -87,6 +87,7 @@ class SliceHeader extends React.PureComponent {
       forceRefresh,
       exploreChart,
       exportCSV,
+      exportExcel,
       innerRef,
       sliceName,
       supersetCanExplore,
@@ -152,6 +153,7 @@ class SliceHeader extends React.PureComponent {
                 forceRefresh={forceRefresh}
                 exploreChart={exploreChart}
                 exportCSV={exportCSV}
+                exportExcel={exportExcel}
                 supersetCanExplore={supersetCanExplore}
                 supersetCanCSV={supersetCanCSV}
                 sliceCanEdit={sliceCanEdit}

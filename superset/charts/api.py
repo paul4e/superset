@@ -74,6 +74,7 @@ from superset.utils.core import (
     ChartDataResultFormat,
     ChartDataResultType,
     json_int_dttm_ser,
+    filter_operators
 )
 from superset.utils.screenshots import ChartScreenshot
 from superset.utils.urls import get_url_path
@@ -521,7 +522,7 @@ class ChartRestApi(BaseSupersetModelRestApi):
                 tmp_vals = []
                 for f in qc['filter']:
                     tmp_cols.append(f['col'])
-                    tmp_ops.append(f['op'])
+                    tmp_ops.append(filter_operators[f['op']])
                     tmp_vals.append(f['val'] if 'val' in f.keys() else None)
 
                     filtros_dict = {
