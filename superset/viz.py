@@ -637,19 +637,21 @@ class BaseViz:
             "Fecha de creación": datetime.today().strftime("%d/%m/%Y %H:%M:%S"),
             "": ""
         }
-        if self.form_data['time_range'] == 'No filter':
-            export_metadata["No se han aplicado filtros de fecha"] = ""
+        if 'time_range' in self.form_data.keys():
+            if self.form_data['time_range'] == 'No filter':
+                export_metadata["No se han aplicado filtros de fecha"] = ""
+            else:
+                time_range = self.form_data['time_range'].split(" : ")
+                export_metadata["Filtros de fecha aplicados sobre los datos"] = ""
+                export_metadata["Fecha de inicio"] = time_range[0]
+                export_metadata["Fecha de finalización"] = time_range[1]
         else:
-            time_range = self.form_data['time_range'].split(" : ")
-            export_metadata["Filtros de fecha aplicados sobre los datos"] = ""
-            export_metadata["Fecha de inicio"] = time_range[0]
-            export_metadata["Fecha de finalización"] = time_range[1]
+            export_metadata["No se han aplicado filtros de fecha"] = ""
 
         export_metadata[" "] = ""
 
         filtros_dict = {}
-
-        if not self.form_data['adhoc_filters'] and not self.form_data['extra_filters']:
+        if 'adhoc_filters' not in self.form_data.keys() and 'extra_filters' not in self.form_data.keys():
             export_metadata["No se han aplicado filtros sobre los datos"] = ""
         else:
             export_metadata["Filtros aplicados sobre los datos"] = ""
@@ -659,14 +661,16 @@ class BaseViz:
 
             if 'adhoc_filters' in self.form_data.keys():
                 for f in self.form_data['adhoc_filters']:
+                    operator = utils.filter_operators[f['op']] if f['op'] in utils.filter_operators.keys() else f['op']
                     tmp_cols.append(f['subject'])
-                    tmp_ops.append(utils.filter_operators[f['operator']])
+                    tmp_ops.append(operator)
                     tmp_vals.append(f['comparator'] if 'comparator' in f.keys() else None)
 
             if 'extra_filters' in self.form_data.keys():
                 for f in self.form_data['extra_filters']:
+                    operator = utils.filter_operators[f['op']] if f['op'] in utils.filter_operators.keys() else f['op']
                     tmp_cols.append(f['col'])
-                    tmp_ops.append(utils.filter_operators[f['op']])
+                    tmp_ops.append(operator)
                     tmp_vals.append(f['val'] if 'val' in f.keys() else None)
 
             filtros_dict = {

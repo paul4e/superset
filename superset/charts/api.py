@@ -502,18 +502,21 @@ class ChartRestApi(BaseSupersetModelRestApi):
                 "Fecha de creación": datetime.today().strftime("%d/%m/%Y %H:%M:%S"),
                 "": ""
             }
-            if not qc['from_dttm'] and not qc['to_dttm']:
-                export_metadata["No se han aplicado filtros de fecha"] = ""
+            if 'from_dttm' in qc.keys() and 'to_dttm' in qc.keys():
+                if not qc['from_dttm'] and not qc['to_dttm']:
+                    export_metadata["No se han aplicado filtros de fecha"] = ""
+                else:
+                    export_metadata["Filtros de fecha aplicados sobre los datos"] = ""
+                    export_metadata["Fecha de inicio"] = qc['from_dttm'] if 'from_dttm' in qc.keys() else 'Sin fecha de inicio'
+                    export_metadata["Fecha de finalización"] = qc['to_dttm'] if 'from_dttm' in qc.keys() else 'Sin fecha de finalización'
             else:
-                export_metadata["Filtros de fecha aplicados sobre los datos"] = ""
-                export_metadata["Fecha de inicio"] = qc['from_dttm']
-                export_metadata["Fecha de finalización"] = qc['to_dttm']
+                export_metadata["No se han aplicado filtros de fecha"] = ""
 
             export_metadata[" "] = ""
 
             filtros_dict = {}
 
-            if not qc['filter']:
+            if 'filter' not in qc.keys():
                 export_metadata["No se han aplicado filtros sobre los datos"] = ""
             else:
                 export_metadata["Filtros aplicados sobre los datos"] = ""
@@ -521,8 +524,9 @@ class ChartRestApi(BaseSupersetModelRestApi):
                 tmp_ops = []
                 tmp_vals = []
                 for f in qc['filter']:
+                    operador = filter_operators[f['op']] if f['op'] in filter_operators.keys() else f['op']
                     tmp_cols.append(f['col'])
-                    tmp_ops.append(filter_operators[f['op']])
+                    tmp_ops.append(operador)
                     tmp_vals.append(f['val'] if 'val' in f.keys() else None)
 
                 filtros_dict = {
@@ -540,7 +544,7 @@ class ChartRestApi(BaseSupersetModelRestApi):
             # return the first result
             data = result["queries"][0]["data"]
 
-            if data is '\n':
+            if data == '\n':
                 resp = make_response("No hay datos para exportar", 200)
                 resp.headers["Content-Type"] = "application/json; charset=utf-8"
                 return resp
