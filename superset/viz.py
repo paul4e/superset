@@ -661,7 +661,7 @@ class BaseViz:
 
             if 'adhoc_filters' in self.form_data.keys():
                 for f in self.form_data['adhoc_filters']:
-                    operator = utils.filter_operators[f['op']] if f['op'] in utils.filter_operators.keys() else f['op']
+                    operator = utils.filter_operators[f['operator']] if f['operator'] in utils.filter_operators.keys() else f['operator']
                     tmp_cols.append(f['subject'])
                     tmp_ops.append(operator)
                     tmp_vals.append(f['comparator'] if 'comparator' in f.keys() else None)
