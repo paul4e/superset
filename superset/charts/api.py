@@ -524,7 +524,10 @@ class ChartRestApi(BaseSupersetModelRestApi):
                 tmp_ops = []
                 tmp_vals = []
                 for f in qc['filter']:
-                    operador = filter_operators[f['op']] if f['op'] in filter_operators.keys() else f['op']
+                    if 'op' in f.keys():
+                        operador = filter_operators[f['op']] if f['op'] in filter_operators.keys() else f['op']
+                    else:
+                        operador = 'No se encontro el operador'
                     tmp_cols.append(f['col'])
                     tmp_ops.append(operador)
                     tmp_vals.append(f['val'] if 'val' in f.keys() else None)
