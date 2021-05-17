@@ -661,8 +661,12 @@ class BaseViz:
 
             if 'adhoc_filters' in self.form_data.keys():
                 for f in self.form_data['adhoc_filters']:
-                    if 'op' in f.keys():
-                        operator = utils.filter_operators[f['operator']] if f['operator'] in utils.filter_operators.keys() else f['operator']
+                    if 'operator' in f.keys():
+                        if f['operator'] in utils.filter_operators.keys():
+                            operator = utils.filter_operators[f['operator']]
+                        else:
+                            operator = f['operator']
+                        # operator = utils.filter_operators[f['operator']] if f['operator'] in utils.filter_operators.keys() else f['operator']
                     else:
                         operator = 'No se encontro el operador'
                     tmp_cols.append(f['subject'] if 'subject' in f.keys() else None)
@@ -672,7 +676,11 @@ class BaseViz:
             if 'extra_filters' in self.form_data.keys():
                 for f in self.form_data['extra_filters']:
                     if 'op' in f.keys():
-                        operator = utils.filter_operators[f['op']] if f['op'] in utils.filter_operators.keys() else f['op']
+                        if f['op'] in utils.filter_operators.keys():
+                            operator = utils.filter_operators[f['op']]
+                        else:
+                            operator = f['op']
+                        # operator = utils.filter_operators[f['op']] if (f['op'] in utils.filter_operators.keys()) else f['op']
                     else:
                         operator = 'No se encontro el operador'
                     tmp_cols.append(f['col'] if 'col' in f.keys() else None)
