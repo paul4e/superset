@@ -22,8 +22,8 @@ import { Dispatch } from 'redux';
 import { FilterConfiguration } from 'src/dashboard/components/nativeFilters/types';
 import { DataMaskType, DataMaskStateWithId } from 'src/dataMask/types';
 import {
-  SET_DATA_MASK_FOR_FILTER_CONFIG_COMPLETE,
   SET_DATA_MASK_FOR_FILTER_CONFIG_FAIL,
+  setDataMaskForFilterConfigComplete,
 } from 'src/dataMask/actions';
 import { HYDRATE_DASHBOARD } from './hydrate';
 import { dashboardInfoChanged } from './dashboardInfo';
@@ -74,6 +74,7 @@ export const setFilterConfiguration = (
     filterConfig,
   });
   const { id, metadata } = getState().dashboardInfo;
+  const oldFilters = getState().nativeFilters?.filters;
 
   // TODO extract this out when makeApi supports url parameters
   const updateDashboard = makeApi<
@@ -100,11 +101,7 @@ export const setFilterConfiguration = (
       type: SET_FILTER_CONFIG_COMPLETE,
       filterConfig,
     });
-    dispatch({
-      type: SET_DATA_MASK_FOR_FILTER_CONFIG_COMPLETE,
-      unitName: DataMaskType.NativeFilters,
-      filterConfig,
-    });
+    dispatch(setDataMaskForFilterConfigComplete(filterConfig, oldFilters));
   } catch (err) {
     dispatch({ type: SET_FILTER_CONFIG_FAIL, filterConfig });
     dispatch({ type: SET_DATA_MASK_FOR_FILTER_CONFIG_FAIL, filterConfig });
@@ -119,7 +116,7 @@ type BootstrapData = {
   };
 };
 
-export interface SetBooststapData {
+export interface SetBootstrapData {
   type: typeof HYDRATE_DASHBOARD;
   data: BootstrapData;
 }
@@ -185,6 +182,28 @@ export function saveFilterSets(
   };
 }
 
+export const SET_FOCUSED_NATIVE_FILTER = 'SET_FOCUSED_NATIVE_FILTER';
+export interface SetFocusedNativeFilter {
+  type: typeof SET_FOCUSED_NATIVE_FILTER;
+  id: string;
+}
+export const UNSET_FOCUSED_NATIVE_FILTER = 'UNSET_FOCUSED_NATIVE_FILTER';
+export interface UnsetFocusedNativeFilter {
+  type: typeof UNSET_FOCUSED_NATIVE_FILTER;
+}
+
+export function setFocusedNativeFilter(id: string): SetFocusedNativeFilter {
+  return {
+    type: SET_FOCUSED_NATIVE_FILTER,
+    id,
+  };
+}
+export function unsetFocusedNativeFilter(): UnsetFocusedNativeFilter {
+  return {
+    type: UNSET_FOCUSED_NATIVE_FILTER,
+  };
+}
+
 export type AnyFilterAction =
   | SetFilterConfigBegin
   | SetFilterConfigComplete
@@ -193,4 +212,6 @@ export type AnyFilterAction =
   | SetFilterSetsConfigComplete
   | SetFilterSetsConfigFail
   | SaveFilterSets
-  | SetBooststapData;
+  | SetBootstrapData
+  | SetFocusedNativeFilter
+  | UnsetFocusedNativeFilter;

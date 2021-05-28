@@ -49,6 +49,7 @@ const propTypes = {
   timeout: PropTypes.number,
   vizType: PropTypes.string.isRequired,
   triggerRender: PropTypes.bool,
+  isFiltersInitialized: PropTypes.bool,
   // state
   chartAlert: PropTypes.string,
   chartStatus: PropTypes.string,
@@ -213,6 +214,7 @@ class Chart extends React.PureComponent {
         showMessage={false}
       >
         <Styles
+          data-ui-anchor="chart"
           className="chart-container"
           data-test="chart-container"
           height={height}
