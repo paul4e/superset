@@ -120,6 +120,30 @@ filter_operators = {
 }
 
 
+def get_time_range(time_range):
+
+    if 'last' in time_range:
+        if 'day' in time_range:
+            return "Último día"
+        if 'week' in time_range:
+            return "Última semana"
+        if 'month' in time_range:
+            return "Último mes"
+        if 'quarter' in time_range:
+            return "Último trimestre"
+        if 'year' in time_range:
+            return "Último año"
+    elif 'previous' in time_range:
+        if 'year' in time_range:
+            return "Año de calendario anterior"
+        if 'week' in time_range:
+            return "Semana de calendario anterior"
+        if 'month' in time_range:
+            return "Mes de calendario anterior"
+
+    return time_range
+
+
 class LenientEnum(Enum):
     """Enums with a `get` method that convert a enum value to `Enum` if it is a
     valid value."""
