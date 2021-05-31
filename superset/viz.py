@@ -640,13 +640,21 @@ class BaseViz:
             "": ""
         }
         if 'time_range' in self.form_data.keys():
-            if self.form_data['time_range'] == 'No filter':
+            time_range = self.form_data['time_range'].lower()
+            if 'no filter' in time_range:
                 export_metadata["No se han aplicado filtros de fecha"] = ""
             else:
-                time_range = self.form_data['time_range'].split(" : ")
                 export_metadata["Filtros de fecha aplicados sobre los datos"] = ""
-                export_metadata["Fecha de inicio"] = time_range[0]
-                export_metadata["Fecha de finalización"] = time_range[1]
+
+                if 'last' in time_range or 'previous' in time_range:
+                    export_metadata["Rango de Fechas"] = utils.get_time_range(time_range)
+                    export_metadata["A partir de la fecha"] = datetime.today().strftime("%d/%m/%Y %H:%M:%S")
+                elif ':' in time_range:
+                    time_range = self.form_data['time_range'].split(" : ")
+                    export_metadata["Fecha de inicio"] = time_range[0]
+                    export_metadata["Fecha de finalización"] = time_range[1]
+                else:
+                    export_metadata["Rango de Fechas"] = time_range
         else:
             export_metadata["No se han aplicado filtros de fecha"] = ""
 
