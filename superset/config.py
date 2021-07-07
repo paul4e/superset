@@ -303,6 +303,7 @@ LANGUAGES = {
     "pt_BR": {"flag": "br", "name": "Brazilian Portuguese"},
     "ru": {"flag": "ru", "name": "Russian"},
     "ko": {"flag": "kr", "name": "Korean"},
+    "sl": {"flag": "si", "name": "Slovenian"},
 }
 # Turning off i18n by default as translation in most languages are
 # incomplete and not well maintained.
@@ -360,9 +361,10 @@ DEFAULT_FEATURE_FLAGS: Dict[str, bool] = {
     "DISPLAY_MARKDOWN_HTML": True,
     # When True, this escapes HTML (rather than rendering it) in Markdown components
     "ESCAPE_MARKDOWN_HTML": False,
-    "DASHBOARD_NATIVE_FILTERS": True,
-    "DASHBOARD_CROSS_FILTERS": True,
-    "DASHBOARD_NATIVE_FILTERS_SET": True,
+    "DASHBOARD_NATIVE_FILTERS": False,
+    "DASHBOARD_CROSS_FILTERS": False,
+    "DASHBOARD_NATIVE_FILTERS_SET": False,
+    "DASHBOARD_FILTERS_EXPERIMENTAL": False,
     "GLOBAL_ASYNC_QUERIES": False,
     "VERSIONED_EXPORT": False,
     # Note that: RowLevelSecurityFilter is only given by default to the Admin role
@@ -386,6 +388,14 @@ DEFAULT_FEATURE_FLAGS: Dict[str, bool] = {
     # for report with type 'report' still send with email and slack message with
     # screenshot and link
     "ALERTS_ATTACH_REPORTS": True,
+    # FORCE_DATABASE_CONNECTIONS_SSL is depreciated.
+    "FORCE_DATABASE_CONNECTIONS_SSL": False,
+    # Enabling ENFORCE_DB_ENCRYPTION_UI forces all database connections to be
+    # encrypted before being saved into superset metastore.
+    "ENFORCE_DB_ENCRYPTION_UI": False,
+    # Allow users to export full CSV of table viz type.
+    # This could cause the server to run out of memory or compute.
+    "ALLOW_FULL_CSV_EXPORT": False,
 }
 
 # Feature flags may also be set via 'SUPERSET_FEATURE_' prefixed environment vars.
@@ -475,11 +485,17 @@ THUMBNAIL_CACHE_CONFIG: CacheConfig = {
     "CACHE_NO_NULL_WARNING": True,
 }
 
-# Used for thumbnails and other api: Time in seconds before selenium
+# Time in seconds before selenium
 # times out after trying to locate an element on the page and wait
-# for that element to load for an alert screenshot.
+# for that element to load for a screenshot.
 SCREENSHOT_LOCATE_WAIT = 10
+# Time in seconds before selenium
+# times out after waiting for all DOM class elements named "loading" are gone.
 SCREENSHOT_LOAD_WAIT = 60
+# Selenium destroy retries
+SCREENSHOT_SELENIUM_RETRIES = 5
+# Give selenium an headstart, in seconds
+SCREENSHOT_SELENIUM_HEADSTART = 3
 
 # ---------------------------------------------------
 # Image and file configuration
@@ -1075,10 +1091,10 @@ SQL_VALIDATORS_BY_ENGINE = {
 # use the "engine_name" attribute of the corresponding DB engine spec
 # in `superset/db_engine_specs/`.
 PREFERRED_DATABASES: List[str] = [
-    # "PostgreSQL",
-    # "Presto",
-    # "MySQL",
-    # "SQLite",
+    "PostgreSQL",
+    "Presto",
+    "MySQL",
+    "SQLite",
     # etc.
 ]
 
