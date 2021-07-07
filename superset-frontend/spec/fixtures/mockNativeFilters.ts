@@ -35,7 +35,11 @@ export const nativeFilters: NativeFiltersState = {
           },
         },
       ],
-      defaultValue: null,
+      defaultDataMask: {
+        filterState: {
+          value: null,
+        },
+      },
       cascadeParentIds: [],
       scope: {
         rootPath: ['ROOT_ID'],
@@ -60,7 +64,11 @@ export const nativeFilters: NativeFiltersState = {
           },
         },
       ],
-      defaultValue: null,
+      defaultDataMask: {
+        filterState: {
+          value: null,
+        },
+      },
       cascadeParentIds: [],
       scope: {
         rootPath: ['ROOT_ID'],
@@ -120,7 +128,11 @@ export const singleNativeFiltersState = {
       name: 'eth',
       type: 'text',
       targets: [{ datasetId: 13, column: { name: 'ethnic_minority' } }],
-      defaultValue: null,
+      defaultDataMask: {
+        filterState: {
+          value: null,
+        },
+      },
       cascadeParentIds: [],
       scope: { rootPath: ['ROOT_ID'], excluded: [227, 229] },
       inverseSelection: false,

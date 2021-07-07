@@ -57,7 +57,7 @@ export function getHostName(allowDomainSharding = false) {
   return availableDomains[currentIndex];
 }
 
-export function getAnnotationJsonUrl(slice_id, form_data, isNative) {
+export function getAnnotationJsonUrl(slice_id, form_data, isNative, force) {
   if (slice_id === null || slice_id === undefined) {
     return null;
   }
@@ -69,6 +69,7 @@ export function getAnnotationJsonUrl(slice_id, form_data, isNative) {
       form_data: safeStringify(form_data, (key, value) =>
         value === null ? undefined : value,
       ),
+      force,
     })
     .toString();
 }
@@ -102,7 +103,7 @@ export function getExploreLongUrl(
     search[key] = extraSearch[key];
   });
   search.form_data = safeStringify(formData);
-  if (endpointType === URL_PARAMS.standalone) {
+  if (endpointType === URL_PARAMS.standalone.name) {
     search.standalone = DashboardStandaloneMode.HIDE_NAV;
   }
   const url = uri.directory(directory).search(search).toString();
@@ -175,7 +176,7 @@ export function getExploreUrl({
   if (endpointType === 'csv') {
     search.csv = 'true';
   }
-  if (endpointType === URL_PARAMS.standalone) {
+  if (endpointType === URL_PARAMS.standalone.name) {
     search.standalone = '1';
   }
   if (endpointType === 'query') {

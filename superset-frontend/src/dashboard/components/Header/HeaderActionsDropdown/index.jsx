@@ -168,7 +168,7 @@ class HeaderActionsDropdown extends React.PureComponent {
           window.location.pathname,
           getActiveFilters(),
           window.location.hash,
-          getUrlParam(URL_PARAMS.standalone, 'number'),
+          getUrlParam(URL_PARAMS.standalone),
         );
         window.location.replace(url);
         break;
@@ -317,7 +317,7 @@ class HeaderActionsDropdown extends React.PureComponent {
         overlay={menu}
         trigger={['click']}
         getPopupContainer={triggerNode =>
-          triggerNode.closest(SCREENSHOT_NODE_SELECTOR)
+          triggerNode.closest('.dashboard-header')
         }
       >
         <DropdownButton id="save-dash-split-button" role="button">

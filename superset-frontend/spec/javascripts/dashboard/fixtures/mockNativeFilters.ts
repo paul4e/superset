@@ -53,7 +53,11 @@ export const nativeFiltersInfo: NativeFiltersState = {
           },
         },
       ],
-      defaultValue: null,
+      defaultDataMask: {
+        filterState: {
+          value: null,
+        },
+      },
       scope: {
         rootPath: [],
         excluded: [],

@@ -23,10 +23,14 @@ import {
   Behavior,
   EXTRA_FORM_DATA_APPEND_KEYS,
   EXTRA_FORM_DATA_OVERRIDE_KEYS,
+  AdhocFilter,
+  FeatureFlag,
 } from '@superset-ui/core';
 import { Charts } from 'src/dashboard/types';
 import { RefObject } from 'react';
 import { DataMaskStateWithId } from 'src/dataMask/types';
+import extractUrlParams from 'src/dashboard/util/extractUrlParams';
+import { isFeatureEnabled } from 'src/featureFlags';
 import { Filter } from './types';
 
 export const getFormData = ({
@@ -34,36 +38,48 @@ export const getFormData = ({
   cascadingFilters = {},
   groupby,
   inputRef,
-  defaultValue,
+  defaultDataMask,
   controlValues,
   filterType,
+  sortMetric,
+  adhoc_filters,
+  time_range,
 }: Partial<Filter> & {
   datasetId?: number;
   inputRef?: RefObject<HTMLInputElement>;
   cascadingFilters?: object;
   groupby?: string;
+  adhoc_filters?: AdhocFilter[];
+  time_range?: string;
 }): Partial<QueryFormData> => {
-  const otherProps: { datasource?: string; groupby?: string[] } = {};
+  const otherProps: {
+    datasource?: string;
+    groupby?: string[];
+    sortMetric?: string;
+  } = {};
   if (datasetId) {
     otherProps.datasource = `${datasetId}__table`;
   }
   if (groupby) {
     otherProps.groupby = [groupby];
   }
+  if (sortMetric) {
+    otherProps.sortMetric = sortMetric;
+  }
   return {
     ...controlValues,
     ...otherProps,
-    adhoc_filters: [],
+    adhoc_filters: adhoc_filters ?? [],
     extra_filters: [],
     extra_form_data: cascadingFilters,
     granularity_sqla: 'ds',
     metrics: ['count'],
-    row_limit: 10000,
+    row_limit: 1000,
     showSearch: true,
-    defaultValue,
-    time_range: 'No filter',
+    defaultValue: defaultDataMask?.filterState?.value,
+    time_range,
     time_range_endpoints: ['inclusive', 'exclusive'],
-    url_params: {},
+    url_params: extractUrlParams('regular'),
     viz_type: filterType,
     inputRef,
   };
@@ -116,4 +132,13 @@ export function getExtraFormData(
     );
   });
   return extraFormData;
+}
+
+export function nativeFilterGate(behaviors: Behavior[]): boolean {
+  return (
+    !behaviors.includes(Behavior.NATIVE_FILTER) ||
+    (isFeatureEnabled(FeatureFlag.DASHBOARD_FILTERS_EXPERIMENTAL) &&
+      isFeatureEnabled(FeatureFlag.DASHBOARD_CROSS_FILTERS) &&
+      behaviors.includes(Behavior.INTERACTIVE_CHART))
+  );
 }
