@@ -40,6 +40,7 @@ type SliceHeaderProps = {
   forceRefresh?: Function;
   exploreChart?: Function;
   exportCSV?: Function;
+  exportExcel?: Function;
   editMode?: boolean;
   isFullSize?: boolean;
   annotationQuery?: object;
@@ -75,6 +76,7 @@ const SliceHeader: FC<SliceHeaderProps> = ({
   toggleExpandSlice = () => ({}),
   exploreChart = () => ({}),
   exportCSV = () => ({}),
+  exportExcel = () => ({}),
   editMode = false,
   annotationQuery = {},
   annotationError = {},
@@ -172,6 +174,7 @@ const SliceHeader: FC<SliceHeaderProps> = ({
               forceRefresh={forceRefresh}
               exploreChart={exploreChart}
               exportCSV={exportCSV}
+              exportExcel={exportExcel}
               supersetCanExplore={supersetCanExplore}
               supersetCanShare={supersetCanShare}
               supersetCanCSV={supersetCanCSV}

@@ -178,9 +178,9 @@ export function getExploreUrl({
   }
   if (endpointType === URL_PARAMS.standalone) {
     search.standalone = '1';
+  }
   if (endpointType === 'xlsx') {
     search.xlsx = 'true';
-  }
   }
   if (endpointType === 'query') {
     search.query = 'true';

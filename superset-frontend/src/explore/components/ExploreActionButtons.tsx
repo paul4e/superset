@@ -130,6 +130,12 @@ const ExploreActionButtons = (props: ExploreActionButtonsProps) => {
     resultFormat: 'json',
   });
 
+  const doExportXLSX = exportChart.bind(this, {
+    formData: latestQueryFormData,
+    resultType: 'results',
+    resultFormat: 'xlsx',
+  });
+
   const exportToCSVClasses = cx('btn btn-default btn-sm', {
     disabled: !canDownload,
   });
@@ -182,6 +188,13 @@ const ExploreActionButtons = (props: ExploreActionButtonsProps) => {
             text=".CSV"
             tooltip={t('Export to .CSV format')}
             onClick={doExportCSV}
+            className={exportToCSVClasses}
+          />
+          <ActionButton
+            icon={<i className="fa fa-file-text-o" />}
+            text="Excel"
+            tooltip={t('Export to Excel format')}
+            onClick={doExportXLSX}
             className={exportToCSVClasses}
           />
         </>
