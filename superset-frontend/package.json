@@ -61,6 +61,7 @@
   },
   "homepage": "https://superset.apache.org/",
   "dependencies": {
+    "@smartnow/plugin-chart-echarts-sn": "^1.0.2",
     "@ant-design/icons": "^4.2.2",
     "@babel/runtime-corejs3": "^7.12.5",
     "@data-ui/sparkline": "^0.0.84",
