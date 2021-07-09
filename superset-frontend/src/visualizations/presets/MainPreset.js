@@ -37,6 +37,8 @@ import RoseChartPlugin from '@superset-ui/legacy-plugin-chart-rose';
 import SankeyChartPlugin from '@superset-ui/legacy-plugin-chart-sankey';
 import SunburstChartPlugin from '@smartnow/legacy-plugin-chart-sunburst';
 import TableChartPlugin from '@smartnow/plugin-chart-table';
+//import SunburstChartPlugin from "@superset-ui/legacy-plugin-chart-sunburst";
+//import TableChartPlugin from "@superset-ui/plugin-chart-table";
 import TreemapChartPlugin from '@superset-ui/legacy-plugin-chart-treemap';
 import { WordCloudChartPlugin } from '@superset-ui/plugin-chart-word-cloud';
 import WorldMapChartPlugin from '@superset-ui/legacy-plugin-chart-world-map';
@@ -51,7 +53,8 @@ import {
   LineChartPlugin,
   LineMultiChartPlugin,
   TimePivotChartPlugin,
-} from '@superset-ui/legacy-preset-chart-nvd3';
+} from '@smartnow/legacy-preset-chart-nvd3';
+//from '@superset-ui/legacy-preset-chart-nvd3';
 import { DeckGLChartPreset } from '@superset-ui/legacy-preset-chart-deckgl';
 import {
   EchartsPieChartPlugin,
