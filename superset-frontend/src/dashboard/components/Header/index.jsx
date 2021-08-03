@@ -412,7 +412,11 @@ class Header extends React.PureComponent {
             />
           )}
         </div>
-
+        <div>
+          <p style={{fontFamily: "Open Sans", color:"red"}}>
+            {dashboardInfo.metadata.banner} 
+          </p>
+        </div>
         <div className="button-container">
           {userCanSaveAs && (
             <div
