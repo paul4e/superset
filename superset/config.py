@@ -386,6 +386,8 @@ DEFAULT_FEATURE_FLAGS: Dict[str, bool] = {
     # for report with type 'report' still send with email and slack message with
     # screenshot and link
     "ALERTS_ATTACH_REPORTS": True,
+    # Enabling dashboard access permissions
+    "DASHBOARD_ACCESS_PERM": True
 }
 
 # Feature flags may also be set via 'SUPERSET_FEATURE_' prefixed environment vars.

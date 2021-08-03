@@ -17,6 +17,7 @@
 import logging
 from typing import Any, Dict, List, Optional
 
+from superset.extensions import security_manager, db
 from flask_appbuilder.models.sqla import Model
 from flask_appbuilder.security.sqla.models import User
 from marshmallow import ValidationError
@@ -44,6 +45,8 @@ class CreateDashboardCommand(BaseCommand):
         try:
             dashboard = DashboardDAO.create(self._properties, commit=False)
             dashboard = DashboardDAO.update_charts_owners(dashboard, commit=True)
+            security_manager.add_permission_view_menu("dashboard_access", dashboard.perm)
+            db.session.commit()
         except DAOCreateFailedError as ex:
             logger.exception(ex.exception)
             raise DashboardCreateFailedError()

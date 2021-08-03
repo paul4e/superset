@@ -76,6 +76,16 @@ class DashboardAccessFilter(BaseFilter):
         datasource_perms = security_manager.user_view_menu_names("datasource_access")
         schema_perms = security_manager.user_view_menu_names("schema_access")
 
+        if is_feature_enabled("DASHBOARD_ACCESS_PERM"):
+            dashboard_perms = security_manager.user_view_menu_names("dashboard_access")
+            if dashboard_perms:
+                dashboard_perms_ids = (
+                    db.session.query(Dashboard.id)
+                    .filter(
+                        Dashboard.perm.in_(dashboard_perms)
+                    )
+                )
+
         is_rbac_disabled_filter = []
         dashboard_has_roles = Dashboard.roles.any()
         if is_feature_enabled("DASHBOARD_RBAC"):
@@ -127,6 +137,26 @@ class DashboardAccessFilter(BaseFilter):
             )
 
             dashboard_rbac_or_filters.append(Dashboard.id.in_(roles_based_query))
+
+        if is_feature_enabled("DASHBOARD_ACCESS_PERM"):
+            if dashboard_perms:
+                query = query.filter(
+                    or_(
+                        Dashboard.id.in_(dashboard_perms_ids),
+                        Dashboard.id.in_(owner_ids_query),
+                        Dashboard.id.in_(users_favorite_dash_query)
+                    )
+                    # and_(
+                    #     Dashboard.id.in_(dashboard_perms_ids),
+                    #     or_(
+                    #         Dashboard.id.in_(owner_ids_query),
+                    #         Dashboard.id.in_(datasource_perm_query),
+                    #         Dashboard.id.in_(users_favorite_dash_query),
+                    #         *dashboard_rbac_or_filters,
+                    #     )
+                    # )
+                )
+                return query
 
         query = query.filter(
             or_(

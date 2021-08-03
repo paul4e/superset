@@ -127,6 +127,7 @@ class DashboardJSONMetadataSchema(Schema):
     # used for v0 import/export
     import_time = fields.Integer()
     remote_id = fields.Integer()
+    banner = fields.Str()
 
 
 class UserSchema(Schema):

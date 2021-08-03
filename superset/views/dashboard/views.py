@@ -37,6 +37,7 @@ from superset.views.base import (
     SupersetModelView,
 )
 from superset.views.dashboard.mixin import DashboardMixin
+from superset.extensions import security_manager
 
 
 class DashboardModelView(
@@ -120,6 +121,9 @@ class Dashboard(BaseSupersetView):
             dashboard_title="[ untitled dashboard ]", owners=[g.user]
         )
         db.session.add(new_dashboard)
+        db.session.commit()
+
+        security_manager.add_permission_view_menu("dashboard_access", new_dashboard.perm)
         db.session.commit()
         return redirect(f"/superset/dashboard/{new_dashboard.id}/?edit=true")
 

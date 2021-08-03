@@ -43,6 +43,8 @@ from sqlalchemy.orm.mapper import Mapper
 from sqlalchemy.orm.session import object_session
 from sqlalchemy.sql import join, select
 from sqlalchemy.sql.elements import BinaryExpression
+from sqlalchemy.ext.hybrid import hybrid_property
+from sqlalchemy.sql import expression
 
 from superset import app, ConnectorRegistry, db, is_feature_enabled, security_manager
 from superset.connectors.base.models import BaseDatasource
@@ -159,6 +161,19 @@ class Dashboard(  # pylint: disable=too-many-instance-attributes
 
     def __repr__(self) -> str:
         return f"Dashboard<{self.id or self.slug}>"
+
+    @hybrid_property
+    def perm(self) -> str:
+        return f"[Dashboard].(id:{self.id})"
+
+    @perm.expression  # type: ignore
+    def perm(cls) -> str:  # pylint: disable=no-self-argument
+        return (
+            "[Dashboard].(id:" + expression.cast(cls.id, String) + ")"
+        )
+
+    def get_perm(self) -> str:
+        return self.perm  # type: ignore
 
     @property
     def table_names(self) -> str:

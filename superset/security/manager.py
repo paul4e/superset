@@ -602,6 +602,13 @@ class SupersetSecurityManager(  # pylint: disable=too-many-public-methods
         for database in databases:
             merge_pv("database_access", database.perm)
 
+        from superset.models.dashboard import Dashboard
+
+        dashboards = self.get_session.query(Dashboard).all()
+        logger.info("Creating missing dashboard permissions.")
+        for dash in dashboards:
+            merge_pv("dashboard_access", dash.get_perm())
+
     def clean_perms(self) -> None:
         """
         Clean up the FAB faulty permissions.

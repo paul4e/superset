@@ -17,12 +17,13 @@
 from typing import Any
 
 from flask_babel import lazy_gettext as _
-from sqlalchemy import or_
+from sqlalchemy import and_, or_
 from sqlalchemy.orm.query import Query
 
-from superset import security_manager
+from superset import security_manager, is_feature_enabled, db
 from superset.connectors.sqla.models import SqlaTable
 from superset.models.slice import Slice
+from superset.models.dashboard import Dashboard
 from superset.views.base import BaseFilter
 from superset.views.base_api import BaseFavoriteFilter
 
@@ -57,6 +58,23 @@ class ChartFavoriteFilter(BaseFavoriteFilter):  # pylint: disable=too-few-public
 
 class ChartFilter(BaseFilter):  # pylint: disable=too-few-public-methods
     def apply(self, query: Query, value: Any) -> Query:
+
+        if is_feature_enabled("DASHBOARD_ACCESS_PERM"):
+            dashboard_perms = security_manager.user_view_menu_names("dashboard_access")
+
+            if dashboard_perms:
+                dashboard_slices = (
+                    db.session.query(Slice.id)
+                    .join(Dashboard.slices)
+                    .filter(
+                        Dashboard.perm.in_(dashboard_perms)
+                    )
+                )
+
+                return query.filter(
+                    self.model.id.in_(dashboard_slices)
+                )
+
         if security_manager.can_access_all_datasources():
             return query
         perms = security_manager.user_view_menu_names("datasource_access")
