@@ -122,9 +122,9 @@ class Dashboard(BaseSupersetView):
         )
         db.session.add(new_dashboard)
         db.session.commit()
-
-        security_manager.add_permission_view_menu("dashboard_access", new_dashboard.perm)
-        db.session.commit()
+        if is_feature_enabled("DASHBOARD_ACCESS_PERM"):
+            security_manager.add_permission_view_menu("dashboard_access", new_dashboard.perm)
+            db.session.commit()
         return redirect(f"/superset/dashboard/{new_dashboard.id}/?edit=true")
 
 

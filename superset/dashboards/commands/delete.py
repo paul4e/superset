@@ -35,6 +35,7 @@ from superset.models.dashboard import Dashboard
 from superset.reports.dao import ReportScheduleDAO
 from superset.views.base import check_ownership
 from superset.extensions import db, security_manager
+from superset import is_feature_enabled
 
 logger = logging.getLogger(__name__)
 
@@ -49,28 +50,28 @@ class DeleteDashboardCommand(BaseCommand):
         self.validate()
         try:
             dashboard = DashboardDAO.delete(self._model)
-
-            view_menu = (
-                security_manager.find_view_menu(self._model.get_perm())
-                if self._model
-                else None
-            )
-            if view_menu:
-                permission_views = (
-                    db.session.query(security_manager.permissionview_model)
-                    .filter_by(view_menu=view_menu)
-                    .all()
+            if is_feature_enabled("DASHBOARD_ACCESS_PERM"):
+                view_menu = (
+                    security_manager.find_view_menu(self._model.get_perm())
+                    if self._model
+                    else None
                 )
-                for permission_view in permission_views:
-                    db.session.delete(permission_view)
                 if view_menu:
-                    db.session.delete(view_menu)
-            else:
-                if not view_menu:
-                    logger.error(
-                        "Could not find the data access permission for the dashboard"
+                    permission_views = (
+                        db.session.query(security_manager.permissionview_model)
+                        .filter_by(view_menu=view_menu)
+                        .all()
                     )
-            db.session.commit()
+                    for permission_view in permission_views:
+                        db.session.delete(permission_view)
+                    if view_menu:
+                        db.session.delete(view_menu)
+                else:
+                    if not view_menu:
+                        logger.error(
+                            "Could not find the data access permission for the dashboard"
+                        )
+                db.session.commit()
         except DAODeleteFailedError as ex:
             logger.exception(ex.exception)
             raise DashboardDeleteFailedError()

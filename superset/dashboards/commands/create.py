@@ -31,6 +31,7 @@ from superset.dashboards.commands.exceptions import (
     DashboardSlugExistsValidationError,
 )
 from superset.dashboards.dao import DashboardDAO
+from superset import is_feature_enabled
 
 logger = logging.getLogger(__name__)
 
@@ -45,8 +46,9 @@ class CreateDashboardCommand(BaseCommand):
         try:
             dashboard = DashboardDAO.create(self._properties, commit=False)
             dashboard = DashboardDAO.update_charts_owners(dashboard, commit=True)
-            security_manager.add_permission_view_menu("dashboard_access", dashboard.perm)
-            db.session.commit()
+            if is_feature_enabled("DASHBOARD_ACCESS_PERM"):
+                security_manager.add_permission_view_menu("dashboard_access", dashboard.perm)
+                db.session.commit()
         except DAOCreateFailedError as ex:
             logger.exception(ex.exception)
             raise DashboardCreateFailedError()
