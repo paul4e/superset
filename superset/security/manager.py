@@ -51,7 +51,7 @@ from superset.constants import RouteMethod
 from superset.errors import ErrorLevel, SupersetError, SupersetErrorType
 from superset.exceptions import SupersetSecurityException
 from superset.utils.core import DatasourceName, RowLevelSecurityFilterType
-from superset import is_feature_enabled
+#from superset import is_feature_enabled
 
 if TYPE_CHECKING:
     from superset.common.query_context import QueryContext
@@ -604,8 +604,9 @@ class SupersetSecurityManager(  # pylint: disable=too-many-public-methods
             merge_pv("database_access", database.perm)
 
         from superset.models.dashboard import Dashboard
+        from superset.extensions import feature_flag_manager
 
-        if is_feature_enabled("DASHBOARD_ACCESS_PERM"):
+        if feature_flag_manager.is_feature_enabled("DASHBOARD_ACCESS_PERM"):
             dashboards = self.get_session.query(Dashboard).all()
             logger.info("Creating missing dashboard permissions.")
             for dash in dashboards:
