@@ -111,7 +111,7 @@ class DashboardJSONMetadataSchema(Schema):
     stagger_time = fields.Integer()
     color_scheme = fields.Str(allow_none=True)
     label_colors = fields.Dict()
-
+    information = fields.Str()
 
 class BaseDashboardSchema(Schema):
     # pylint: disable=no-self-use,unused-argument
