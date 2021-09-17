@@ -14,7 +14,6 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-# pylint: disable=no-self-use, invalid-name
 from unittest import mock, skip
 from unittest.mock import patch
 
@@ -587,7 +586,7 @@ class TestTestConnectionDatabaseCommand(SupersetTestCase):
         connection exc is raised"""
         database = get_example_database()
         mock_get_sqla_engine.side_effect = SupersetSecurityException(
-            SupersetError(error_type=500, message="test", level="info", extra={})
+            SupersetError(error_type=500, message="test", level="info")
         )
         db_uri = database.sqlalchemy_uri_decrypted
         json_payload = {"sqlalchemy_uri": db_uri}

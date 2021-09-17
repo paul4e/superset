@@ -31,12 +31,17 @@ const options = [
   {
     label: 'Such an incredibly awesome long long label',
     value: 'Such an incredibly awesome long long label',
+    custom: 'Secret custom prop',
   },
   {
     label: 'Another incredibly awesome long long label',
     value: 'Another incredibly awesome long long label',
   },
-  { label: 'Just a label', value: 'Just a label' },
+  {
+    label: 'JSX Label',
+    customLabel: <div style={{ color: 'red' }}>JSX Label</div>,
+    value: 'JSX Label',
+  },
   { label: 'A', value: 'A' },
   { label: 'B', value: 'B' },
   { label: 'C', value: 'C' },
@@ -75,6 +80,12 @@ const ARG_TYPES = {
     },
   },
   ariaLabel: {
+    table: {
+      disable: true,
+    },
+  },
+  labelInValue: {
+    defaultValue: true,
     table: {
       disable: true,
     },
@@ -131,6 +142,7 @@ InteractiveSelect.args = {
   disabled: false,
   invertSelection: false,
   placeholder: 'Select ...',
+  optionFilterProps: ['value', 'label', 'custom'],
 };
 
 InteractiveSelect.argTypes = {
@@ -140,6 +152,11 @@ InteractiveSelect.argTypes = {
     control: { type: 'inline-radio', options: ['none', 'text', 'control'] },
   },
   pageSize: {
+    table: {
+      disable: true,
+    },
+  },
+  fetchOnlyOnSearch: {
     table: {
       disable: true,
     },
@@ -166,7 +183,11 @@ export const AtEveryCorner = () => (
           position: 'absolute',
         }}
       >
-        <Select ariaLabel={`gallery-${position.id}`} options={options} />
+        <Select
+          ariaLabel={`gallery-${position.id}`}
+          options={options}
+          labelInValue
+        />
       </div>
     ))}
     <p style={{ position: 'absolute', top: '40%', left: '33%', width: 500 }}>
@@ -201,7 +222,7 @@ export const PageScroll = () => (
         right: 30,
       }}
     >
-      <Select ariaLabel="page-scroll-select-1" options={options} />
+      <Select ariaLabel="page-scroll-select-1" options={options} labelInValue />
     </div>
     <div
       style={{
@@ -295,11 +316,14 @@ const USERS = [
 ];
 
 export const AsyncSelect = ({
+  fetchOnlyOnSearch,
   withError,
+  withInitialValue,
   responseTime,
   ...rest
 }: SelectProps & {
   withError: boolean;
+  withInitialValue: boolean;
   responseTime: number;
 }) => {
   const [requests, setRequests] = useState<ReactNode[]>([]);
@@ -340,15 +364,18 @@ export const AsyncSelect = ({
   const fetchUserListPage = useCallback(
     (
       search: string,
-      offset: number,
-      limit: number,
+      page: number,
+      pageSize: number,
     ): Promise<OptionsTypePage> => {
       const username = search.trim().toLowerCase();
       return new Promise(resolve => {
         let results = getResults(username);
         const totalCount = results.length;
-        results = results.splice(offset, limit);
-        setRequestLog(offset + results.length, totalCount, username);
+        const start = page * pageSize;
+        const deleteCount =
+          start + pageSize < totalCount ? pageSize : totalCount - start;
+        results = results.splice(start, deleteCount);
+        setRequestLog(start + results.length, totalCount, username);
         setTimeout(() => {
           resolve({ data: results, totalCount });
         }, responseTime * 1000);
@@ -371,7 +398,14 @@ export const AsyncSelect = ({
       >
         <Select
           {...rest}
+          fetchOnlyOnSearch={fetchOnlyOnSearch}
           options={withError ? fetchUserListError : fetchUserListPage}
+          placeholder={fetchOnlyOnSearch ? 'Type anything' : 'Select...'}
+          value={
+            withInitialValue
+              ? { label: 'Valentina', value: 'Valentina' }
+              : undefined
+          }
         />
       </div>
       <div
@@ -395,9 +429,11 @@ export const AsyncSelect = ({
 };
 
 AsyncSelect.args = {
-  withError: false,
-  pageSize: 10,
   allowNewOptions: false,
+  fetchOnlyOnSearch: false,
+  pageSize: 10,
+  withError: false,
+  withInitialValue: false,
 };
 
 AsyncSelect.argTypes = {
@@ -428,6 +464,7 @@ AsyncSelect.argTypes = {
       type: 'range',
       min: 0.5,
       max: 5,
+      step: 0.5,
     },
   },
 };

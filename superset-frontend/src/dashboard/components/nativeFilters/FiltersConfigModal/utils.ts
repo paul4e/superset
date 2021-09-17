@@ -104,7 +104,6 @@ export const createHandleSave = (
   filterConfigMap: Record<string, Filter>,
   filterIds: string[],
   removedFilters: Record<string, FilterRemoval>,
-  resetForm: Function,
   saveForm: Function,
   values: NativeFiltersForm,
 ) => async () => {
@@ -141,11 +140,11 @@ export const createHandleSave = (
           : [],
         scope: formInputs.scope,
         sortMetric: formInputs.sortMetric,
+        type: formInputs.type,
       };
     });
 
   await saveForm(newFilterConfig);
-  resetForm();
 };
 
 export const createHandleTabEdit = (

@@ -15,7 +15,6 @@
 # specific language governing permissions and limitations
 # under the License.
 # isort:skip_file
-# pylint: disable=invalid-name, no-self-use, too-many-public-methods, too-many-arguments
 """Unit tests for Superset"""
 import dataclasses
 import json
@@ -39,6 +38,7 @@ from superset.db_engine_specs.mysql import MySQLEngineSpec
 from superset.db_engine_specs.postgres import PostgresEngineSpec
 from superset.db_engine_specs.redshift import RedshiftEngineSpec
 from superset.db_engine_specs.bigquery import BigQueryEngineSpec
+from superset.db_engine_specs.gsheets import GSheetsEngineSpec
 from superset.db_engine_specs.hana import HanaEngineSpec
 from superset.errors import SupersetError
 from superset.models.core import Database, ConfigurationMethod
@@ -177,6 +177,7 @@ class TestDatabaseApi(SupersetTestCase):
             "database_name",
             "explore_database_id",
             "expose_in_sqllab",
+            "extra",
             "force_ctas_schema",
             "id",
         ]
@@ -1187,6 +1188,8 @@ class TestDatabaseApi(SupersetTestCase):
         assert dataset.table_name == "imported_dataset"
         assert str(dataset.uuid) == dataset_config["uuid"]
 
+        dataset.owners = []
+        database.owners = []
         db.session.delete(dataset)
         db.session.delete(database)
         db.session.commit()
@@ -1256,6 +1259,8 @@ class TestDatabaseApi(SupersetTestCase):
             db.session.query(Database).filter_by(uuid=database_config["uuid"]).one()
         )
         dataset = database.tables[0]
+        dataset.owners = []
+        database.owners = []
         db.session.delete(dataset)
         db.session.delete(database)
         db.session.commit()
@@ -1437,6 +1442,7 @@ class TestDatabaseApi(SupersetTestCase):
             PostgresEngineSpec: {"psycopg2"},
             BigQueryEngineSpec: {"bigquery"},
             MySQLEngineSpec: {"mysqlconnector", "mysqldb"},
+            GSheetsEngineSpec: {"apsw"},
             RedshiftEngineSpec: {"psycopg2"},
             HanaEngineSpec: {""},
         }
@@ -1563,6 +1569,18 @@ class TestDatabaseApi(SupersetTestCase):
                     },
                     "preferred": False,
                     "sqlalchemy_uri_placeholder": "redshift+psycopg2://user:password@host:port/dbname[?key=value&key=value...]",
+                },
+                {
+                    "available_drivers": ["apsw"],
+                    "default_driver": "apsw",
+                    "engine": "gsheets",
+                    "name": "Google Sheets",
+                    "parameters": {
+                        "properties": {"catalog": {"type": "object"},},
+                        "type": "object",
+                    },
+                    "preferred": False,
+                    "sqlalchemy_uri_placeholder": "gsheets://",
                 },
                 {
                     "available_drivers": ["mysqlconnector", "mysqldb"],

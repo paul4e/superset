@@ -101,6 +101,7 @@ class Dashboard extends React.PureComponent {
     const bootstrapData = appContainer?.getAttribute('data-bootstrap') || '';
     const { dashboardState, layout } = this.props;
     const eventData = {
+      is_soft_navigation: Logger.timeOriginOffset > 0,
       is_edit_mode: dashboardState.editMode,
       mount_duration: Logger.getTimestamp(),
       is_empty: isDashboardEmpty(layout),
@@ -131,6 +132,11 @@ class Dashboard extends React.PureComponent {
   UNSAFE_componentWillReceiveProps(nextProps) {
     const currentChartIds = getChartIdsFromLayout(this.props.layout);
     const nextChartIds = getChartIdsFromLayout(nextProps.layout);
+
+    if (this.props.dashboardInfo.id !== nextProps.dashboardInfo.id) {
+      // single-page-app navigation check
+      return;
+    }
 
     if (currentChartIds.length < nextChartIds.length) {
       const newChartIds = nextChartIds.filter(
@@ -284,7 +290,7 @@ class Dashboard extends React.PureComponent {
     }
     return (
       <>
-        <OmniContainer logEvent={this.props.actions.logEvent} />
+        <OmniContainer />
         <DashboardBuilder />
       </>
     );

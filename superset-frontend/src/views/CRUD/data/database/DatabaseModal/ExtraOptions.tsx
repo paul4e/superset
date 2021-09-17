@@ -169,9 +169,9 @@ const ExtraOptions = ({
             <StyledInputContainer css={no_margin_bottom}>
               <div className="input-container">
                 <IndeterminateCheckbox
-                  id="cost_query_enabled"
+                  id="cost_estimate_enabled"
                   indeterminate={false}
-                  checked={!!db?.extra_json?.cost_query_enabled}
+                  checked={!!db?.extra_json?.cost_estimate_enabled}
                   onChange={onExtraInputChange}
                   labelText={t('Enable query cost estimation')}
                 />
@@ -294,6 +294,24 @@ const ExtraOptions = ({
             />
           </div>
         </StyledInputContainer>
+        <StyledInputContainer css={{ no_margin_bottom }}>
+          <div className="input-container">
+            <IndeterminateCheckbox
+              id="cancel_query_on_windows_unload"
+              indeterminate={false}
+              checked={!!db?.extra_json?.cancel_query_on_windows_unload}
+              onChange={onExtraInputChange}
+              labelText={t('Cancel query on window unload event')}
+            />
+            <InfoTooltip
+              tooltip={t(
+                'Terminate running queries when browser window closed or navigated ' +
+                  'to another page. Available for Presto, Hive, MySQL, Postgres and ' +
+                  'Snowflake databases.',
+              )}
+            />
+          </div>
+        </StyledInputContainer>
       </Collapse.Panel>
       <Collapse.Panel
         header={
@@ -354,13 +372,17 @@ const ExtraOptions = ({
             <input
               type="text"
               name="schemas_allowed_for_csv_upload"
-              value={db?.extra_json?.schemas_allowed_for_csv_upload || ''}
-              placeholder={t('Select one or multiple schemas')}
+              value={(
+                db?.extra_json?.schemas_allowed_for_csv_upload || []
+              ).join(',')}
+              placeholder="schema1,schema2"
               onChange={onExtraInputChange}
             />
           </div>
           <div className="helper">
-            {t('A list of schemas that CSVs are allowed to upload to.')}
+            {t(
+              'A comma-separated list of schemas that CSVs are allowed to upload to.',
+            )}
           </div>
         </StyledInputContainer>
         <StyledInputContainer css={{ no_margin_bottom }}>
@@ -370,11 +392,13 @@ const ExtraOptions = ({
               indeterminate={false}
               checked={!!db?.impersonate_user}
               onChange={onInputChange}
-              labelText={t('Impersonate logged in user (Presto & Hive)')}
+              labelText={t(
+                'Impersonate logged in user (Presto, Trino, Hive, and GSheets)',
+              )}
             />
             <InfoTooltip
               tooltip={t(
-                'If Presto, all the queries in SQL Lab are going to be executed as the ' +
+                'If Presto or Trino, all the queries in SQL Lab are going to be executed as the ' +
                   'currently logged on user who must have permission to run them. If Hive ' +
                   'and hive.server2.enable.doAs is enabled, will run the queries as ' +
                   'service account, but impersonate the currently logged on user via ' +
@@ -414,7 +438,7 @@ const ExtraOptions = ({
           <div className="input-container">
             <StyledJsonEditor
               name="metadata_params"
-              value={db?.extra_json?.metadata_params || '{}'}
+              value={db?.extra_json?.metadata_params || ''}
               placeholder={t('Metadata Parameters')}
               onChange={(json: string) =>
                 onExtraEditorChange({ json, name: 'metadata_params' })
@@ -436,7 +460,7 @@ const ExtraOptions = ({
           <div className="input-container">
             <StyledJsonEditor
               name="engine_params"
-              value={db?.extra_json?.engine_params || '{}'}
+              value={db?.extra_json?.engine_params || ''}
               placeholder={t('Engine Parameters')}
               onChange={(json: string) =>
                 onExtraEditorChange({ json, name: 'engine_params' })
@@ -468,8 +492,8 @@ const ExtraOptions = ({
           </div>
           <div className="helper">
             {t(
-              'Specify this database’s version. This should be used with ' +
-                'Presto databases so that the syntax is correct.',
+              'Specify the database version. This should be used with ' +
+                'Presto in order to enable query cost estimation.',
             )}
           </div>
         </StyledInputContainer>

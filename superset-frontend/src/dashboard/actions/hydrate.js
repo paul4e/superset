@@ -17,7 +17,7 @@
  * under the License.
  */
 /* eslint-disable camelcase */
-import { isString, keyBy } from 'lodash';
+import { isString } from 'lodash';
 import {
   Behavior,
   CategoricalColorNamespace,
@@ -60,7 +60,7 @@ import extractUrlParams from '../util/extractUrlParams';
 
 export const HYDRATE_DASHBOARD = 'HYDRATE_DASHBOARD';
 
-export const hydrateDashboard = (dashboardData, chartData, datasourcesData) => (
+export const hydrateDashboard = (dashboardData, chartData) => (
   dispatch,
   getState,
 ) => {
@@ -329,14 +329,13 @@ export const hydrateDashboard = (dashboardData, chartData, datasourcesData) => (
   return dispatch({
     type: HYDRATE_DASHBOARD,
     data: {
-      datasources: keyBy(datasourcesData, 'uid'),
       sliceEntities: { ...initSliceEntities, slices, isLoading: false },
       charts: chartQueries,
       // read-only data
       dashboardInfo: {
         ...dashboardData,
         metadata,
-        userId: String(user.userId), // legacy, please use state.user instead
+        userId: user.userId ? String(user.userId) : null, // legacy, please use state.user instead
         dash_edit_perm: canEdit,
         dash_save_perm: findPermission('can_save_dash', 'Superset', roles),
         dash_share_perm: findPermission(
@@ -379,6 +378,7 @@ export const hydrateDashboard = (dashboardData, chartData, datasourcesData) => (
         hasUnsavedChanges: false,
         maxUndoHistoryExceeded: false,
         lastModifiedTime: dashboardData.changed_on,
+        isRefreshing: false,
         activeTabs: [],
       },
       dashboardLayout,

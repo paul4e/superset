@@ -82,6 +82,22 @@ extraConfigs: {}
 
 extraSecrets: {}
 
+extraVolumes: []
+ # - name: customConfig
+ #   configMap:
+ #     name: '{{ template "superset.fullname" . }}-custom-config'
+ # - name: additionalSecret
+ #   secret:
+ #     secretName: my-secret
+ #     defaultMode: 0600
+
+extraVolumeMounts: []
+ # - name: customConfig
+ #   mountPath: /mnt/config
+ #   readOnly: true
+ # - name: additionalSecret:
+ #   mountPath: /mnt/secret
+
 # A dictionary of overrides to append at the end of superset_config.py - the name does not matter
 # WARNING: the order is not guaranteed
 configOverrides: {}
@@ -168,6 +184,15 @@ resources: {}
   #   memory: 128Mi
 
 ##
+## Custom hostAliases for all superset pods
+## https://kubernetes.io/docs/tasks/network/customize-hosts-file-for-pods/
+hostAliases: []
+# - hostnames:
+#   - nodns.my.lan
+#   ip: 18.27.36.45
+
+
+##
 ## Superset node configuration
 supersetNode:
   command:
@@ -182,6 +207,7 @@ supersetNode:
     db_user: superset
     db_pass: superset
     db_name: superset
+  env: {}
   forceReload: false # If true, forces deployment to reload on each upgrade
   initContainers:
     - name: wait-for-postgres
@@ -244,7 +270,7 @@ supersetCeleryBeat:
 ## Init job configuration
 init:
   # Configure resources
-  # Warning: fab commant consumes a lot of ram and can
+  # Warning: fab command consumes a lot of ram and can
   # cause the process to be killed due to OOM if it exceeds limit
   resources: {}
     # limits:
