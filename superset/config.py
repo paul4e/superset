@@ -1098,6 +1098,7 @@ PREFERRED_DATABASES: List[str] = [
     "Presto",
     "MySQL",
     "SQLite",
+    "CrateDB",
     # etc.
 ]
 
