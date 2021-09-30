@@ -213,6 +213,7 @@ const config = {
     sqllab: addPreamble('/src/SqlLab/index.tsx'),
     profile: addPreamble('/src/profile/index.tsx'),
     showSavedQuery: [path.join(APP_DIR, '/src/showSavedQuery/index.jsx')],
+    activeReports: addPreamble('src/activeReports/index.tsx'),
   },
   output,
   stats: 'minimal',
