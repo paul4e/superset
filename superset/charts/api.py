@@ -87,6 +87,13 @@ from superset.views.base_api import (
 from superset.views.core import CsvResponse, generate_download_headers
 from superset.views.filters import FilterRelatedOwners
 
+from superset.common.query_context import QueryContext
+from superset.common.query_object import QueryObject
+
+from superset.connectors.sqla.models import SqlaTable
+from superset import db
+from superset.charts.utils import parse_list_parameter, parse_time_range_parameter, convert_datetime
+
 logger = logging.getLogger(__name__)
 
 
@@ -115,6 +122,7 @@ class ChartRestApi(BaseSupersetModelRestApi):
         "thumbnail",
         "screenshot",
         "cache_screenshot",
+        "odata"
     }
     class_permission_name = "Chart"
     method_permission_name = MODEL_API_RW_METHOD_PERMISSION_MAP
@@ -236,6 +244,203 @@ class ChartRestApi(BaseSupersetModelRestApi):
     }
 
     allowed_rel_fields = {"owners", "created_by"}
+
+    @expose("/odata/<table_name>/<table_schema>", methods=["GET"])
+    @protect()
+    @safe
+    @statsd_metrics
+    @event_logger.log_this_with_context(
+        action=lambda self, *args, **kwargs: f"{self.__class__.__name__}.get",
+        log_to_statsd=False,
+    )
+    def odata(self, table_name: str, table_schema: str = None) -> Response:
+        DEBUG_REQ_ARGS = "\n******\nREQUEST ARGS\n******\n"
+        DEBUG_REQ_FORM = "\n******\nREQUEST FORM\n******\n"
+        logger.debug(request.__dict__.items())
+        logger.debug(f"{DEBUG_REQ_ARGS}{request.args}")
+        logger.debug(f"{DEBUG_REQ_FORM}{request.form}")
+        data = {"values": {"id": 1,
+                           "text": "Hello world",
+                           'desc': "hola"}}
+
+        # Validar si existe la tabla
+        if table_schema == "None":
+            table_schema = None
+
+        datasource = db.session.query(SqlaTable) \
+            .filter_by(table_name=table_name, schema=table_schema) \
+            .one_or_none()
+
+        if datasource is None:
+            return self.response_400(message="No se ha encontrado el dataset")
+
+        datasource_id = datasource.id
+
+        print(
+            f"table_name: {datasource.table_name}, table_schema: {datasource.schema}, datasource_id: {datasource.id}")
+        # Recibir parametros del request/
+
+        columns = request.args.get("$columns")
+        orderby = request.args.get("$orderby")
+        groupby = request.args.get("$groupby")
+        filters = request.args.get("$filter")
+        metrics = request.args.get("$metrics")
+        row_limit = request.args.get("$top")
+        time_range = request.args.get("$time_range")
+        granularity = request.args.get("$time_column")
+
+        # Transformar los parametros listas
+
+        columns = parse_list_parameter(columns) if columns else columns
+        orderby = parse_list_parameter(orderby) if orderby else orderby
+        groupby = parse_list_parameter(groupby) if groupby else groupby
+        filters = parse_list_parameter(filters) if filters else filters
+        metrics = parse_list_parameter(metrics) if metrics else metrics
+        time_range = parse_time_range_parameter(
+            time_range) if time_range else time_range
+
+        logger.debug(f"table_name: {table_name}, table_schema: {table_schema}")
+
+        # Validacion de parametros
+
+        logger.debug(f"\nDATASOURCE COLUMNS\n{datasource.columns}\n")
+
+        if columns:
+            for column in columns:
+                if column not in datasource.columns:
+                    return self.response_400(message="Columna Invalida")
+        else:
+            columns = [col.column_name for col in datasource.columns]
+
+        if groupby:
+            for column in groupby:
+                if column not in columns:
+                    return self.response_400(message="Error en el group by")
+
+        if orderby:
+            for column in orderby:
+                if column not in columns:
+                    return self.response_400(message="Error en el order by")
+
+        if time_range:
+            try:
+                time_range = convert_datetime(time_range)
+            except ValueError as error:
+                return self.response_400(message=error)
+
+            if not granularity:
+                return self.response_400(message="Es necesario incluir el parametro $time_column cuando se usa $time_range")
+
+            if granularity not in columns:
+                return self.response_400(message="Se debe incluir la columna de tiempo en el parametro $columns.")
+            if granularity not in datasource.dttm_cols:
+                return self.response_400(
+                    message="$time_column No es una columna de tiempo Valida del dataset.")
+
+        if row_limit:
+            try:
+                row_limit = int(row_limit)
+            except ValueError as error:
+                return self.response_400(message="$top Espera un valor entero.")
+
+
+        # crear query object
+
+        # annotation_layers: List[Dict[str, Any]]
+        # applied_time_extras: Dict[str, str]
+        # apply_fetch_values_predicate: bool
+        # granularity: Optional[str]
+        # from_dttm: Optional[datetime]
+        # to_dttm: Optional[datetime]
+        # inner_from_dttm: Optional[datetime]
+        # inner_to_dttm: Optional[datetime]
+        # is_timeseries: bool
+        # time_shift: Optional[timedelta]
+        # groupby: List[str]
+        # metrics: Optional[List[Metric]]
+        # row_limit: int
+        # row_offset: int
+        # filter: List[QueryObjectFilterClause]
+        # timeseries_limit: int
+        # timeseries_limit_metric: Optional[Metric]
+        # order_desc: bool
+        # extras: Dict[str, Any]
+        # columns: List[str]
+        # orderby: List[OrderBy]
+        # post_processing: List[Dict[str, Any]]
+        # datasource: Optional[BaseDatasource]
+        # result_type: Optional[ChartDataResultType]
+        # is_rowcount: bool
+        # time_offsets: List[str]
+
+        # query_object = QueryObject()
+        # query_object.row_limit = 10
+        # crear query context
+
+        # cache_type: ClassVar[str] = "df"
+        # enforce_numerical_metrics: ClassVar[bool] = True
+        #
+        # datasource: BaseDatasource
+        # queries: List[QueryObject]
+        # force: bool
+        # custom_cache_timeout: Optional[int]
+        # result_type: ChartDataResultType
+        # result_format: ChartDataResultFormat
+
+
+        new_query_context = {
+            "datasource": {
+                "id": datasource_id,
+                "type": "table"
+            },
+            "queries": [
+                {
+                    'time_range': time_range if time_range else 'No filter',
+                    'granularity': granularity,
+                    'filters': [
+                    ],
+                    'extras': {
+                        'time_range_endpoints': [
+                            'inclusive', 'exclusive'
+                        ],
+                        'having': '',
+                        'having_druid': [],
+                        'where': ''
+                    },
+                    'applied_time_extras': {},
+                    'columns': columns,
+                    'metrics': [],
+                    'orderby': [],
+                    'annotation_layers': [],
+                    'timeseries_limit': 0,
+                    'order_desc': True,
+                    'url_params': {},
+                    'custom_params': {},
+                    'custom_form_data': {}
+                }
+            ],
+            "result_format": ChartDataResultFormat.JSON,
+            "result_type": ChartDataResultType.RESULTS,
+            "force": False
+        }
+        # query_object.columns = [column.column_name for column in
+        #                         query_context.datasource.columns]
+
+        try:
+            command = ChartDataCommand()
+            command.set_query_context(new_query_context)
+            command.validate()
+        except QueryObjectValidationError as error:
+            return self.response_400(message=error.message)
+        except ValidationError as error:
+            logger.error(error)
+            return self.response_400(
+                message=_(
+                    "Request is incorrect: %(error)s", error=error.normalized_messages()
+                )
+            )
+
+        return self.get_data_response(command)
 
     @expose("/", methods=["POST"])
     @protect()
