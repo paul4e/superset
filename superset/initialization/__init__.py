@@ -189,6 +189,7 @@ class SupersetAppInitializer:
             TabStateView,
         )
         from superset.views.tags import TagView
+        from superset.active_reports.api import ActiveReportsRestApi
 
         #
         # Setup API views
@@ -208,6 +209,7 @@ class SupersetAppInitializer:
         appbuilder.add_api(SavedQueryRestApi)
         appbuilder.add_api(ReportScheduleRestApi)
         appbuilder.add_api(ReportExecutionLogRestApi)
+        appbuilder.add_api(ActiveReportsRestApi)
         #
         # Setup regular views
         #
@@ -533,6 +535,26 @@ class SupersetAppInitializer:
         appbuilder.add_separator(
             "Data", cond=lambda: bool(self.config["DRUID_IS_ACTIVE"])
         )
+        from superset.views.active_reports.views import ActiveReports
+        appbuilder.add_view(
+            ActiveReports,
+            name="Active Reports JS",
+            label=__("Active Reports JS"),
+            icon="fa-cubes",
+            category="",
+            # category_label="Active Reports JS",
+            # category_icon="fa-table",
+            menu_cond=lambda: bool(self.config["ACTIVE_REPORTS_IS_ACTIVE"]),
+        )
+        # appbuilder.add_link(
+        #     "Active Reports JS"
+        # )DashboardModelView,
+        #             "Dashboards",
+        #             label=__("Dashboards"),
+        #             icon="fa-dashboard",
+        #             category="",
+        #             category_icon="",
+
 
     def init_app_in_ctx(self) -> None:
         """
