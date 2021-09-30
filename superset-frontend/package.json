@@ -67,6 +67,8 @@
     "@emotion/babel-preset-css-prop": "^11.2.0",
     "@emotion/cache": "^11.1.3",
     "@emotion/react": "^11.1.5",
+    "@grapecity/activereports": "2.1.4",
+    "@grapecity/activereports-react": "^2.1.0",
     "@superset-ui/chart-controls": "^0.17.84",
     "@superset-ui/core": "^0.17.81",
     "@superset-ui/legacy-plugin-chart-calendar": "^0.17.84",
