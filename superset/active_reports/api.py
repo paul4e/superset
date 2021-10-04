@@ -40,7 +40,7 @@ logger = logging.getLogger(__name__)
 class ActiveReportsRestApi(BaseSupersetModelRestApi):
     datamodel = SQLAInterface(ActiveReport)
 
-    resource_name = "active_report"
+    resource_name = "active_reports"
     allow_browser_login = True
 
     @before_request
@@ -74,7 +74,11 @@ class ActiveReportsRestApi(BaseSupersetModelRestApi):
     edit_model_schema = ActiveReportPutSchema()
 
     order_columns = [
+        "changed_by.first_name",
+        "changed_on_delta_humanized",
+        "created_by.first_name",
         "report_name",
+        "published",
     ]
     search_columns = [
         "id",
@@ -275,6 +279,7 @@ class ActiveReportsRestApi(BaseSupersetModelRestApi):
             500:
               $ref: '#/components/responses/500'
         """
+        logger.debug("\n\n*** put ***\n\n")
         if not request.is_json:
             return self.response_400(message="Request is not JSON")
         try:
