@@ -536,25 +536,49 @@ class SupersetAppInitializer:
             "Data", cond=lambda: bool(self.config["DRUID_IS_ACTIVE"])
         )
         from superset.views.active_reports.views import ActiveReports
+        # appbuilder.add_view(
+        #     ActiveReports,
+        #     name="Active Reports JS",
+        #     label=__("Active Reports JS"),
+        #     icon="fa-cubes",
+        #     category="",
+        #     # category_label="Active Reports JS",
+        #     # category_icon="fa-table",
+        #     menu_cond=lambda: bool(self.config["ACTIVE_REPORTS_IS_ACTIVE"]),
+        # )
         appbuilder.add_view(
             ActiveReports,
-            name="Active Reports JS",
-            label=__("Active Reports JS"),
-            icon="fa-cubes",
-            category="",
-            # category_label="Active Reports JS",
-            # category_icon="fa-table",
-            menu_cond=lambda: bool(self.config["ACTIVE_REPORTS_IS_ACTIVE"]),
+            "ActiveReports",
+            label=__("Reports"),
+            icon="fa-database",
+            category="Active Reports",
+            category_label=__("Active Reports"),
+            category_icon="fa-database",
+        )
+        appbuilder.add_separator("Active Reports")
+        appbuilder.add_link(
+            "Active Reports",
+            label=__("Viewer"),
+            href="/active_reports/viewer/",
+            icon="fa-table",
+            category="Active Reports",
+            category_label=__("Active Reports"),
+            category_icon="fa-table",
         )
         # appbuilder.add_link(
-        #     "Active Reports JS"
-        # )DashboardModelView,
-        #             "Dashboards",
-        #             label=__("Dashboards"),
-        #             icon="fa-dashboard",
-        #             category="",
-        #             category_icon="",
-
+        #     "Upload a CSV",
+        #     label=__("Upload a CSV"),
+        #     href="/csvtodatabaseview/form",
+        #     icon="fa-upload",
+        #     category="Data",
+        #     category_label=__("Data"),
+        #     category_icon="fa-wrench",
+        #     cond=lambda: bool(
+        #         self.config["CSV_EXTENSIONS"].intersection(
+        #             self.config["ALLOWED_EXTENSIONS"]
+        #         )
+        #     ),
+        # )
 
     def init_app_in_ctx(self) -> None:
         """
