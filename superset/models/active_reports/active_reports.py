@@ -33,18 +33,19 @@ from sqlalchemy.orm import relationship
 
 from superset import security_manager
 
-# metadata = Model.metadata  # pylint: disable=no-member
-# active_report_user = Table(
-#     "active_report_user",
-#     Column("id", Integer, primary_key=True),
-#     Column("user_id", Integer, ForeignKey("ab_user.id")),
-#     Column("active_report_id", Integer, ForeignKey("active_reports.id")),
-# )
+metadata = Model.metadata  # pylint: disable=no-member
+active_report_user = Table(
+    "active_report_user",
+    metadata,
+    Column("id", Integer, primary_key=True),
+    Column("user_id", Integer, ForeignKey("ab_user.id")),
+    Column("active_report_id", Integer, ForeignKey("active_reports.id")),
+)
 
 metadata = Model.metadata
 
 
-class ActiveReport(Model):
+class ActiveReport(Model, AuditMixinNullable):
 
     """
     Report Schedules, supports alerts and reports
@@ -56,7 +57,24 @@ class ActiveReport(Model):
     id = Column(Integer, primary_key=True)
     report_name = Column(String(250), nullable=False)
     report_data = Column(Text)
-    # owners = relationship(security_manager.user_model, secondary=active_report_user)
+    published = Column(Boolean, default=False)
+    owners = relationship(security_manager.user_model, secondary=active_report_user)
 
     def __repr__(self) -> str:
-        return str(self.name)
+        return str(self.report_name)
+
+    @property
+    def changed_by_name(self) -> str:
+        if not self.changed_by:
+            return ""
+        return str(self.changed_by)
+
+    @property
+    def changed_by_url(self) -> str:
+        if not self.changed_by:
+            return ""
+        return f"/superset/profile/{self.changed_by.username}"
+
+    @property
+    def url(self) -> str:
+        return "report url" #f"/superset/dashboard/{self.slug or self.id}/"
