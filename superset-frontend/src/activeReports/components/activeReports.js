@@ -3,6 +3,8 @@ import {Designer, Viewer} from '@grapecity/activereports-react';
 import {SupersetClient} from "@superset-ui/core";
 import {saveSliceSuccess} from "../../explore/actions/saveModalActions";
 
+import {useReport} from "src/activeReports/hooks/apiResources/reports";
+
 
 export function Upload(props) {
   const [files, setFiles] = useState("");
@@ -36,6 +38,7 @@ function postActiveReportEndpoint(url, report) {
     .then(response => {
       console.log("POST REPORT RESPONSE\n\n")
       console.log(response)
+
     }).catch(error => console.log(error))
 
 }
@@ -55,7 +58,12 @@ function ActiveReportsComponent() {
 
   const [view, setView] = useState(true);
 
-  const [count, setCount] = useState(1);
+  const [currentReport, setCurrentReport] = useState(2);
+
+  const { result: report, error: reportApiError } = useReport(
+    currentReport,
+  );
+
   const handleChange = value => {
     setView(value);
   };
@@ -84,14 +92,14 @@ function ActiveReportsComponent() {
     console.log(report)
     console.log("\nreporte string\n\n")
     console.log(JSON.stringify(report))
-    const url = '/api/v1/active_report/'
+    const url = '/api/v1/active_reports/'
     postActiveReportEndpoint(url, report);
 
   }
 
   const btnListReports = () => {
     SupersetClient.get({
-      endpoint: "/api/v1/active_report/"
+      endpoint: "/api/v1/active_reports/"
     })
       .then(response => {
         console.log("get list ACTIVE REPORT\n\n")
@@ -101,13 +109,14 @@ function ActiveReportsComponent() {
   }
 
   const deleteReport = () => {
+    console.log(report)
 
   }
 
   const getReportByID = () => {
-    const id = 1;
+    const id = 2;
     SupersetClient.get({
-      endpoint: `/api/v1/active_report/${id}`
+      endpoint: `/api/v1/active_reports/${id}`
     })
       .then(response => {
         console.log("get REPORT BY ID ACTIVE REPORT\n\n")
