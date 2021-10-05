@@ -214,6 +214,7 @@ const config = {
     profile: addPreamble('/src/profile/index.tsx'),
     showSavedQuery: [path.join(APP_DIR, '/src/showSavedQuery/index.jsx')],
     activeReports: addPreamble('src/activeReports/index.tsx'),
+    addReport: addPreamble('src/activeReports/components/addReport/index.tsx'),
   },
   output,
   stats: 'minimal',

@@ -36,6 +36,7 @@ from superset.views.utils import (
     bootstrap_user_data,
 )
 from superset.models.active_reports import ActiveReport
+from superset import is_feature_enabled, security_manager
 
 
 class ActiveReports(SupersetModelView, ActiveReportsMixin):
@@ -77,6 +78,29 @@ class ActiveReports(SupersetModelView, ActiveReportsMixin):
     @expose("/list_react/")
     def list_react(self) -> FlaskResponse:
         return self.render_app_template()
+
+    @expose("/add", methods=["GET", "POST"])
+    def add(self) -> FlaskResponse:
+        datasources = [
+            {"value": str(d.id) + "__" + d.type, "label": repr(d)}
+            for d in security_manager.get_user_datasources()
+        ]
+        payload = {
+            "datasources": sorted(
+                datasources,
+                key=lambda d: d["label"].lower() if isinstance(d["label"], str) else "",
+            ),
+            "common": common_bootstrap_payload(),
+            "user": bootstrap_user_data(g.user, include_perms=True),
+        }
+        return self.render_template(
+            "superset/add_report.html",
+            title=_("Active Reports").__str__(),
+            entry="addReport",
+            bootstrap_data=json.dumps(
+                payload, default=utils.pessimistic_json_iso_dttm_ser
+            )
+        )
 
 
 
