@@ -314,7 +314,7 @@ function ReportList(props: ReportListProps) {//@ts-ignore
       operator: FilterOperator.relationManyMany,
       unfilteredLabel: t('All'),
       fetchSelects: createFetchRelated(
-        'dashboard',
+        'active_reports',
         'owners',
         createErrorHandler(errMsg =>
           addDangerToast(
@@ -335,7 +335,7 @@ function ReportList(props: ReportListProps) {//@ts-ignore
       operator: FilterOperator.relationOneMany,
       unfilteredLabel: t('All'),
       fetchSelects: createFetchRelated(
-        'dashboard',
+        'active_reports',
         'created_by',
         createErrorHandler(errMsg =>
           addDangerToast(
@@ -457,7 +457,7 @@ function ReportList(props: ReportListProps) {//@ts-ignore
                 bulkActions={bulkActions}
                 bulkSelectEnabled={bulkSelectEnabled}
                 cardSortSelectOptions={sortTypes}
-                className="dashboard-list-view"
+                className="reports-list-view"
                 columns={columns}
                 count={dashboardCount}
                 data={reports}
