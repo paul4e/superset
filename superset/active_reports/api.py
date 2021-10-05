@@ -34,6 +34,9 @@ from superset.active_reports.commands.exceptions import (
     ActiveReportNotFoundError,
     ActiveReportUpdateFailedError
 )
+
+from superset.views.filters import FilterRelatedOwners
+
 logger = logging.getLogger(__name__)
 
 
@@ -49,7 +52,9 @@ class ActiveReportsRestApi(BaseSupersetModelRestApi):
             return self.response_404()
         return None
 
-    include_route_methods = RouteMethod.REST_MODEL_VIEW_CRUD_SET
+    include_route_methods = RouteMethod.REST_MODEL_VIEW_CRUD_SET | {
+        RouteMethod.RELATED
+    }
     class_permission_name = "ActiveReport"
     method_permission_name = MODEL_API_RW_METHOD_PERMISSION_MAP
 
@@ -63,11 +68,31 @@ class ActiveReportsRestApi(BaseSupersetModelRestApi):
     list_columns = [
         "id",
         "report_name",
+        "url",
+        "changed_by.first_name",
+        "changed_by.last_name",
+        "changed_by.username",
+        "changed_by.id",
+        "changed_by_name",
+        "changed_by_url",
+        "changed_on_utc",
+        "changed_on_delta_humanized",
+        "created_by.first_name",
+        "created_by.id",
+        "created_by.last_name",
+        "owners.id",
+        "owners.username",
+        "owners.first_name",
+        "owners.last_name",
     ]
+    list_select_columns = list_columns + ["changed_on", "changed_by_fk"]
     add_columns = [
         "id",
         "report_name",
         "report_data",
+        "owners",
+        "roles",
+        "published",
     ]
     edit_columns = add_columns
     add_model_schema = ActiveReportPostSchema()
@@ -80,23 +105,27 @@ class ActiveReportsRestApi(BaseSupersetModelRestApi):
         "report_name",
         "published",
     ]
-    search_columns = [
+    search_columns = (
         "id",
         "report_name",
-    ]
+        "created_by",
+        "changed_by",
+        "id",
+        "owners",
+        "published",
+    )
     # search_filters = {"name": [ReportScheduleAllTextFilter]}
-    # allowed_rel_fields = {"owners", "chart", "dashboard", "database", "created_by"}
-    # filter_rel_fields = {
-    #     "chart": [["id", ChartFilter, lambda: []]],
-    #     "dashboard": [["id", DashboardAccessFilter, lambda: []]],
-    #     "database": [["id", DatabaseFilter, lambda: []]],
-    # }
+    allowed_rel_fields = {"owners", "created_by"}
+    related_field_filters = {
+        "owners": RelatedFieldFilter("first_name", FilterRelatedOwners),
+        "created_by": RelatedFieldFilter("first_name", FilterRelatedOwners),
+    }
     # text_field_rel_fields = {
     #     "dashboard": "dashboard_title",
     #     "chart": "slice_name",
     #     "database": "database_name",
     # }
-    # related_field_filters = {
+    # filter_rel_fields = {
     #     "dashboard": "dashboard_title",
     #     "chart": "slice_name",
     #     "database": "database_name",

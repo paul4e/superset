@@ -13,6 +13,8 @@
 
 import logging
 from datetime import datetime
+
+from superset.commands.utils import populate_owners
 from typing import Any, Dict, List, Optional
 
 from flask_appbuilder.models.sqla import Model
@@ -23,7 +25,8 @@ from superset.commands.base import BaseCommand
 from superset.dao.exceptions import DAOCreateFailedError
 
 from superset.active_reports.dao import ActiveReportsDAO
-from superset.active_reports.commands.exceptions import ActiveReportCreateFailedError
+from superset.active_reports.commands.exceptions import ActiveReportCreateFailedError, ActiveReportInvalidError
+
 
 logger = logging.getLogger(__name__)
 
@@ -43,4 +46,15 @@ class CreateActiveReportCommand(BaseCommand):
         return chart
 
     def validate(self) -> None:
-        pass
+        exceptions: List[ValidationError] = list()
+        owner_ids: Optional[List[int]] = self._properties.get("owners")
+
+        try:
+            owners = populate_owners(self._actor, owner_ids)
+            self._properties["owners"] = owners
+        except ValidationError as ex:
+            exceptions.append(ex)
+        if exceptions:
+            exception = ActiveReportInvalidError()
+            exception.add_list(exceptions)
+            raise exception
