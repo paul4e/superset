@@ -16,7 +16,7 @@
 # under the License.
 
 import simplejson as json
-
+import logging
 from flask_appbuilder import expose, has_access
 from flask import g
 
@@ -37,6 +37,11 @@ from superset.views.utils import (
 )
 from superset.models.active_reports import ActiveReport
 from superset import is_feature_enabled, security_manager
+from superset.models.slice import Slice
+from superset import db
+from sqlalchemy import and_, or_
+
+logger = logging.getLogger(__name__)
 
 
 class ActiveReports(SupersetModelView, ActiveReportsMixin):
@@ -45,6 +50,7 @@ class ActiveReports(SupersetModelView, ActiveReportsMixin):
     include_route_methods = RouteMethod.CRUD_SET | {
         "viewer",
         "list_react",
+        "report",
     }
     class_permission_name = "Active_report"
     method_permission_name = MODEL_VIEW_RW_METHOD_PERMISSION_MAP
@@ -81,14 +87,26 @@ class ActiveReports(SupersetModelView, ActiveReportsMixin):
 
     @expose("/add", methods=["GET", "POST"])
     def add(self) -> FlaskResponse:
-        datasources = [
-            {"value": str(d.id) + "__" + d.type, "label": repr(d)}
-            for d in security_manager.get_user_datasources()
+        datasources = [d.id for d in security_manager.get_user_datasources()]
+
+        datasets = db.session.query(Slice).filter(
+            and_(
+                Slice.viz_type == 'table',
+                or_(
+                    Slice.datasource_id.in_(datasources)
+                ))) \
+            .all()
+
+        datasets = [
+            {"value": str(d.id) + "__" + d.slice_name, "label": repr(d)}
+            for d in datasets
         ]
+
+        logger.debug(f"chart_tables\n{datasets}\n")
         payload = {
-            "datasources": sorted(
-                datasources,
-                key=lambda d: d["label"].lower() if isinstance(d["label"], str) else "",
+            "datasets": sorted(
+                datasets,
+                key=lambda d: d['label'].lower() if isinstance(d['label'], str) else "",
             ),
             "common": common_bootstrap_payload(),
             "user": bootstrap_user_data(g.user, include_perms=True),
@@ -102,6 +120,9 @@ class ActiveReports(SupersetModelView, ActiveReportsMixin):
             )
         )
 
+    @expose("/report/<int:report_id>")
+    def report(self, report_id: int) -> FlaskResponse:
+        return self.render_app_template()
 
 
 # class ActiveReports(BaseSupersetView):
