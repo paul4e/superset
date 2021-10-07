@@ -39,16 +39,20 @@ class CreateActiveReportCommand(BaseCommand):
     def run(self) -> Model:
         self.validate()
         try:
-            chart = ActiveReportsDAO.create(self._properties)
+            report = ActiveReportsDAO.create(self._properties)
+            report = ActiveReportsDAO.update_charts_owners(report, commit=True)
         except DAOCreateFailedError as ex:
             logger.exception(ex.exception)
             raise ActiveReportCreateFailedError()
-        return chart
+        return report
 
     def validate(self) -> None:
         exceptions: List[ValidationError] = list()
         owner_ids: Optional[List[int]] = self._properties.get("owners")
+        slices_id: Optional[List[int]] = self._properties.get('slices')
 
+        logger.debug(self._properties.get('slices'))
+        logger.debug(type(self._properties.get('slices')[0]))
         try:
             owners = populate_owners(self._actor, owner_ids)
             self._properties["owners"] = owners
@@ -58,3 +62,12 @@ class CreateActiveReportCommand(BaseCommand):
             exception = ActiveReportInvalidError()
             exception.add_list(exceptions)
             raise exception
+
+        # Populate Charts
+        try:
+            slices = ActiveReportsDAO.update_charts_for_report(slices_id)
+            self._properties["slices"] = slices
+        except Exception as e:
+            raise e
+
+

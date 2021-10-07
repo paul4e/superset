@@ -50,3 +50,7 @@ class ActiveReportUpdateFailedError(UpdateFailedError):
 
 class ActiveReportInvalidError(CommandInvalidError):
     message = _("Active Report parameters are invalid.")
+
+
+class ActiveReportForbiddenError(ForbiddenError):
+    message = _("Changing this Report is forbidden.")

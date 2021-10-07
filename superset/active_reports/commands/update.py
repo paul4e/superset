@@ -30,7 +30,14 @@ from superset.active_reports.dao import ActiveReportsDAO
 from superset.active_reports.commands.exceptions import (
     ActiveReportNotFoundError,
     ActiveReportUpdateFailedError,
+    ActiveReportForbiddenError,
+    ActiveReportInvalidError,
 )
+from superset.exceptions import (
+    SupersetSecurityException,
+)
+from superset.views.base import check_ownership
+from superset.commands.utils import populate_owners
 
 logger = logging.getLogger(__name__)
 
@@ -45,11 +52,12 @@ class UpdateActiveReportCommand(BaseCommand):
     def run(self) -> Model:
         self.validate()
         try:
-            chart = ActiveReportsDAO.update(self._model, self._properties)
+            report = ActiveReportsDAO.update(self._model, self._properties)
+            report = ActiveReportsDAO.update_charts_owners(report, commit=True)
         except DAOUpdateFailedError as ex:
             logger.exception(ex.exception)
             raise ActiveReportUpdateFailedError()
-        return chart
+        return report
 
     def validate(self) -> None:
         exceptions: List[ValidationError] = list()
@@ -60,18 +68,18 @@ class UpdateActiveReportCommand(BaseCommand):
         if not self._model:
             raise ActiveReportNotFoundError()
         # Check ownership
-        # try:
-        #     check_ownership(self._model)
-        # except SupersetSecurityException:
-        #     raise ChartForbiddenError()
+        try:
+            check_ownership(self._model)
+        except SupersetSecurityException:
+            raise ActiveReportForbiddenError()
 
-       # # Validate/Populate owner
-       #  try:
-       #      owners = populate_owners(self._actor, owner_ids)
-       #      self._properties["owners"] = owners
-       #  except ValidationError as ex:
-       #      exceptions.append(ex)
-       #  if exceptions:
-       #      exception = ChartInvalidError()
-       #      exception.add_list(exceptions)
-       #      raise exception
+        # Validate/Populate owner
+        try:
+            owners = populate_owners(self._actor, owner_ids)
+            self._properties["owners"] = owners
+        except ValidationError as ex:
+            exceptions.append(ex)
+        if exceptions:
+            exception = ActiveReportInvalidError()
+            exception.add_list(exceptions)
+            raise exception
