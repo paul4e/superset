@@ -16,19 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { useApiV1Resource, useTransformedResource } from 'src/common/hooks/apiResources';
-import {Dataset} from "src/activeReports/types/Dataset";
-import { Report } from 'src/activeReports/types/Report';
 
-export const useReport = (id: string | number) =>
-  useTransformedResource(
-    useApiV1Resource<Report>(`/api/v1/active_reports/${id}`),
-    report => ({
-      ...report,
-      report_data: report.report_data && JSON.parse(report.report_data),
-    }),
-  );
+import {SupersetClient} from "@superset-ui/core";
 
-// gets the dataset definitions for a report
-export const useReportDatasets = (id: string | number) =>
-  useApiV1Resource<Dataset[]>(`/api/v1/active_reports/${id}/datasets`);
+
+export function postActiveReportEndpoint(endpoint: string, report: any) {
+  return SupersetClient.post({
+    endpoint: `/api/v1/active_reports${endpoint}`,
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(report)
+  })
+    .then(response => {
+      console.log("POST REPORT RESPONSE\n\n")
+      console.log(response)
+      return response;
+    }).catch(error => console.log(error))
+}

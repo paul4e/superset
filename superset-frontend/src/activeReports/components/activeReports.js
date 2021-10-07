@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Designer, Viewer} from '@grapecity/activereports-react';
 import {SupersetClient} from "@superset-ui/core";
 import {saveSliceSuccess} from "../../explore/actions/saveModalActions";
 
 import {useReport} from "src/activeReports/hooks/apiResources/reports";
+import {useParams} from "react-router-dom";
 
 
 export function Upload(props) {
@@ -43,6 +44,28 @@ function postActiveReportEndpoint(url, report) {
 
 }
 
+export function SetViewer(props){
+  const viewerRef = React.useRef();
+  console.log(props.name)
+  React.useEffect(() => {
+    async function loadReport() {
+      await fetch(props.name)
+        .then((data) => data.json())
+        .then((report) => {
+          report.Page.PageOrientation = "Landscape";
+          viewerRef.current.Viewer.open(report);
+        });
+    }
+    loadReport().then(r => console.log("success"));
+  }, []);
+
+  return (
+    <div id="viewer-host">
+      <Viewer ref={viewerRef} />
+    </div>
+  );
+}
+
 // await SupersetClient.put({
 //   endpoint: `/api/v1/chart/${slice.slice_id}`,
 //   headers: { 'Content-Type': 'application/json' },
@@ -52,17 +75,52 @@ function postActiveReportEndpoint(url, report) {
 //   })
 function ActiveReportsComponent() {
   const [designer, setDesigner] = useState({id: '', displayName: ''});
-  const [viewer, setViewer] = useState({Uri: ''});
+  const [viewer, setViewer] = useState({id: ''});
 
   const [reports, setReports] = useState([]);
 
   const [view, setView] = useState(true);
 
   const [currentReport, setCurrentReport] = useState(2);
-
+  // const { idOrSlug } = useParams<{ idOrSlug: string }>();
   const { result: report, error: reportApiError } = useReport(
     currentReport,
   );
+
+  const viewerRef = React.useRef();
+  const DesignerRef = React.createRef();
+
+  useEffect(()=> {
+    // { definition: Report; displayName?: undefined | string; id?: undefined | string }
+    console.log(report);
+    if(report) {
+      console.log(report.report_data);
+      const report_data = report.report_data;
+      console.log(`Report data\n${report_data}\n`)
+
+
+      report_data.Page.PageOrientation = "Landscape";
+
+      const reportDefinition = {
+        definition: report_data,
+        displayName: report_data.Name,
+        id: report.report_name,
+      }
+
+      DesignerRef.current.setReport(reportDefinition);
+      // setViewer({id: report_data});
+    }
+  }, [report])
+  // React.useEffect(() => {
+  //   async function loadReport() {
+  //     await fetch("/reports/Invoice")
+  //       .then((data) => data.json())
+  //       .then((report) => {
+  //         report.Page.PageOrientation = "Landscape";
+  //         viewerRef.current.Viewer.open(report);
+  //       });
+  //   }
+  //   loadRepo
 
   const handleChange = value => {
     setView(value);
@@ -147,7 +205,7 @@ function ActiveReportsComponent() {
           Open Report
         </button>
         <Upload onChange={handleChangeUpload} />
-        {!view ? <Viewer report={viewer}/> : <Designer report={designer}/>}
+        {(!view && viewerRef) ? <Viewer ref={viewerRef}/> : <Designer ref={DesignerRef}/>}
       </div>
     </>
   );

@@ -34,6 +34,13 @@ const Viewer = lazy(
       )
 )
 
+const ReportPage = lazy (
+  () =>
+    import (
+      /* webpackChunkName: "ActiveReportPage" */ 'src/activeReports/components/ReportPage'
+      )
+)
+
 type Routes = {
   path: string;
   Component: React.ComponentType;
@@ -51,6 +58,10 @@ export const routes: Routes = [
     path: '/active_reports/viewer/',
     Component: Viewer,
   },
+  {
+    path: '/active_reports/report/:report_id',
+    Component: ReportPage
+  }
 ]
 
 const frontEndRoutes = routes

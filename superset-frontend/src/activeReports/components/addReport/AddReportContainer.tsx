@@ -20,16 +20,16 @@ import React, {useState} from 'react';
 import {css, styled, t} from "@superset-ui/core";
 import {FormLabel} from "../../../components/Form";
 import {Select} from "../../../components";
-import {MAX_ADVISABLE_VIZ_GALLERY_WIDTH} from "../../../explore/components/controls/VizTypeControl/VizTypeGallery";
 import Button from "../../../components/Button";
+import {postActiveReportEndpoint} from "../../utils";
 
-interface Datasource {
+interface Dataset {
   label: string;
   value: string;
 }
 
 type AddReportContainerProps = {
-  datasources: Datasource[];
+  datasets: Dataset[];
   templates?: any[]; // Idea de agregar reportes como templates.
 };
 
@@ -43,7 +43,7 @@ const StyledContainer = styled.div`
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
-    max-width: ${MAX_ADVISABLE_VIZ_GALLERY_WIDTH}px;
+    max-width: ${750}px;
     max-height: calc(100vh - ${ESTIMATED_NAV_HEIGHT});
     border-radius: ${theme.gridUnit}px;
     background-color: ${theme.colors.grayscale.light5};
@@ -76,23 +76,56 @@ const cssStatic = css`
 
 function AddReportContainer(
   {
-    datasources,
+    datasets,
     templates,
   }: AddReportContainerProps) {
-
+  //@ts-ignore
   const [selectedDatasources, setSelectedDatasources] = useState<{ datasourceValue: string, datasourceID: string }[]>([])
 
   const handleOnChange = (value: string[]) => {
-    const data = value.map(x => {
-        return {
-          datasourceValue: x,
-          datasourceID: x.split('__')[0]
-        }
+    const values: any[] = value.map(value => {
+      return {
+        datasourceValue: value,
+        datasourceID: value.split('__')[0]
       }
-    )
-    setSelectedDatasources(data)
+    })
+    setSelectedDatasources(values)
   }
 
+  const isBtnDisabled = () => {
+    if (!selectedDatasources) return undefined
+    if (selectedDatasources.length === 0) return true;
+    return false;
+  }
+  // Report: { Author?: undefined | string; Body?: Body; ConsumeContainerWhitespace?: undefined | false | true; DataSets?: DataSet[]; DataSources?: DataSource[]; Description?: undefined | string; DocumentMap?: DocumentMap; EmbeddedImages?: EmbeddedImage[]; FixedPage?: undefined | { DataSetName?: undefined | string; Filters?: Filter[]; Group?: Grouping; Pages?: FixedPageSection[]; SortExpressions?: SortExpression[] }; Language?: undefined | string; Name?: undefined | string; Page?: Page; PageFooter?: PageSection; PageHeader?: PageSection; ReportParameters?: ReportParameter[]; StartPageNumber?: undefined | number; ThemeUri?: undefined | string; Themes?: string[]; Width?: undefined | string }
+  {
+    //crear reporte
+
+    //guardar reporte en el backend /api/v1/active_reports/ - POST
+
+    //redirect al designer con el id.
+    {
+    }
+  }
+
+  const handleOnCreate = () => {
+
+    console.log(datasets)
+    const datasetss = selectedDatasources.map(x => {
+      return x.datasourceID;
+    })
+    // const slices = datasets.map(slice => {
+    //   if (slice.)
+    // })
+    const report = {
+      report_name: "New Report",
+      report_data: JSON.stringify({}),
+      slices: [...datasetss]
+    }
+
+    postActiveReportEndpoint('/', report);
+
+  }
 
   return (
 
@@ -102,12 +135,12 @@ function AddReportContainer(
         <div className={'dataset'}>
           <Select
             mode={'multiple'}
-            autoFocus
+
             ariaLabel={t('Dataset')}
             name="select-datasource"
             header={<FormLabel required>{t('Select datasets')}</FormLabel>}
             onChange={handleOnChange}
-            options={datasources}
+            options={datasets}
             placeholder={t('Select datasets')}
             showSearch
             value={selectedDatasources.map(datasource => {
@@ -123,8 +156,8 @@ function AddReportContainer(
             `,
           ]}
           buttonStyle="primary"
-          disabled={true}
-          onClick={() => console.log('go to report designer')}
+          disabled={isBtnDisabled()}
+          onClick={handleOnCreate}
         >
           {t('Create new report')}
         </Button>

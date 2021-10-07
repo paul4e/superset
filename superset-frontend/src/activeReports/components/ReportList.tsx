@@ -410,7 +410,7 @@ function ReportList(props: ReportListProps) {//@ts-ignore
       ),
       buttonStyle: 'primary',
       onClick: () => {
-        window.location.assign(''); //url create report
+        window.location.assign('/active_reports/add'); //url create report
       },
     });
   }

@@ -16,19 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { useApiV1Resource, useTransformedResource } from 'src/common/hooks/apiResources';
-import {Dataset} from "src/activeReports/types/Dataset";
-import { Report } from 'src/activeReports/types/Report';
 
-export const useReport = (id: string | number) =>
-  useTransformedResource(
-    useApiV1Resource<Report>(`/api/v1/active_reports/${id}`),
-    report => ({
-      ...report,
-      report_data: report.report_data && JSON.parse(report.report_data),
-    }),
-  );
+import { QueryFormData } from '@superset-ui/core';
 
-// gets the dataset definitions for a report
-export const useReportDatasets = (id: string | number) =>
-  useApiV1Resource<Dataset[]>(`/api/v1/active_reports/${id}/datasets`);
+export type Dataset = {
+  id?: number;
+  slice_id: number;
+  slice_name: string;
+  description: string | null;
+  cache_timeout: number | null;
+  form_data?: QueryFormData;
+  query_context?: object;
+};

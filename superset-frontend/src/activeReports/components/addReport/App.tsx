@@ -34,12 +34,13 @@ const bootstrapData = JSON.parse(
   addReportContainer?.getAttribute('data-bootstrap') || '{}',
 );
 
+console.log(`datasets\n${bootstrapData.datasets}\n`)
 initFeatureFlags(bootstrapData.common.feature_flags);
 
 const App = () => (
   <ThemeProvider theme={theme}>
     <DynamicPluginProvider>
-      <AddReportContainer datasources={bootstrapData.datasources} />
+      <AddReportContainer datasets={bootstrapData.datasets} />
     </DynamicPluginProvider>
   </ThemeProvider>
 );
