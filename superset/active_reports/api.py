@@ -36,8 +36,12 @@ from superset.active_reports.commands.exceptions import (
 )
 
 from superset.views.filters import FilterRelatedOwners
+from superset.charts.schemas import ChartEntityResponseSchema
+from superset.active_reports.dao import ActiveReportsDAO
 
 logger = logging.getLogger(__name__)
+
+# :TODO Add event logger decorator to each enpoint
 
 
 class ActiveReportsRestApi(BaseSupersetModelRestApi):
@@ -53,7 +57,8 @@ class ActiveReportsRestApi(BaseSupersetModelRestApi):
         return None
 
     include_route_methods = RouteMethod.REST_MODEL_VIEW_CRUD_SET | {
-        RouteMethod.RELATED
+        RouteMethod.RELATED,
+        "get_charts"
     }
     class_permission_name = "ActiveReport"
     method_permission_name = MODEL_API_RW_METHOD_PERMISSION_MAP
@@ -97,6 +102,7 @@ class ActiveReportsRestApi(BaseSupersetModelRestApi):
     edit_columns = add_columns
     add_model_schema = ActiveReportPostSchema()
     edit_model_schema = ActiveReportPutSchema()
+    chart_entity_response_schema = ChartEntityResponseSchema()
 
     order_columns = [
         "changed_by.first_name",
@@ -241,12 +247,16 @@ class ActiveReportsRestApi(BaseSupersetModelRestApi):
         if not request.is_json:
             return self.response_400(message="Request is not JSON")
         try:
+
             item = self.add_model_schema.load(request.json)
+
         # This validates custom Schema with custom validations
         except ValidationError as error:
             return self.response_400(message=error.messages)
         try:
+            logger.debug("Este sale")
             new_model = CreateActiveReportCommand(g.user, item).run()
+            logger.debug("Este no sale")
             return self.response(201, id=new_model.id, result=item)
         except ActiveReportNotFoundError as ex:
             return self.response_400(message=str(ex))
@@ -334,3 +344,47 @@ class ActiveReportsRestApi(BaseSupersetModelRestApi):
             )
             return self.response_422(message=str(ex))
 
+    @expose("/<int:report_id>/datasets", methods=["GET"])
+    @protect()
+    @safe
+    @statsd_metrics
+    def get_charts(self, report_id: str) -> Response:
+        """Gets the chart definitions for a given report
+        ---
+        get:
+          description: >-
+            Get the chart definitions for a given report
+          parameters:
+          - in: path
+            schema:
+              type: string
+            name: id
+          responses:
+            200:
+              description: Report chart definitions
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      result:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ChartEntityResponseSchema'
+            302:
+              description: Redirects to the current digest
+            400:
+              $ref: '#/components/responses/400'
+            401:
+              $ref: '#/components/responses/401'
+            404:
+              $ref: '#/components/responses/404'
+        """
+        try:
+            charts = ActiveReportsDAO.get_charts_for_report(report_id)
+            logger.debug(charts)
+            result = [self.chart_entity_response_schema.dump(chart) for chart in charts]
+
+            return self.response(200, result=result)
+        except ActiveReportNotFoundError:
+            return self.response_404()
