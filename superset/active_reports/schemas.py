@@ -34,12 +34,17 @@ from superset.utils.core import (
     PostProcessingContributionOrientation,
     TimeRangeEndpoint,
 )
+
 report_name_description = (
     "Nombre del Reporte"
 )
 
 report_data_description = (
     "Informacion del reporte"
+)
+
+slices_description = (
+    "Lista de Slices del reporte (Datasets)"
 )
 
 
@@ -56,6 +61,7 @@ class ActiveReportPostSchema(Schema):
         allow_none=True,
         validate=utils.validate_json,
     )
+    slices = fields.List(fields.Integer(description=slices_description))
 
 
 class ActiveReportPutSchema(Schema):
@@ -71,4 +77,5 @@ class ActiveReportPutSchema(Schema):
         allow_none=True,
         validate=utils.validate_json,
     )
+    slices = fields.List(fields.Integer(description=slices_description))
 
