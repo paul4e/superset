@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import rison from 'rison';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'src/common/components';
@@ -459,13 +460,13 @@ class DatasourceEditor extends React.PureComponent {
         results.added.push(col.name);
       } else if (
         currentCol.type !== col.type ||
-        currentCol.is_dttm !== col.is_dttm
+        (!currentCol.is_dttm && col.is_dttm)
       ) {
         // modified column
         finalColumns.push({
           ...currentCol,
           type: col.type,
-          is_dttm: col.is_dttm,
+          is_dttm: currentCol.is_dttm || col.is_dttm,
         });
         results.modified.push(col.name);
       } else {
@@ -485,11 +486,22 @@ class DatasourceEditor extends React.PureComponent {
 
   syncMetadata() {
     const { datasource } = this.state;
-    const endpoint = `/datasource/external_metadata_by_name/${
-      datasource.type || datasource.datasource_type
-    }/${datasource.database.database_name || datasource.database.name}/${
-      datasource.schema
-    }/${datasource.table_name}/`;
+    const params = {
+      datasource_type: datasource.type || datasource.datasource_type,
+      database_name:
+        datasource.database.database_name || datasource.database.name,
+      schema_name: datasource.schema,
+      table_name: datasource.table_name,
+    };
+    Object.entries(params).forEach(([key, value]) => {
+      // rison can't encode the undefined value
+      if (value === undefined) {
+        params[key] = null;
+      }
+    });
+    const endpoint = `/datasource/external_metadata_by_name/?q=${rison.encode(
+      params,
+    )}`;
     this.setState({ metadataLoading: true });
 
     SupersetClient.get({ endpoint })
