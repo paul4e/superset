@@ -43,7 +43,7 @@ function ActiveReportPage() {
 
   useEffect(() => {
     if (report) {
-      console.log("report\n")
+      console.log("datasets\n")
       console.log(datasets)
     }
   }, [datasets])
