@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {css, styled, SupersetClient, t} from "@superset-ui/core";
 import {FormLabel} from "../../../components/Form";
 import {Select} from "../../../components";
@@ -77,79 +77,42 @@ const cssStatic = css`
   flex: 0 0 auto;
 `;
 
-// DATASET
-// [
-//   {
-//     "Name": "TestTable",
-//     "Fields": [
-//       {
-//         "Name": "year",
-//         "DataField": "year"
-//       },
-//       {
-//         "Name": "name",
-//         "DataField": "name"
-//       },
-//       {
-//         "Name": "genre",
-//         "DataField": "genre"
-//       }
-//     ],
-//     "Query": {
-//       "DataSourceName": "DataSource",
-//       "CommandText": "uri=/131/data?type=full&format=json;jpath=$.result[0].data[*]"
-//     },
-//     "CaseSensitivity": "Auto",
-//     "KanatypeSensitivity": "Auto",
-//     "AccentSensitivity": "Auto",
-//     "WidthSensitivity": "Auto"
-//   }
-// ]
-
-// DATASOURCE
-// [
-//   {
-//     "Name": "DataSource",
-//     "ConnectionProperties": {
-//       "DataProvider": "JSON",
-//       "ConnectString": "endpoint=http://localhost:9000/api/v1/chart"
-//     }
-//   }
-// ]
-type get_data_sets_info_t = { id: string, colnames: string[] };
-
-async function get_datasets_info_async(datasets_id: string[]) {
-  const result = await get_datasets_info(datasets_id);
-  return result;
-}
-
-function get_datasets_info(datasets_id: string[]): Promise<get_data_sets_info_t[]> {
-
-  return new Promise(resolve => {
-
-    const dataset_info: get_data_sets_info_t[] = [];
-    datasets_id.forEach(dataset => {
-        SupersetClient.get({
-          endpoint: `/api/v1/chart/${dataset}/data?type=full&format=json`
-        }).then(info => {
-          console.log(info);
-          const dataset_i = {id: dataset, colnames: [...info.json.result[0].colnames]};
-          dataset_info.push(dataset_i);
-        }).catch(e => console.log(e));
-      }
-    );
-      resolve(dataset_info);
-  })
-
-};
-
-
 function AddReportContainer(
   {
     datasets,
   }: AddReportContainerProps) {
   //@ts-ignore
   const [selectedDatasources, setSelectedDatasources] = useState<{ datasourceValue: string, datasourceID: string }[]>([])
+
+  const [datasetsInfo, setDatasetsInfo] = React.useState(new Map());
+
+  useEffect(() => {
+    console.log('use effect')
+    const fetchDatasetsInfo = async () => {
+      const selectedDatasets = datasets.map(x => {
+        return {
+          id: x.value.split('__')[0],
+          dataset_name: x.label,
+        }
+      })
+
+      selectedDatasets.map(dataset => {
+        const dataset_i = async() => {
+          const res =  await SupersetClient.get({
+            endpoint: `/api/v1/chart/${dataset.id}/data?type=full&format=json`
+          })
+
+          setDatasetsInfo( (prevstate) => {
+            const info = {...dataset, colnames: [...res.json.result[0].colnames]}
+            return new Map(prevstate.set(dataset.id, info))
+          })
+        }
+        dataset_i()
+      })
+    }
+    fetchDatasetsInfo()
+
+  }, [datasets])
 
   const handleOnChange = (value: string[]) => {
     const values: any[] = value.map(value => {
@@ -159,13 +122,14 @@ function AddReportContainer(
       }
     })
     setSelectedDatasources(values)
-  }
+  };
 
   const isBtnDisabled = () => {
-    if (!selectedDatasources) return undefined
+    if (!selectedDatasources) return undefined;
     if (selectedDatasources.length === 0) return true;
+    if(datasetsInfo.size !== datasets.length) return true;
     return false;
-  }
+  };
   // Report: { Author?: undefined | string; Body?: Body; ConsumeContainerWhitespace?: undefined | false | true; DataSets?: DataSet[]; DataSources?: DataSource[]; Description?: undefined | string; DocumentMap?: DocumentMap; EmbeddedImages?: EmbeddedImage[]; FixedPage?: undefined | { DataSetName?: undefined | string; Filters?: Filter[]; Group?: Grouping; Pages?: FixedPageSection[]; SortExpressions?: SortExpression[] }; Language?: undefined | string; Name?: undefined | string; Page?: Page; PageFooter?: PageSection; PageHeader?: PageSection; ReportParameters?: ReportParameter[]; StartPageNumber?: undefined | number; ThemeUri?: undefined | string; Themes?: string[]; Width?: undefined | string }
   {
     //crear reporte
@@ -179,15 +143,10 @@ function AddReportContainer(
 
   const handleOnCreate = () => {
     const new_report = " [ New Report ] ";
-    console.log(datasets)
+
     const selectedDatasets = selectedDatasources.map(x => {
       return x.datasourceID;
     })
-    // const slices = datasets.map(slice => {
-    //   if (slice.)
-    // })
-
-    const datasets_info = get_datasets_info_async(selectedDatasets);
 
     const datasource = {
       "Name": "SupersetDatasource",
@@ -198,29 +157,28 @@ function AddReportContainer(
     }
 
     const charts: any = [];
+    datasetsInfo.forEach((value,key) => {
+      console.log(`value: ${value}, key: ${key}`)
+      console.log(key)
+      console.log(value)
 
-    datasets_info.then(x => {
-      console.log('data')
-      console.log(x)
-      x.forEach(d => {
-        charts.push({
-          "Name": "Falta Nombre", //sacar nombre de dataset de los datasets state, con el id
-          "Fields": d.colnames.map(col => {
-            return {Name: col, DataField: col}
-          }),
-          "Query": {
-            "DataSourceName": "SupersetDatasource",
-            "CommandText": `uri=/${d.id}/data?type=full&format=json;jpath=$.result[0].data[*]`
-          },
-          "CaseSensitivity": "Auto",
-          "KanatypeSensitivity": "Auto",
-          "AccentSensitivity": "Auto",
-          "WidthSensitivity": "Auto"
-        })
-      });
+      if(!selectedDatasets.includes(key)) return;
+
+      charts.push({
+        "Name": value.dataset_name, //sacar nombre de dataset de los datasets state, con el id
+        "Fields": value.colnames.map((col: string) => {
+          return {Name: col, DataField: col}
+        }),
+        "Query": {
+          "DataSourceName": "SupersetDatasource",
+          "CommandText": `uri=/${key}/data?type=full&format=json;jpath=$.result[0].data[*]`
+        },
+        "CaseSensitivity": "Auto",
+        "KanatypeSensitivity": "Auto",
+        "AccentSensitivity": "Auto",
+        "WidthSensitivity": "Auto"
+      })
     });
-
-    console.log(`charts \n\n${charts}\n***`)
 
     const template = {
       definition: templates.CPL,
@@ -238,8 +196,6 @@ function AddReportContainer(
     }
 
     postActiveReportEndpoint('/', report);
-
-
   }
 
   return (
