@@ -81,14 +81,20 @@ class ActiveReports(SupersetModelView, ActiveReportsMixin):
     def viewer(self):
         return self.render_app_template()
 
-    @expose("/list_react/")
+    @expose("/list/")
     def list_react(self) -> FlaskResponse:
-        return self.render_app_template()
+        if not is_feature_enabled("ENABLE_REACT_CRUD_VIEWS"):
+            return super().list()
+
+        return super().render_app_template()
 
     @expose("/add", methods=["GET", "POST"])
     def add(self) -> FlaskResponse:
+        # Extraer los datasources disponibles para el usuario
         datasources = [d.id for d in security_manager.get_user_datasources()]
 
+        # Extraer los charts tipo tabla disponibles para el usuario, que se usaran
+        # como datasets en active reports
         datasets = db.session.query(Slice).filter(
             and_(
                 Slice.viz_type == 'table',
@@ -132,7 +138,6 @@ class ActiveReports(SupersetModelView, ActiveReportsMixin):
     @expose("/report/<int:report_id>")
     def report(self, report_id: int) -> FlaskResponse:
         return self.render_app_template()
-
 
 # class ActiveReports(BaseSupersetView):
 #
