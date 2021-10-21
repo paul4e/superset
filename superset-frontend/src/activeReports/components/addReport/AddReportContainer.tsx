@@ -31,9 +31,15 @@ interface Dataset {
   value: string;
 }
 
+interface Template {
+  id: number;
+  name: string;
+  report: string;
+}
+
 type AddReportContainerProps = {
   datasets: Dataset[];
-  //templates?: any[]; // Idea de agregar reportes como templates.
+  templates?: Template[]; // Idea de agregar reportes como templates.
 };
 
 

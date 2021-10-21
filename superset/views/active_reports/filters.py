@@ -21,8 +21,10 @@ from sqlalchemy.orm.query import Query
 
 from superset import security_manager
 from superset.views.base import BaseFilter
+from superset.models.active_reports import ActiveReport
 
 
 class ActiveReportFilter(BaseFilter):  # pylint: disable=too-few-public-methods
     def apply(self, query: Query, value: Any) -> Query:
+        query = query.filter(ActiveReport.is_template == False)
         return query

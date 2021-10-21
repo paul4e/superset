@@ -40,7 +40,7 @@ initFeatureFlags(bootstrapData.common.feature_flags);
 const App = () => (
   <ThemeProvider theme={theme}>
     <DynamicPluginProvider>
-      <AddReportContainer datasets={bootstrapData.datasets} />
+      <AddReportContainer datasets={bootstrapData.datasets} templates={bootstrapData.templates}/>
     </DynamicPluginProvider>
   </ThemeProvider>
 );

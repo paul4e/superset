@@ -102,12 +102,21 @@ class ActiveReports(SupersetModelView, ActiveReportsMixin):
             for d in datasets
         ]
 
-        logger.debug(f"chart_tables\n{datasets}\n")
+        templates = db.session.query(ActiveReport).filter(
+            ActiveReport.is_template == True
+        ).all()
+
+        templates = [
+            {"id": template.id, "name": template.report_name, "report": template.report_data}
+            for template in templates
+        ]
+
         payload = {
             "datasets": sorted(
                 datasets,
                 key=lambda d: d['label'].lower() if isinstance(d['label'], str) else "",
             ),
+            "templates": templates,
             "common": common_bootstrap_payload(),
             "user": bootstrap_user_data(g.user, include_perms=True),
         }

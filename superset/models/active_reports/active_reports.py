@@ -66,6 +66,7 @@ class ActiveReport(Model, AuditMixinNullable):
     report_name = Column(String(250), nullable=False)
     report_data = Column(Text)
     published = Column(Boolean, default=False)
+    is_template = Column(Boolean, default=False)
     owners = relationship(security_manager.user_model, secondary=active_report_user)
     slices = relationship(Slice, secondary=active_report_slices, backref="active_reports")
 

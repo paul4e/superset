@@ -47,6 +47,15 @@ slices_description = (
     "Lista de Slices del reporte (Datasets)"
 )
 
+published_description = (
+    "Indica si el reporte es visible "
+    "en la lista de todos los reportes."
+)
+
+is_template_description = (
+    "Indica si el reporte es un template para generar reportes."
+)
+
 
 class ActiveReportPostSchema(Schema):
     """
@@ -62,6 +71,8 @@ class ActiveReportPostSchema(Schema):
         validate=utils.validate_json,
     )
     slices = fields.List(fields.Integer(description=slices_description))
+    published = fields.Boolean(description=published_description, allow_none=True)
+    is_template = fields.Boolean(description=is_template_description, allow_none=True)
 
 
 class ActiveReportPutSchema(Schema):
@@ -78,4 +89,6 @@ class ActiveReportPutSchema(Schema):
         validate=utils.validate_json,
     )
     slices = fields.List(fields.Integer(description=slices_description))
+    published = fields.Boolean(description=published_description, allow_none=True)
+    is_template = fields.Boolean(description=is_template_description, allow_none=True)
 
