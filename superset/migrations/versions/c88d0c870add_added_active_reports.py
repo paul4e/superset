@@ -14,16 +14,16 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-"""added active reports
+"""added_active_reports
 
-Revision ID: 460260f05a8e
+Revision ID: c88d0c870add
 Revises: 07071313dd52
-Create Date: 2021-10-07 12:11:33.079634
+Create Date: 2021-10-21 13:40:47.551838
 
 """
 
 # revision identifiers, used by Alembic.
-revision = '460260f05a8e'
+revision = 'c88d0c870add'
 down_revision = '07071313dd52'
 
 from alembic import op
@@ -39,6 +39,7 @@ def upgrade():
     sa.Column('report_name', sa.String(length=250), nullable=False),
     sa.Column('report_data', sa.Text(), nullable=True),
     sa.Column('published', sa.Boolean(), nullable=True),
+    sa.Column('is_template', sa.Boolean(), nullable=True),
     sa.Column('created_by_fk', sa.Integer(), nullable=True),
     sa.Column('changed_by_fk', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['changed_by_fk'], ['ab_user.id'], ),
