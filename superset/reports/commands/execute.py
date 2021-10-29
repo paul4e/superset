@@ -142,6 +142,13 @@ class BaseReportState:
         """
         Get the url for this report schedule: chart or dashboard
         """
+        if feature_flag_manager.is_feature_enabled("ACTIVE_REPORTS_JS"):
+            if self._report_schedule.active_report:
+                return get_url_path(
+                    "ActiveReports.report",
+                    report_id=self._report_schedule.active_report_id
+                )
+
         if self._report_schedule.chart:
             if csv:
                 return get_url_path(
@@ -255,6 +262,27 @@ class BaseReportState:
         df = pd.read_csv(buf)
         return df
 
+    def _get_pdf_data(self) -> None:
+        """
+
+        :return:
+        """
+        pass
+
+    def _get_excel_data(self) -> None:
+        """
+
+        :return:
+        """
+        pass
+
+    def _get_html_data(self) -> None:
+        """
+
+        :return:
+        """
+        pass
+
     def _get_notification_content(self) -> NotificationContent:
         """
         Gets a notification content, this is composed by a title and a screenshot
@@ -266,10 +294,30 @@ class BaseReportState:
         error_text = None
         screenshot_data = None
         url = self._get_url(user_friendly=True)
+
+        pdf = None
+        excel = None
+        html = None
+
         if (
             feature_flag_manager.is_feature_enabled("ALERTS_ATTACH_REPORTS")
             or self._report_schedule.type == ReportScheduleType.REPORT
         ):
+            # ACTIVE_REPORTS_CODE
+            if feature_flag_manager.is_feature_enabled("ACTIVE_REPORTS_JS"):
+                if self._report_schedule.report_format == ReportDataFormat.PDF:
+                    PDF = self._get_pdf_data()
+                    if not PDF:
+                        error_text = "Unexpected missing pdf"
+                if self._report_schedule.report_format == ReportDataFormat.PDF:
+                    excel = self._get_excel_data()
+                    if not excel:
+                        error_text = "Unexpected missing pdf"
+                if self._report_schedule.report_format == ReportDataFormat.PDF:
+                    html = self._get_html_data()
+                    if not html:
+                        error_text = "Unexpected missing pdf"
+
             if self._report_schedule.report_format == ReportDataFormat.VISUALIZATION:
                 screenshot_data = self._get_screenshot()
                 if not screenshot_data:
@@ -292,7 +340,15 @@ class BaseReportState:
         ):
             embedded_data = self._get_embedded_data()
 
-        if self._report_schedule.chart:
+        if (
+            feature_flag_manager.is_feature_enabled("ACTIVE_REPORTS_JS")
+            and self._report_schedule.active_report
+        ):
+            name = (
+                f"{self._report_schedule.name}: "
+                f"{self._report_schedule.active_report.report_name}"
+            )
+        elif self._report_schedule.chart:
             name = (
                 f"{self._report_schedule.name}: "
                 f"{self._report_schedule.chart.slice_name}"
@@ -309,6 +365,9 @@ class BaseReportState:
             description=self._report_schedule.description,
             csv=csv_data,
             embedded_data=embedded_data,
+            pdf=pdf,
+            excel=excel,
+            html=html,
         )
 
     def _send(
