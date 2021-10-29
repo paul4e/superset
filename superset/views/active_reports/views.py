@@ -49,7 +49,7 @@ class ActiveReports(SupersetModelView, ActiveReportsMixin):
     datamodel = SQLAInterface(ActiveReport)
     include_route_methods = RouteMethod.CRUD_SET | {
         "viewer",
-        "list_react",
+        "list",
         "report",
     }
     class_permission_name = "Active_report"
@@ -82,11 +82,11 @@ class ActiveReports(SupersetModelView, ActiveReportsMixin):
         return self.render_app_template()
 
     @expose("/list/")
-    def list_react(self) -> FlaskResponse:
+    def list(self) -> FlaskResponse:
         if not is_feature_enabled("ENABLE_REACT_CRUD_VIEWS"):
             return super().list()
 
-        return super().render_app_template()
+        return self.render_app_template()
 
     @expose("/add", methods=["GET", "POST"])
     def add(self) -> FlaskResponse:

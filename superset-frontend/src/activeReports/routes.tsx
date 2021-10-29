@@ -51,7 +51,7 @@ type Routes = {
 
 export const routes: Routes = [
   {
-    path: '/active_reports/list_react/',
+    path: '/active_reports/list/',
     Component: ReportList,
   },
   {
