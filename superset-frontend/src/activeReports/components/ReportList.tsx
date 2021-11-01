@@ -30,6 +30,7 @@ import {Link} from "react-router-dom";
 import {DashboardStatus} from "../../views/CRUD/dashboard/types";
 import FacePile from "../../components/FacePile";
 import {createErrorHandler, createFetchRelated} from "../../views/CRUD/utils";
+import {deleteActiveReportEndpoint} from "../utils";
 // import {Tooltip} from "../../components/Tooltip";
 // import Icons from "../../components/Icons";
 
@@ -63,7 +64,6 @@ const Actions = styled.div`
 //@ts-ignore
 function ReportList(props: ReportListProps) {//@ts-ignore
   const {addDangerToast, addSuccessToast} = props;
-
   const {
     state: {
       loading,
@@ -390,6 +390,13 @@ function ReportList(props: ReportListProps) {//@ts-ignore
     },
   ];
 
+  function deleteReport( e: any ){
+    e.map((value:any)=> {
+      const endpoint = '/' + value.id;
+      deleteActiveReportEndpoint(endpoint);
+    })
+    window.location.href = `/active_reports/list`
+  }
   //render card
 
   const subMenuButtons: SubMenuProps['buttons'] = [];
@@ -423,7 +430,7 @@ function ReportList(props: ReportListProps) {//@ts-ignore
         description={t(
           'Are you sure you want to delete the selected dashboards?',
         )}
-        onConfirm={() => console.log('handleBulkDashboardDelete')}//handleBulkDashboardDelete
+        onConfirm={deleteReport}//handleBulkDashboardDelete
       >
         {confirmDelete => {
           const bulkActions: ListViewProps['bulkActions'] = [];

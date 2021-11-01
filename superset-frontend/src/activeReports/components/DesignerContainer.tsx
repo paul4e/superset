@@ -21,43 +21,98 @@ import {
   templates,
 } from "@grapecity/activereports/reportdesigner";
 import {Report} from 'src/activeReports/types/Report';
-import {Designer} from '@grapecity/activereports-react';
+import {Designer, Viewer} from '@grapecity/activereports-react';
+import {
+  getActiveReportEndpoint,
+  postActiveReportEndpoint, /*postActiveReportEndpoint,*/
+  putActiveReportEndpoint
+} from "../utils";
+import {useReportList} from "../hooks/apiResources/reports";
+import {t} from "@superset-ui/core";
+
+import {Input} from "../../common/components";
+import {Form, FormItem} from "../../components/Form";
 
 interface DesignerComponent {
   report: any;
   datasets: any[] | null;
 }
 
+export function Upload(props: any) {
+  // @ts-ignore
+  const [files, setFiles] = useState();
+
+  const handleChange = (e: any) => {
+    const fileReader = new FileReader();
+    fileReader.readAsText(e.target.files[0], "UTF-8");
+    fileReader.onload = e => {
+      // @ts-ignore
+      setFiles(e.target.result);
+      // @ts-ignore
+      const result = JSON.parse(e.target.result)
+      props.onChange(result)
+    };
+  };
+  return (
+    <>
+      <input type="file" onChange={handleChange}/>
+    </>
+  );
+}
+
 function DesignerComponent(props: DesignerComponent) {
   const DesignerRef = React.createRef();
+  const ViewerRef = React.useRef();
   const currentResolveFn = React.useRef();
   const [currentReport, setCurrentReport] = useState<Report>(props.report);
+  const [reportName, setReportName] = useState<string>();
+  const [designerVisible, setDesignerVisible] = React.useState(true);
   // @ts-ignore
   const [currentDatasets, setCurrentDatasets] = useState(props.datasets);
   // const [availableDatasets, setAvailableDatasets] = useState([]);
   const counter = React.useRef(0);
+  const listReports = useReportList()
+  // @ts-ignore
+  const [reportStorage, setReportStorage] = React.useState(new Array());
 
-  const [reportStorage, setReportStorage] = React.useState(new Map());
-
-  console.log("currentReport")
-  console.log(currentReport)
-  console.log("currentDatasets")
-  console.log(currentDatasets)
-
+  useEffect(()=>{
+    if(listReports.status === "complete"){
+      setReportStorage(listReports.result);
+    }
+  },[listReports])
+  //--------------- Get datasets
   useEffect(() => {
     setCurrentDatasets(props.datasets)
   }, [props.datasets])
-
+  //---------------Set current Report
   useEffect(() => {
     setCurrentReport(props.report)
   }, [props.report])
+  //---------------Change of view
+  useEffect(() => {
+    if(!designerVisible){
+      // @ts-ignore
+     var aboutButton = {
+        key: "$about",
+        iconCssClass: "mdi mdi-help-circle",
+        text: "go to Designer",
+        enabled: true,
+        action:  () => setDesignerVisible(true),
+      };
+      // @ts-ignore
+      ViewerRef.current.toolbar.addItem(aboutButton)
+      // @ts-ignore
+      ViewerRef.current.toolbar.updateLayout({
+        default: ['$about','$split','$navigation', '$split', '$refresh', '$split', '$history', '$split', '$mousemode', '$zoom', '$fullscreen', '$split', '$print', '$singlepagemode', '$continuousmode', '$galleymode'],
+        fullscreen: ["$fullscreen", "$split", "$print", "$split", "$about"],
+        mobile: ["$navigation", "$split", "$about"],
+      });// @ts-ignore
+    }
+  }, [designerVisible])
 
   useEffect(() => {
-
-    console.log("USE EFFECT before if")
     if (currentReport && currentDatasets) {
       const report_data = currentReport.report_data;
-      console.log("USE EFFECT")
       const reportDefinition = {
         definition: report_data,
         // @ts-ignore
@@ -67,44 +122,57 @@ function DesignerComponent(props: DesignerComponent) {
       // @ts-ignore
       DesignerRef.current.setReport(reportDefinition);
     }
-
   }, [currentReport, currentDatasets])
 
-  const onSaveReport = function (info: any) {
-    const report = {"report_name": info.id};
-    console.log('info')
-    console.log(info)
-    console.log("info")
-    setCurrentReport((current) => {
-      return {...current, ...report};
+
+  const getSlices = (info: any) => {
+    const slices: string[] = [];
+    info.map((value:any) => {
+      slices.push(value.Query.CommandText.split("/")[1]);
     });
-    setReportStorage(new Map(reportStorage.set(info.id, info.definition)));
+    return slices
+  }
+
+  const onSaveReport = function (info: any) {
+    if(info.definition.DataSets.length > 0){
+      const report = {
+        "report_data": JSON.stringify(info.definition),
+        "report_name": info.displayName,
+      };
+      setCurrentReport((current) => {
+        return {...current, ...report};
+      });
+      putActiveReportEndpoint(`/${currentReport.id}`, report)
+    }
+    else{
+      alert("The report doesn't contain datasets");
+    }
     return Promise.resolve({displayName: info.id});
   };
 
   const onSaveAsReport = function (info: any) {
-    setReportStorage(new Map(reportStorage.set(info.id, info.definition)));
-    //post.(reportStorate(id))
+    window.$("#saveAs").modal("show");
     return Promise.resolve({id: info.id, displayName: info.id});
   };
 
-  function onSelectReport(reportId: any) {
-    if (currentResolveFn.current) {
-      window.$("#dlgOpen").modal("hide");
-      // @ts-ignore
-      currentResolveFn.current({
-        definition: reportStorage.get(reportId),
-        id: reportId,
-        displayName: reportId,
+  function onSelectReport(report: any) {
+    window.$("#dlgOpen").modal("hide");
+    getActiveReportEndpoint(`/${report.id}`).then(r => {
+      setCurrentReport((current) => {
+        // @ts-ignore
+        return {...current, ..."json" in r ? r.json : null };
       });
       // @ts-ignore
-      currentResolveFn.current = null;
-    }
+      if ("json" in r) {
+        window.location.assign(`/active_reports/report/${r.json.id}`)
+      }
+    })
+    //window.location.href = `/active_reports/report/${report.id}`
   }
+
   function onCreateReport(){
     const reportId = `New Report ${++counter.current}`;
     return Promise.resolve({
-
       definition: templates.CPL,
       id: reportId,
       displayName: reportId,
@@ -118,11 +186,112 @@ function DesignerComponent(props: DesignerComponent) {
     });
   }
 
+  function onReportPreview(reportView: any){
+    setDesignerVisible(false);
+    // @ts-ignore
+    ViewerRef.current.open(reportView.definition);
+    return Promise.resolve();
+  }
+
+  const handleChangeUpload = (info: { id: string; Name: string; }) => {
+    const id = reportStorage.length;
+    info.id = "reporte_" + id;
+    //setCurrentReport({report_name: info.Name, report_data: JSON.stringify(info)});
+  }
+
+  const handleSaveAs = () => {
+    console.log("info save as")
+    console.log(currentReport)
+    // @ts-ignore
+    let slices: string[] = getSlices(currentReport?.report_data?.DataSets);
+    const report = {
+      report_data: JSON.stringify(currentReport.report_data),
+      report_name: reportName,
+      slices: slices,
+    }
+    console.log(report)
+    postActiveReportEndpoint('/', report).then(r => {
+      // @ts-ignore
+      if ("json" in r) {
+        const {id} = r.json;
+        window.location.href = `/active_reports/report/${id}`
+      }
+    } ).catch();
+  }
+
+
   return (
     <>
-      <div id="designer-host">
-        {/* @ts-ignore */}
-        <Designer ref={DesignerRef} onCreate={onCreateReport} onSave={onSaveReport} onSaveAs={onSaveAsReport} onOpen={onOpenReport}/>
+      <div
+        id="designer-host"
+        style={{display: designerVisible ? "block" : "none"}}
+      >  {/* @ts-ignore */}
+        <Designer ref={DesignerRef}
+                  onCreate={onCreateReport}
+                  onSave={onSaveReport}
+                  onSaveAs={onSaveAsReport}
+                  onOpen={onOpenReport}
+                  onRender={onReportPreview}
+        />
+      </div>
+      {!designerVisible && (
+        <div id="viewer-host">
+          {/* @ts-ignore*/}
+          <Viewer ref={ViewerRef}
+          />
+        </div>
+      )}
+      <div className="modal" id="saveAs" tabIndex={-1} aria-hidden="true">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalLabel">
+                Save as
+              </h5>
+              <button
+                type="button"
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              <Form layout="vertical">
+                <h3>{t('New Report')}</h3>
+                <FormItem label={t('Name')} required>
+                  <Input
+                    name="name"
+                    type="text"
+                    value={reportName}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                      setReportName(event.target.value ?? '')
+                    }
+                  />
+                </FormItem>
+              {/*  Checkbox is template*/}
+              </Form>
+            </div>
+            <div className="modal-footer">
+
+              <button
+                type="button"
+                className="btn btn-primary"
+                data-dismiss="modal"
+                onClick={handleSaveAs}
+              >
+                Save
+              </button><button
+                type="button"
+                className="btn btn-secondary"
+                data-dismiss="modal"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
       <div className="modal" id="dlgOpen" tabIndex={-1} aria-hidden="true">
         <div className="modal-dialog">
@@ -143,18 +312,19 @@ function DesignerComponent(props: DesignerComponent) {
             <div className="modal-body">
               <h2>Select Report:</h2>
               <div className="list-group">
-                {[...reportStorage.keys()].map((reportId) => (
+                {reportStorage.map((report) => (
                   <button
                     type="button"
                     className="list-group-item list-group-item-action"
-                    onClick={() => onSelectReport(reportId)}
+                    onClick={() => onSelectReport(report)}
                   >
-                    {reportId}
+                    {report.report_name}
                   </button>
                 ))}
               </div>
             </div>
             <div className="modal-footer">
+              <Upload onChange={handleChangeUpload}/>
               <button
                 type="button"
                 className="btn btn-secondary"
@@ -166,8 +336,8 @@ function DesignerComponent(props: DesignerComponent) {
           </div>
         </div>
       </div>
-      </>
-  )
+    </>
+  );
 }
 
 

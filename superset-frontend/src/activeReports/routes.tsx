@@ -27,13 +27,6 @@ const ReportList = lazy(
       ),
 );
 
-const Viewer = lazy(
-  () =>
-    import(
-      /* webpackChunkName: "Viewer" */ 'src/activeReports/components/activeReports'
-      )
-)
-
 const ReportPage = lazy (
   () =>
     import (
@@ -51,12 +44,8 @@ type Routes = {
 
 export const routes: Routes = [
   {
-    path: '/active_reports/list_react/',
+    path: '/active_reports/list/',
     Component: ReportList,
-  },
-  {
-    path: '/active_reports/viewer/',
-    Component: Viewer,
   },
   {
     path: '/active_reports/report/:report_id',

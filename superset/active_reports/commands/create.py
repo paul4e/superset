@@ -51,8 +51,6 @@ class CreateActiveReportCommand(BaseCommand):
         owner_ids: Optional[List[int]] = self._properties.get("owners")
         slices_id: Optional[List[int]] = self._properties.get('slices')
 
-        logger.debug(self._properties.get('slices'))
-        logger.debug(type(self._properties.get('slices')[0]))
         try:
             owners = populate_owners(self._actor, owner_ids)
             self._properties["owners"] = owners

@@ -29,6 +29,9 @@ export const useReport = (id: string | number) =>
     }),
   );
 
+export const useReportList = () =>
+    useApiV1Resource<Report[]>(`/api/v1/active_reports`);
+
 // gets the dataset definitions for a report
 export const useReportDatasets = (id: string | number) =>
   useApiV1Resource<Dataset[]>(`/api/v1/active_reports/${id}/datasets`);
