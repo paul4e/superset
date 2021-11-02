@@ -38,6 +38,7 @@ from superset.exceptions import (
 )
 from superset.views.base import check_ownership
 from superset.commands.utils import populate_owners
+# from superset.models.slice import Slice
 
 logger = logging.getLogger(__name__)
 
@@ -60,6 +61,7 @@ class UpdateActiveReportCommand(BaseCommand):
         return report
 
     def validate(self) -> None:
+#         slices: Optional[List[Slice]] = list()
         exceptions: List[ValidationError] = list()
         owner_ids: Optional[List[int]] = self._properties.get("owners")
 
@@ -79,6 +81,18 @@ class UpdateActiveReportCommand(BaseCommand):
             self._properties["owners"] = owners
         except ValidationError as ex:
             exceptions.append(ex)
+
+
+#         # Validate/Populate Slices
+#
+#         try:
+#             slices = ActiveReportsDAO.update_charts_for_report()
+#         except Exception as ex:
+#             exceptions.append(ex) # fix error msg
+#
+#         if slices:
+#             self._model.slices = slices
+
         if exceptions:
             exception = ActiveReportInvalidError()
             exception.add_list(exceptions)

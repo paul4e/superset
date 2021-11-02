@@ -87,6 +87,6 @@ wrapt==1.12.1
     # via deprecated
 xlrd==1.2.0
     # via tabulator
-
+crate[sqlalchemy]==0.26.0
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

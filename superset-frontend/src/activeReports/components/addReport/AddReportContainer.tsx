@@ -18,13 +18,14 @@
  */
 import React, {useEffect, useState} from 'react';
 import {css, styled, SupersetClient, t} from "@superset-ui/core";
-import {FormLabel} from "../../../components/Form";
+import {Form, FormItem, FormLabel} from "../../../components/Form";
 import {Select} from "../../../components";
 import Button from "../../../components/Button";
 import {postActiveReportEndpoint} from "../../utils";
 import {
   templates,
 } from "@grapecity/activereports/reportdesigner";
+import {Input} from "../../../common/components";
 
 interface Dataset {
   label: string;
@@ -39,7 +40,7 @@ interface Template {
 
 type AddReportContainerProps = {
   datasets: Dataset[];
-  templates?: Template[]; // Idea de agregar reportes como templates.
+  templates_list: Template[]; // Idea de agregar reportes como templates.
 };
 
 
@@ -86,11 +87,18 @@ const cssStatic = css`
 function AddReportContainer(
   {
     datasets,
+    templates_list
   }: AddReportContainerProps) {
   //@ts-ignore
   const [selectedDatasources, setSelectedDatasources] = useState<{ datasourceValue: string, datasourceID: string }[]>([])
+  // @ts-ignore
+  const [selectedTemplates, setSelectedTemplates] = useState<{ value: string, id: string }>([])
 
   const [datasetsInfo, setDatasetsInfo] = React.useState(new Map());
+  // @ts-ignore
+  const [reportList, setReportList] = React.useState(new Map());
+  // @ts-ignore
+  const [reportName, setReportName] = React.useState("");
 
   useEffect(() => {
     console.log('use effect')
@@ -120,7 +128,7 @@ function AddReportContainer(
 
   }, [datasets])
 
-  const handleOnChange = (value: string[]) => {
+  const handleOnChangeDatasources = (value: string[]) => {
     const values: any[] = value.map(value => {
       return {
         datasourceValue: value,
@@ -128,6 +136,12 @@ function AddReportContainer(
       }
     })
     setSelectedDatasources(values)
+  };
+
+  const handleOnChangeTemplate = (value: any ) => {
+    console.log("value");
+    console.log(value);
+    setSelectedTemplates(value);
   };
 
   const isBtnDisabled = () => {
@@ -148,8 +162,10 @@ function AddReportContainer(
   }
 
   const handleOnCreate = () => {
-    const new_report = " [ New Report ] ";
-
+    if (reportName!== ''){
+      //add len of list how id report if it's default
+      setReportName('New Report')
+    }
     const selectedDatasets = selectedDatasources.map(x => {
       return x.datasourceID;
     })
@@ -187,10 +203,11 @@ function AddReportContainer(
     });
 
     const template = {
+      // aqui se usa el template que desea o se pone el cpl
       definition: templates.CPL,
-      id: new_report,
+      id: reportName,
     }
-
+    //mandar el id
     const report = {
       report_data: JSON.stringify({
         ...template.definition,
@@ -198,32 +215,68 @@ function AddReportContainer(
         DataSources: [datasource],
       }),
       report_name: template.id,
-      slices: [...selectedDatasets]
+      slices: [...selectedDatasets],
+      //reportsList: reportList,
+      //que los datasets no se repitan en el template y en los que tiene por dentro
     }
-
-    postActiveReportEndpoint('/', report);
+    postActiveReportEndpoint('/', report).then(r => {
+      // @ts-ignore
+      if ("json" in r) {
+        const {id} = r.json;
+        window.location.href = `/active_reports/report/${id}`
+      }
+    } ).catch();
   }
+
 
   return (
 
     <>
       <StyledContainer>
-        <h3 css={cssStatic}>{t('Create a new report')}</h3>
-        <div className={'dataset'}>
-          <Select
-            mode={'multiple'}
+        <Form layout="vertical">
+          <h3>{t('New Report')}</h3>
+          <FormItem label={t('Name')} required>
+            <Input
+              name="name"
+              type="text"
+              value={reportName}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                setReportName(event.target.value ?? '')
+              }
+            />
+          </FormItem>
+          <div className={'dataset'}>
+            <Select
+              mode={'multiple'}
+              ariaLabel={t('Dataset')}
+              name="select-datasource"
+              header={<FormLabel required>{t('Select datasets')}</FormLabel>}
+              onChange={handleOnChangeDatasources}
+              options={datasets}
+              placeholder={t('Select datasets')}
+              showSearch
+              value={selectedDatasources.map(datasource => {
+                return datasource.datasourceValue
+              })}
+            />
+          </div>
+          <div className={'templates'}>
 
-            ariaLabel={t('Dataset')}
-            name="select-datasource"
-            header={<FormLabel required>{t('Select datasets')}</FormLabel>}
-            onChange={handleOnChange}
-            options={datasets}
-            placeholder={t('Select datasets')}
-            showSearch
-            value={selectedDatasources.map(datasource => {
-              return datasource.datasourceValue
-            })}
-          />
+            <Select
+              ariaLabel={t('templates')}
+              name="select-template"
+              header={<FormLabel required>{t('Select template')}</FormLabel>}
+              onChange={handleOnChangeTemplate}
+              options={templates_list.map(tl => {
+                return {value: tl.id, label: tl.name}
+              })}
+              placeholder={t('Select templates')}
+              showSearch
+              value = { selectedTemplates.value  }
+            />
+          </div>
+        </Form>
+        <div className={'Report name'}>
         </div>
         <Button
           css={[

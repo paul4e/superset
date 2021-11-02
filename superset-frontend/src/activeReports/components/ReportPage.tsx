@@ -22,7 +22,6 @@ import {useParams} from "react-router-dom";
 import DesignerContainer from "./DesignerContainer";
 
 function ActiveReportPage() {
-
   const { report_id } = useParams<{ report_id: string }>();
   const { result: report, error: reportApiError } = useReport(
     report_id,
@@ -48,10 +47,12 @@ function ActiveReportPage() {
     }
   }, [datasets])
 
+
   if (error) throw error; // caught in error boundary
 
+  // @ts-ignore
   return (
-    <DesignerContainer report={report} datasets={datasets}/>
+      <DesignerContainer report={report} datasets={datasets}/>
   )
 
 }

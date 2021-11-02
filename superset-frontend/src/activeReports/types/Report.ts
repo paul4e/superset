@@ -29,6 +29,7 @@ export interface Report {
   changed_by: Owner;
   changed_on: string;
   owners: Owner[];
+  is_template?: boolean | null;
 }
 
 export default Report;

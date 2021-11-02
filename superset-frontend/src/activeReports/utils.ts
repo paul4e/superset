@@ -32,3 +32,37 @@ export function postActiveReportEndpoint(endpoint: string, report: any) {
       return response;
     }).catch(error => console.log(error))
 }
+
+export function deleteActiveReportEndpoint(endpoint: string) {
+  return SupersetClient.delete({
+    endpoint: `/api/v1/active_reports${endpoint}`,
+    headers: {'Content-Type': 'application/json'},
+  })
+    .then(response => {
+      console.log("DELETE REPORT RESPONSE\n\n")
+      return response;
+    }).catch(error => console.log(error))
+}
+
+export function putActiveReportEndpoint(endpoint: string, report: any) {
+  return SupersetClient.put({
+    endpoint: `/api/v1/active_reports${endpoint}`,
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(report)
+  })
+    .then(response => {
+      return response;
+    }).catch(error => console.log(error))
+}
+
+export function getActiveReportEndpoint(endpoint: string) {
+  return SupersetClient.get({
+    endpoint: `/api/v1/active_reports${endpoint}`,
+    headers: {'Content-Type': 'application/json'},
+  })
+    .then(response => {
+      console.log("GET REPORT RESPONSE\n\n")
+      console.log(response)
+      return response;
+    }).catch(error => console.log(error))
+}
