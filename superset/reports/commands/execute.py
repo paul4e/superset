@@ -20,6 +20,8 @@ from datetime import datetime, timedelta
 from io import BytesIO
 from typing import Any, List, Optional
 from uuid import UUID
+import requests
+import prison
 
 import pandas as pd
 from celery.exceptions import SoftTimeLimitExceeded
@@ -262,26 +264,35 @@ class BaseReportState:
         df = pd.read_csv(buf)
         return df
 
-    def _get_pdf_data(self) -> None:
+    def _get_pdf_data(self):
         """
 
         :return:
         """
-        pass
+        ARJSSSERVER_ENDPOINT = app.config["ARJSSERVER_ENDPOINT"]
+
+        # Obtener
+        # query_params = {"columns": ["report_data"], "keys": ["none"]}
+        report_data = self._report_schedule.active_report.report_data
+
+        response = requests.post(ARJSSSERVER_ENDPOINT, json=json.loads(report_data))
+        result = response.json()
+        pdf_data = result["pdf_data"] if result["pdf_data"] else None
+        return pdf_data
 
     def _get_excel_data(self) -> None:
         """
 
         :return:
         """
-        pass
+        return None
 
     def _get_html_data(self) -> None:
         """
 
         :return:
         """
-        pass
+        return None
 
     def _get_notification_content(self) -> NotificationContent:
         """
@@ -306,8 +317,8 @@ class BaseReportState:
             # ACTIVE_REPORTS_CODE
             if feature_flag_manager.is_feature_enabled("ACTIVE_REPORTS_JS"):
                 if self._report_schedule.report_format == ReportDataFormat.PDF:
-                    PDF = self._get_pdf_data()
-                    if not PDF:
+                    pdf = self._get_pdf_data()
+                    if not pdf:
                         error_text = "Unexpected missing pdf"
                 if self._report_schedule.report_format == ReportDataFormat.PDF:
                     excel = self._get_excel_data()

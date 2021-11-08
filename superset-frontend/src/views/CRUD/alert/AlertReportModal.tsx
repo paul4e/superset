@@ -48,6 +48,7 @@ import {
   MetaObject,
   Operator,
   Recipient,
+  ActiveReportObjetc,
 } from './types';
 
 const SELECT_PAGE_SIZE = 2000; // temporary fix for paginated query
@@ -426,6 +427,9 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
   const [sourceOptions, setSourceOptions] = useState<MetaObject[]>([]);
   const [dashboardOptions, setDashboardOptions] = useState<MetaObject[]>([]);
   const [chartOptions, setChartOptions] = useState<MetaObject[]>([]);
+  const [activeReportOptions, setActiveReportsOptions] = useState<MetaObject[]>(
+    [],
+  ); // ARJS
 
   // Chart metadata
   const [chartVizType, setChartVizType] = useState<string>('');
@@ -532,6 +536,11 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
         contentType === 'dashboard'
           ? DEFAULT_NOTIFICATION_FORMAT
           : reportFormat || DEFAULT_NOTIFICATION_FORMAT,
+      // ARJS
+      active_report:
+        contentType === 'active_report'
+          ? currentAlert?.active_report?.value
+          : null,
     };
 
     if (data.recipients && !data.recipients.length) {
@@ -636,6 +645,56 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
     sourceOptions.forEach(source => {
       if (source.value === database.value || source.value === database.id) {
         result = source;
+      }
+    });
+
+    return result;
+  };
+
+  const loadActivereportsOptions = (input = '') => {
+    const query = rison.encode({ filter: input, page_size: SELECT_PAGE_SIZE });
+    return SupersetClient.get({
+      endpoint: `/api/v1/report/related/active_report?q=${query}`,
+    }).then(
+      response => {
+        const list = response.json.result.map((item: any) => ({
+          value: item.value,
+          label: item.text,
+        }));
+
+        setActiveReportsOptions(list);
+
+        // Find source if current alert has one set
+        if (
+          currentAlert &&
+          currentAlert.active_report &&
+          !currentAlert.active_report.label
+        ) {
+          updateAlertState('active_report', getActiveReportsData());
+        }
+
+        return list;
+      },
+      badResponse => [],
+    );
+  };
+
+  const getActiveReportsData = (db?: MetaObject) => {
+    const active_report = db || currentAlert?.dashboard;
+
+    if (!active_report || active_report.label) {
+      return null;
+    }
+
+    let result;
+
+    // Cycle through dashboard options to find the selected option
+    activeReportOptions.forEach(arjs => {
+      if (
+        arjs.value === active_report.value ||
+        arjs.value === active_report.id
+      ) {
+        result = arjs;
       }
     });
 
@@ -786,12 +845,20 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
   const onDashboardChange = (dashboard: SelectValue) => {
     updateAlertState('dashboard', dashboard || undefined);
     updateAlertState('chart', null);
+    updateAlertState('active_report', null);
   };
 
   const onChartChange = (chart: SelectValue) => {
     getChartVisualizationType(chart);
     updateAlertState('chart', chart || undefined);
     updateAlertState('dashboard', null);
+    updateAlertState('active_report', null);
+  };
+
+  const onARJSChange = (active_report: SelectValue) => {
+    updateAlertState('dashboard', null);
+    updateAlertState('chart', null);
+    updateAlertState('active_report', active_report || undefined);
   };
 
   const onActiveSwitch = (checked: boolean) => {
@@ -867,7 +934,8 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
       currentAlert.crontab?.length &&
       currentAlert.working_timeout !== undefined &&
       ((contentType === 'dashboard' && !!currentAlert.dashboard) ||
-        (contentType === 'chart' && !!currentAlert.chart)) &&
+        (contentType === 'chart' && !!currentAlert.chart) ||
+        (contentType === 'active_report' && !!currentAlert.active_report)) &&
       checkNotificationSettings()
     ) {
       if (isReport) {
@@ -963,6 +1031,12 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
           ? getSourceData(resource.database) || {
               value: (resource.database as DatabaseObject).id,
               label: (resource.database as DatabaseObject).database_name,
+            }
+          : undefined,
+        active_report: resource.active_report
+          ? getActiveReportsData(resource.active_report) || {
+              value: (resource.active_report as ActiveReportObjetc).id,
+              label: (resource.active_report as ActiveReportObjetc).report_name,
             }
           : undefined,
         owners: (resource.owners || []).map(owner => ({
@@ -1283,6 +1357,7 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
             <Radio.Group onChange={onContentTypeChange} value={contentType}>
               <StyledRadio value="dashboard">{t('Dashboard')}</StyledRadio>
               <StyledRadio value="chart">{t('Chart')}</StyledRadio>
+              <StyledRadio value="arjs">{t('Active Reports')}</StyledRadio>
             </Radio.Group>
             <AsyncSelect
               className={
@@ -1323,6 +1398,26 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
               defaultOptions // load options on render
               cacheOptions
               onChange={onDashboardChange}
+            />
+            <AsyncSelect
+              className={
+                contentType === 'arjs'
+                  ? 'async-select'
+                  : 'hide-dropdown async-select'
+              }
+              name="arjs"
+              value={
+                currentAlert && currentAlert.active_report
+                  ? {
+                      value: currentAlert.active_report.value,
+                      label: currentAlert.active_report.label,
+                    }
+                  : undefined
+              }
+              loadOptions={loadActivereportsOptions}
+              defaultOptions // load options on render
+              cacheOptions
+              onChange={onARJSChange}
             />
             {formatOptionEnabled && (
               <div className="inline-container">

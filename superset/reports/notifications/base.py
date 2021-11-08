@@ -34,9 +34,9 @@ class NotificationContent:
     embedded_data: Optional[pd.DataFrame] = None
 
     # ACTIVE_REPORTS_CODE
-    pdf = Optional[any] = None
-    excel = Optional[any] = None
-    html = Optional[any] = None
+    pdf: Optional[bytes] = None
+    excel: Optional[any] = None
+    html: Optional[any] = None
 
 
 class BaseNotification:  # pylint: disable=too-few-public-methods

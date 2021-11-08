@@ -106,7 +106,9 @@ class EmailNotification(BaseNotification):  # pylint: disable=too-few-public-met
         # ACTIVE_REPORTS_CODE
         # TODO: definir el tipo de dato que se envia. Posiblemente FILE para pdf y excel
         if self._content.pdf:
-            pdf = ""
+            pdf_data = {__("%(name)s.pdf", name=self._content.name): self._content.pdf}
+            return EmailContent(body=body, images=image, data=pdf_data)
+
         if self._content.excel:
             excel = ""
         if self._content.html:
