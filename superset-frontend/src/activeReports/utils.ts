@@ -27,10 +27,11 @@ export function postActiveReportEndpoint(endpoint: string, report: any) {
     body: JSON.stringify(report)
   })
     .then(response => {
-      console.log("POST REPORT RESPONSE\n\n")
-      console.log(response)
+      if(response.response.status !== 200){
+        alert("An error has occurred");
+      }
       return response;
-    }).catch(error => console.log(error))
+    }).catch(error => alert("An error has occurred, " + error))
 }
 
 export function deleteActiveReportEndpoint(endpoint: string) {
@@ -39,7 +40,12 @@ export function deleteActiveReportEndpoint(endpoint: string) {
     headers: {'Content-Type': 'application/json'},
   })
     .then(response => {
-      console.log("DELETE REPORT RESPONSE\n\n")
+      if(response.response.status !== 200){
+        alert("An error has occurred");
+      }
+      else{
+        alert("Report deleted successfully");
+      }
       return response;
     }).catch(error => console.log(error))
 }
@@ -51,8 +57,14 @@ export function putActiveReportEndpoint(endpoint: string, report: any) {
     body: JSON.stringify(report)
   })
     .then(response => {
-      return response;
-    }).catch(error => console.log(error))
+        if(response.response.status !== 200){
+          alert("An error has occurred");
+        }
+        else{
+          alert("Saved successfully");
+        }
+        return response;
+    }).catch(error => alert("An error has occurred, " + error));
 }
 
 export function getActiveReportEndpoint(endpoint: string) {
@@ -61,8 +73,17 @@ export function getActiveReportEndpoint(endpoint: string) {
     headers: {'Content-Type': 'application/json'},
   })
     .then(response => {
-      console.log("GET REPORT RESPONSE\n\n")
-      console.log(response)
+      if(response.response.status !== 200){
+        alert("An error has occurred when get the reports list ");
+      }
       return response;
-    }).catch(error => console.log(error))
+    }).catch(error => alert("An error has occurred, " + error))
+}
+
+export const getSlices = (info: any) => {
+  const slices: string[] = [];
+  info.map((value:any) => {
+    slices.push(value.Query.CommandText.split("/")[1]);
+  });
+  return slices
 }

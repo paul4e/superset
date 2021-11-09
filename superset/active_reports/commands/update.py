@@ -48,7 +48,7 @@ class UpdateActiveReportCommand(BaseCommand):
         self._actor = user
         self._model_id = model_id
         self._properties = data.copy()
-        self._model: Optional[ActiveReport] = None
+#         self._model: Optional[ActiveReport] = None
 
     def run(self) -> Model:
         self.validate()
@@ -61,7 +61,7 @@ class UpdateActiveReportCommand(BaseCommand):
         return report
 
     def validate(self) -> None:
-#         slices: Optional[List[Slice]] = list()
+        slices_id: Optional[List[int]] = self._properties.get('slices')
         exceptions: List[ValidationError] = list()
         owner_ids: Optional[List[int]] = self._properties.get("owners")
 
@@ -85,11 +85,12 @@ class UpdateActiveReportCommand(BaseCommand):
 
 #         # Validate/Populate Slices
 #
-#         try:
-#             slices = ActiveReportsDAO.update_charts_for_report()
-#         except Exception as ex:
-#             exceptions.append(ex) # fix error msg
-#
+        try:
+            slices = ActiveReportsDAO.update_charts_for_report(slices_id)
+            self._properties["slices"] = slices
+        except Exception as ex:
+            exceptions.append(ex) # fix error msg
+
 #         if slices:
 #             self._model.slices = slices
 

@@ -21,11 +21,12 @@ import {css, styled, SupersetClient, t} from "@superset-ui/core";
 import {Form, FormItem, FormLabel} from "../../../components/Form";
 import {Select} from "../../../components";
 import Button from "../../../components/Button";
-import {postActiveReportEndpoint} from "../../utils";
 import {
   templates,
 } from "@grapecity/activereports/reportdesigner";
 import {Input} from "../../../common/components";
+import {getSlices} from "../../utils";
+import {postActiveReportEndpoint} from "../../utils";
 
 interface Dataset {
   label: string;
@@ -89,19 +90,14 @@ function AddReportContainer(
     datasets,
     templates_list
   }: AddReportContainerProps) {
-  //@ts-ignore
   const [selectedDatasources, setSelectedDatasources] = useState<{ datasourceValue: string, datasourceID: string }[]>([])
-  // @ts-ignore
-  const [selectedTemplates, setSelectedTemplates] = useState<{ value: string, id: string }>([])
-
+  const [selectedTemplates, setSelectedTemplates] = useState<{ value: string, id: number, report: string }>( );
   const [datasetsInfo, setDatasetsInfo] = React.useState(new Map());
   // @ts-ignore
   const [reportList, setReportList] = React.useState(new Map());
-  // @ts-ignore
   const [reportName, setReportName] = React.useState("");
 
   useEffect(() => {
-    console.log('use effect')
     const fetchDatasetsInfo = async () => {
       const selectedDatasets = datasets.map(x => {
         return {
@@ -138,10 +134,14 @@ function AddReportContainer(
     setSelectedDatasources(values)
   };
 
-  const handleOnChangeTemplate = (value: any ) => {
-    console.log("value");
-    console.log(value);
-    setSelectedTemplates(value);
+  const handleOnChangeTemplate = (id: any ) => {
+    let res = templates_list.filter(value => value.id === id)[0];
+    let report = {
+      value: res.name,
+      id: res.id,
+      report: res.report
+    }
+    setSelectedTemplates(report);
   };
 
   const isBtnDisabled = () => {
@@ -166,9 +166,6 @@ function AddReportContainer(
       //add len of list how id report if it's default
       setReportName('New Report')
     }
-    const selectedDatasets = selectedDatasources.map(x => {
-      return x.datasourceID;
-    })
 
     const datasource = {
       "Name": "SupersetDatasource",
@@ -178,12 +175,12 @@ function AddReportContainer(
       }
     }
 
+    const selectedDatasets = selectedDatasources.map(x => {
+      return x.datasourceID;
+    })
+
     const charts: any = [];
     datasetsInfo.forEach((value,key) => {
-      console.log(`value: ${value}, key: ${key}`)
-      console.log(key)
-      console.log(value)
-
       if(!selectedDatasets.includes(key)) return;
 
       charts.push({
@@ -202,35 +199,84 @@ function AddReportContainer(
       })
     });
 
-    const template = {
-      // aqui se usa el template que desea o se pone el cpl
-      definition: templates.CPL,
-      id: reportName,
-    }
-    //mandar el id
     const report = {
-      report_data: JSON.stringify({
-        ...template.definition,
-        DataSets: charts,
-        DataSources: [datasource],
-      }),
-      report_name: template.id,
-      slices: [...selectedDatasets],
-      //reportsList: reportList,
-      //que los datasets no se repitan en el template y en los que tiene por dentro
+      report_data: "",
+      report_name: "",
+      slices: [],
+    };
+
+    const template = {
+      definition: {},
+      id: "",
     }
-    postActiveReportEndpoint('/', report).then(r => {
+    let slices: any[] = [];
+    if(selectedTemplates) {
+      let template_selected = JSON.parse(selectedTemplates.report);
+      let auxDatasetTemplates: any = template_selected.DataSets;
+      // let auxDatasourcesTemplates: any = template_selected.DataSources
+      charts.map((valueCharts: any) => {
+        auxDatasetTemplates.splice(auxDatasetTemplates.findIndex((valueTemplates: any) =>
+          valueCharts.Query.CommandText === valueTemplates.Query.CommandText),1);
+      });
+
+      // selectedDatasources.map((valueDatasources: any) => {
+      //   auxDatasourcesTemplates.splice(auxDatasourcesTemplates.findIndex((valueTemplates: any) =>
+      //       valueDatasources.ConnectionProperties.ConnectString === valueTemplates.ConnectionProperties.ConnectString),1);
+      //   }
+      // )
+      if(auxDatasetTemplates.length !== 0){
+        auxDatasetTemplates.map((templ:any) => {
+          charts.push(templ);
+        });
+        slices = getSlices(charts);
+      }
+      console.log(charts);
+      // if(auxDatasourcesTemplates.length !== 0){
+      //   auxDatasourcesTemplates.map((templ:any) => {
+      //     selectedDatasources.push(templ);
+      //   })
+      // }
+      // console.log("dataSources");
+      // console.log(selectedDatasources);
+      // console.log("dataSources template");
+      // console.log(template_selected.DataSources)
+
+      template.definition = template_selected;
+      template.id = reportName;
+    }
+    else{
+      template.definition = templates.CPL
+      template.id = reportName
+    }
+
+    report.report_data = JSON.stringify({
+      ...template.definition,
+      DataSets: charts,
+      DataSources:[datasource]
+    });
+    report.report_name = template.id;
+    if(slices.length === 0){
       // @ts-ignore
-      if ("json" in r) {
-        const {id} = r.json;
-        window.location.href = `/active_reports/report/${id}`
+      report.slices = [...selectedDatasets]
+    }
+    else{
+      // @ts-ignore
+      report.slices = slices;
+    }
+
+    postActiveReportEndpoint('/', report).then(r => {
+      console.log(r);
+      if(r){
+        if ("json" in r) {
+          const {id} = r.json;
+          window.location.href = `/active_reports/report/${id}`
+        }
       }
     } ).catch();
   }
 
 
   return (
-
     <>
       <StyledContainer>
         <Form layout="vertical">
@@ -261,7 +307,6 @@ function AddReportContainer(
             />
           </div>
           <div className={'templates'}>
-
             <Select
               ariaLabel={t('templates')}
               name="select-template"
@@ -272,7 +317,7 @@ function AddReportContainer(
               })}
               placeholder={t('Select templates')}
               showSearch
-              value = { selectedTemplates.value  }
+              value = { selectedTemplates?.value  }
             />
           </div>
         </Form>

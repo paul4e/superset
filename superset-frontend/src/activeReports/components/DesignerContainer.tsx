@@ -17,19 +17,17 @@
  * under the License.
  */
 import React, {useEffect, useState} from 'react';
-import {
-  templates,
-} from "@grapecity/activereports/reportdesigner";
+import {templates,} from "@grapecity/activereports/reportdesigner";
 import {Report} from 'src/activeReports/types/Report';
 import {Designer, Viewer} from '@grapecity/activereports-react';
-import {
-  getActiveReportEndpoint,
-  postActiveReportEndpoint, /*postActiveReportEndpoint,*/
-  putActiveReportEndpoint
-} from "../utils";
+import {getActiveReportEndpoint, getSlices, postActiveReportEndpoint, putActiveReportEndpoint} from "../utils";
 import {useReportList} from "../hooks/apiResources/reports";
 import {t} from "@superset-ui/core";
-
+import "@grapecity/activereports/styles/ar-js-ui.css";
+import "@grapecity/activereports/styles/ar-js-viewer.css";
+import "@grapecity/activereports/pdfexport";
+import "@grapecity/activereports/htmlexport";
+import "@grapecity/activereports/xlsxexport";
 import {Input} from "../../common/components";
 import {Form, FormItem} from "../../components/Form";
 
@@ -64,8 +62,16 @@ function DesignerComponent(props: DesignerComponent) {
   const DesignerRef = React.createRef();
   const ViewerRef = React.useRef();
   const currentResolveFn = React.useRef();
+  // @ts-ignore
+  const [allExports, setAllExports] = React.useState([
+    { label: "PDF", value: "pdf", available: true },
+    { label: "HTML", value: "html", available: true },
+    { label: "XLSX", value: "xlsx", available: true },
+  ]);
   const [currentReport, setCurrentReport] = useState<Report>(props.report);
   const [reportName, setReportName] = useState<string>();
+  // @ts-ignore
+  const [checked, setCheckbox] = useState<boolean>(false);
   const [designerVisible, setDesignerVisible] = React.useState(true);
   // @ts-ignore
   const [currentDatasets, setCurrentDatasets] = useState(props.datasets);
@@ -92,13 +98,15 @@ function DesignerComponent(props: DesignerComponent) {
   useEffect(() => {
     if(!designerVisible){
       // @ts-ignore
-     var aboutButton = {
+      var aboutButton = {
         key: "$about",
-        iconCssClass: "mdi mdi-help-circle",
-        text: "go to Designer",
+        iconUrl: "",
+        icon: "",
+        text: "Designer",
         enabled: true,
         action:  () => setDesignerVisible(true),
       };
+
       // @ts-ignore
       ViewerRef.current.toolbar.addItem(aboutButton)
       // @ts-ignore
@@ -124,25 +132,20 @@ function DesignerComponent(props: DesignerComponent) {
     }
   }, [currentReport, currentDatasets])
 
-
-  const getSlices = (info: any) => {
-    const slices: string[] = [];
-    info.map((value:any) => {
-      slices.push(value.Query.CommandText.split("/")[1]);
-    });
-    return slices
-  }
-
   const onSaveReport = function (info: any) {
+    let slices: string[] = getSlices(info?.definition?.DataSets);
     if(info.definition.DataSets.length > 0){
       const report = {
         "report_data": JSON.stringify(info.definition),
         "report_name": info.displayName,
+        "slices": slices
       };
+      console.log("report");
+      console.log(report);
       setCurrentReport((current) => {
         return {...current, ...report};
       });
-      putActiveReportEndpoint(`/${currentReport.id}`, report)
+      putActiveReportEndpoint(`/${currentReport.id}`, report);
     }
     else{
       alert("The report doesn't contain datasets");
@@ -199,16 +202,30 @@ function DesignerComponent(props: DesignerComponent) {
     //setCurrentReport({report_name: info.Name, report_data: JSON.stringify(info)});
   }
 
+  // @ts-ignore
+  const Checkbox = ({ label, checked, onChange }) => {
+    return (
+      <label>
+        <input type="checkbox" checked={checked} onChange={onChange} />
+        { label }
+      </label>
+    );
+  };
+
+  const handleCheckbox = (e: any) => {
+    setCheckbox(!checked);
+  }
+
   const handleSaveAs = () => {
-    console.log("info save as")
-    console.log(currentReport)
     // @ts-ignore
     let slices: string[] = getSlices(currentReport?.report_data?.DataSets);
     const report = {
       report_data: JSON.stringify(currentReport.report_data),
       report_name: reportName,
       slices: slices,
+      is_template: checked
     }
+    console.log("report template")
     console.log(report)
     postActiveReportEndpoint('/', report).then(r => {
       // @ts-ignore
@@ -219,6 +236,41 @@ function DesignerComponent(props: DesignerComponent) {
     } ).catch();
   }
 
+  const exportsSettings = {
+    pdf: {
+      title: `${reportName}`,
+      author: "SmartNow",
+      subject: "Web Reporting",
+      keywords: "reporting, exports",
+      userPassword: "",
+      ownerPassword: "",
+      printing: "none",
+      copying: false,
+      modifying: false,
+      annotating: false,
+      contentAccessibility: false,
+      documentAssembly: false,
+      pdfVersion: "1.7",
+      autoPrint: true,
+      filename: `${reportName}.pdf`,
+    },
+    xlsx: {
+      creator: "GrapeCity",
+      size: "Letter",
+      orientation: "Landscape",
+      sheetName: "Report",
+      password: "",
+      filename: `${reportName}.xlsx`,
+    },
+    html: {
+      title: `${reportName}`,
+      filename: `${reportName}.html`,
+      autoPrint: true,
+      multiPage: true,
+      embedImages: "external",
+      outputType: "html",
+    },
+  };
 
   return (
     <>
@@ -238,6 +290,11 @@ function DesignerComponent(props: DesignerComponent) {
         <div id="viewer-host">
           {/* @ts-ignore*/}
           <Viewer ref={ViewerRef}
+                  exportsSettings={exportsSettings}
+                  availableExports={allExports
+                    .filter((exp) => exp.available)
+                    .map((exp) => exp.value)}
+                  sidebarVisible={true}
           />
         </div>
       )}
@@ -270,7 +327,13 @@ function DesignerComponent(props: DesignerComponent) {
                     }
                   />
                 </FormItem>
-              {/*  Checkbox is template*/}
+                {/* @ts-ignore*/}
+                <Checkbox
+                  label="Is template"
+                  checked={checked}
+                  onChange = {handleCheckbox}
+                >
+                </Checkbox>
               </Form>
             </div>
             <div className="modal-footer">
