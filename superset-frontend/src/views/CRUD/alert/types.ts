@@ -35,6 +35,12 @@ export type DashboardObject = {
   id: number;
 };
 
+export type ActiveReportObjetc = {
+  report_data: string;
+  report_name: string;
+  id: number;
+};
+
 export type DatabaseObject = {
   database_name: string;
   id: number;
@@ -64,6 +70,7 @@ export type AlertObject = {
   created_on?: string;
   crontab?: string;
   dashboard?: MetaObject;
+  active_report?: MetaObject;
   database?: MetaObject;
   description?: string;
   grace_period?: number;

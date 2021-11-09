@@ -33,6 +33,11 @@ class NotificationContent:
     url: Optional[str] = None  # url to chart/dashboard for this screenshot
     embedded_data: Optional[pd.DataFrame] = None
 
+    # ACTIVE_REPORTS_CODE
+    pdf: Optional[bytes] = None
+    excel: Optional[any] = None
+    html: Optional[any] = None
+
 
 class BaseNotification:  # pylint: disable=too-few-public-methods
     """

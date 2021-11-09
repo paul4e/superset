@@ -57,6 +57,8 @@ from superset.views.base_api import (
 )
 from superset.views.filters import FilterRelatedOwners
 
+from superset.active_reports.filters import ActiveReportAccessFilter  # ARJS
+
 logger = logging.getLogger(__name__)
 
 
@@ -112,6 +114,9 @@ class ReportScheduleRestApi(BaseSupersetModelRestApi):
         "validator_config_json",
         "validator_type",
         "working_timeout",
+        "active_report.id",  # ARJS
+        "active_report.report_name",  # ARJS
+        "active_report.report_data",  # ARJS
     ]
     show_select_columns = show_columns + [
         "chart.datasource_id",
@@ -163,6 +168,7 @@ class ReportScheduleRestApi(BaseSupersetModelRestApi):
         "validator_config_json",
         "validator_type",
         "working_timeout",
+        "active_report",  # ARJS
     ]
     edit_columns = add_columns
     add_model_schema = ReportSchedulePostSchema()
@@ -191,24 +197,28 @@ class ReportScheduleRestApi(BaseSupersetModelRestApi):
         "creation_method",
         "dashboard_id",
         "chart_id",
+        "active_reports_id"  # ARJS
     ]
     search_filters = {"name": [ReportScheduleAllTextFilter]}
-    allowed_rel_fields = {"owners", "chart", "dashboard", "database", "created_by"}
+    allowed_rel_fields = {"owners", "chart", "dashboard", "database", "created_by", "active_report"}  # ARJS
     filter_rel_fields = {
         "chart": [["id", ChartFilter, lambda: []]],
         "dashboard": [["id", DashboardAccessFilter, lambda: []]],
         "database": [["id", DatabaseFilter, lambda: []]],
+        "active_report": [[["id"], ActiveReportAccessFilter, lambda: []]],  # ARJS
     }
     text_field_rel_fields = {
         "dashboard": "dashboard_title",
         "chart": "slice_name",
         "database": "database_name",
+        "active_report": "report_name",  # ARJS
     }
     related_field_filters = {
         "dashboard": "dashboard_title",
         "chart": "slice_name",
         "database": "database_name",
         "owners": RelatedFieldFilter("first_name", FilterRelatedOwners),
+        "active_report": "report_name",  # ARJS
     }
 
     apispec_parameter_schemas = {

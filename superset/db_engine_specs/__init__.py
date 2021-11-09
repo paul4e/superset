@@ -137,6 +137,14 @@ def get_available_engine_specs() -> Dict[Type[BaseEngineSpec], Set[str]]:
 
     available_engines = {}
     for engine_spec in load_engine_specs():
-        available_engines[engine_spec] = drivers[engine_spec.engine]
+        driver = drivers[engine_spec.engine]
+        # support lookup driver via engine aliases.
+        if not driver and engine_spec.engine_aliases:
+            for alias in engine_spec.engine_aliases:
+                driver = drivers[alias]
+                if driver:
+                    break
+
+        available_engines[engine_spec] = driver
 
     return available_engines
