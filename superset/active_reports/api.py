@@ -1,6 +1,8 @@
-
+import json
 import logging
 from typing import Any, Optional
+import requests
+import os
 
 from flask import g, request, Response
 from flask_appbuilder.api import expose, permission_name, protect, rison, safe
@@ -38,6 +40,7 @@ from superset.active_reports.commands.exceptions import (
 from superset.views.filters import FilterRelatedOwners
 from superset.charts.schemas import ChartEntityResponseSchema
 from superset.active_reports.dao import ActiveReportsDAO
+from superset import app
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +61,8 @@ class ActiveReportsRestApi(BaseSupersetModelRestApi):
 
     include_route_methods = RouteMethod.REST_MODEL_VIEW_CRUD_SET | {
         RouteMethod.RELATED,
-        "get_charts"
+        "get_charts",
+        "test"
     }
     class_permission_name = "ActiveReport"
     method_permission_name = MODEL_API_RW_METHOD_PERMISSION_MAP
@@ -386,5 +390,106 @@ class ActiveReportsRestApi(BaseSupersetModelRestApi):
             result = [self.chart_entity_response_schema.dump(chart) for chart in charts]
 
             return self.response(200, result=result)
+        except ActiveReportNotFoundError:
+            return self.response_404()
+
+    @expose("/<int:report_id>/test/<int:option>", methods=["GET"])
+    @protect()
+    @safe
+    @statsd_metrics
+    def test(self, report_id: str, option: str) -> Response:
+        """Gets the chart definitions for a given report
+        ---
+        get:
+          description: >-
+            Get the chart definitions for a given report
+          parameters:
+          - in: path
+            schema:
+              type: string
+            name: id
+          responses:
+            200:
+              description: Report chart definitions
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      result:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ChartEntityResponseSchema'
+            302:
+              description: Redirects to the current digest
+            400:    
+              $ref: '#/components/responses/400'
+            401:
+              $ref: '#/components/responses/401'
+            404:
+              $ref: '#/components/responses/404'
+        """
+        try:
+            report = ActiveReportsDAO.get_by_id(report_id)
+            logger.info(report)
+            logger.info(report.report_data)
+            report_dict = json.loads(report.report_data)
+            logger.info(report_dict)
+            # arjs_server_endpoint = app.config["ARJSSERVER_ENDPOINT"]
+            arjs_server_endpoint = "http://localhost:3000/"
+            logger.info(f"option: {option}")
+            logger.info(f"option type: {type(option)}")
+            if option == 1:
+                logger.info("atendiendo opcion 1")
+                api_url = arjs_server_endpoint+"arjs/export/pdf"
+
+            elif option == 2:
+                logger.info("atendiendo opcion 2")
+                api_url = arjs_server_endpoint + "arjs/export/excel"
+
+            elif option == 3:
+                logger.info("atendiendo opcion 3")
+                api_url = arjs_server_endpoint + "arjs/export/html"
+
+            elif option == 4:
+                logger.info("atendiendo opcion 4")
+                api_url = arjs_server_endpoint + f"arjs/{report_id}/data"
+                logger.info(arjs_server_endpoint)
+                logger.info(api_url)
+                response = requests.get(api_url)
+                logger.info(response.status_code)
+                logger.info(response)
+                logger.info(type(response))
+                logger.info(response.text)
+                return self.response(response.status_code, result=response.text)
+            else:
+                logger.info("atendiendo opcion default")
+                api_url = arjs_server_endpoint + f"arjs/{report_id}/data"
+                logger.info(arjs_server_endpoint)
+                logger.info(api_url)
+                response = requests.get(api_url)
+                logger.info(response.status_code)
+                logger.info(response)
+                logger.info(type(response))
+                logger.info(response.text)
+                return self.response(response.status_code, result=response.text)
+
+            # arjs_server_endpoint = os.environ.get("ARJSSERVER_ENDPOINT")
+            # api_url = arjs_server_endpoint if arjs_server_endpoint is not None else "http://localhost:3000/"
+            # api_url = "http://superset-arjs-service:3000/"
+            # api_url = "http://localhost:3000/arjs/export/pdf"
+            # api_url = "http://localhost:3000/arjs/export/html"
+            # api_url = "http://localhost:3000/arjs/export/excel"
+            # api_url = "http://localhost:3000/
+            response = requests.post(api_url, json=report_dict)
+            # response = requests.post(arjs_server_endpoint, json=report_dict)
+            # response = requests.get(arjs_server_endpoint+"julio")
+            logger.info(response.status_code)
+            logger.info(response)
+            logger.info(type(response))
+            logger.info(response.text)
+            # logger.info(response.json())
+
+            return self.response(response.status_code, result=response.text)
         except ActiveReportNotFoundError:
             return self.response_404()

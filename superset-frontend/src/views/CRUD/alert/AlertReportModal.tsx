@@ -76,6 +76,7 @@ interface AlertReportModalProps {
 
 const NOTIFICATION_METHODS: NotificationMethod[] = ['Email', 'Slack'];
 const DEFAULT_NOTIFICATION_FORMAT = 'PNG';
+const DEFAULT_ARJS_NOTIFICATION_FORMAT = 'PDF'; // ARJS
 const CONDITIONS = [
   {
     label: t('< (Smaller than)'),
@@ -439,6 +440,10 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
     contentType === 'chart' &&
     (isFeatureEnabled(FeatureFlag.ALERTS_ATTACH_REPORTS) || isReport);
 
+  const ARJSFormatOptionEnabled =
+    contentType === 'active_report' &&
+    (isFeatureEnabled(FeatureFlag.ALERTS_ATTACH_REPORTS) || isReport); // TODO: METER FUNCIONALIDAD DE ARJS BAJO UNA FEATURE FLAG
+
   const [
     notificationAddState,
     setNotificationAddState,
@@ -651,6 +656,7 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
     return result;
   };
 
+  // ARJS
   const loadActivereportsOptions = (input = '') => {
     const query = rison.encode({ filter: input, page_size: SELECT_PAGE_SIZE });
     return SupersetClient.get({
@@ -679,6 +685,7 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
     );
   };
 
+  // ARJS
   const getActiveReportsData = (db?: MetaObject) => {
     const active_report = db || currentAlert?.dashboard;
 
@@ -996,10 +1003,18 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
       setNotificationAddState(
         settings.length === NOTIFICATION_METHODS.length ? 'hidden' : 'active',
       );
-      setContentType(resource.chart ? 'chart' : 'dashboard');
+      setContentType(
+        resource.chart
+          ? 'chart'
+          : resource.dashboard
+          ? 'dashboard'
+          : 'active_report',
+      );
       setReportFormat(
         resource.chart
           ? resource.report_format || DEFAULT_NOTIFICATION_FORMAT
+          : resource.active_report
+          ? resource.report_format || DEFAULT_ARJS_NOTIFICATION_FORMAT
           : DEFAULT_NOTIFICATION_FORMAT,
       );
       const validatorConfig =
@@ -1068,6 +1083,7 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
     currentAlertSafe.working_timeout,
     currentAlertSafe.dashboard,
     currentAlertSafe.chart,
+    currentAlertSafe.active_report,
     contentType,
     notificationSettings,
     conditionNotNull,
@@ -1357,7 +1373,9 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
             <Radio.Group onChange={onContentTypeChange} value={contentType}>
               <StyledRadio value="dashboard">{t('Dashboard')}</StyledRadio>
               <StyledRadio value="chart">{t('Chart')}</StyledRadio>
-              <StyledRadio value="arjs">{t('Active Reports')}</StyledRadio>
+              <StyledRadio value="active_report">
+                {t('Active Reports')}
+              </StyledRadio>
             </Radio.Group>
             <AsyncSelect
               className={
@@ -1401,11 +1419,11 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
             />
             <AsyncSelect
               className={
-                contentType === 'arjs'
+                contentType === 'active_report'
                   ? 'async-select'
                   : 'hide-dropdown async-select'
               }
-              name="arjs"
+              name="active_report"
               value={
                 currentAlert && currentAlert.active_report
                   ? {
@@ -1430,6 +1448,18 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
                   {TEXT_BASED_VISUALIZATION_TYPES.includes(chartVizType) && (
                     <StyledRadio value="TEXT">{t('Send as text')}</StyledRadio>
                   )}
+                </StyledRadioGroup>
+              </div>
+            )}
+            {ARJSFormatOptionEnabled && (
+              <div className="inline-container">
+                <StyledRadioGroup
+                  onChange={onFormatChange}
+                  value={reportFormat}
+                >
+                  <StyledRadio value="PDF">{t('Send as PDF')}</StyledRadio>
+                  <StyledRadio value="HTML">{t('Send as HTML')}</StyledRadio>
+                  <StyledRadio value="EXCEL">{t('Send as EXCEL')}</StyledRadio>
                 </StyledRadioGroup>
               </div>
             )}

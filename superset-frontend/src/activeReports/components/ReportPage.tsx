@@ -16,45 +16,49 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import React, {useEffect} from "react";
-import {useReport, useReportDatasets} from "src/activeReports/hooks/apiResources/reports";
-import {useParams} from "react-router-dom";
-import DesignerContainer from "./DesignerContainer";
+import React, { useEffect } from 'react';
+import {
+  useReport,
+  useReportDatasets,
+} from 'src/activeReports/hooks/apiResources/reports';
+import { useParams } from 'react-router-dom';
+
+import DesignerContainer from './DesignerContainer';
 
 function ActiveReportPage() {
   const { report_id } = useParams<{ report_id: string }>();
-  const { result: report, error: reportApiError } = useReport(
-    report_id,
-  );
-  //Cambiar a traer todos los datasets disponibles.
+  const { result: report, error: reportApiError } = useReport(report_id);
+  // Cambiar a traer todos los datasets disponibles.
   const { result: datasets, error: datasetsApiError } = useReportDatasets(
     report_id,
   );
 
   const error = reportApiError || datasetsApiError;
+  //
+  // const ARJS_LICENSE = process.env.ARJSSERVER_LICENCE || '';
+  //
+  // useEffect(() => {
+  //   Core.setLicenseKey(ARJS_LICENSE);
+  // }, [])
 
   useEffect(() => {
     if (report) {
-      console.log("report\n")
-      console.log(report)
+      console.log('report\n');
+      console.log(report);
     }
-  }, [report])
+  }, [report]);
 
   useEffect(() => {
     if (report) {
-      console.log("datasets\n")
-      console.log(datasets)
+      console.log('datasets\n');
+      console.log(datasets);
     }
-  }, [datasets])
-
+  }, [datasets]);
 
   if (error) throw error; // caught in error boundary
 
   // @ts-ignore
-  return (
-      <DesignerContainer report={report} datasets={datasets}/>
-  )
-
+  return <DesignerContainer report={report} datasets={datasets} />;
 }
 
-export default ActiveReportPage
+export default ActiveReportPage;

@@ -53,6 +53,15 @@ class ChartNotFoundValidationError(ValidationError):
         super().__init__(_("Chart does not exist"), field_name="chart")
 
 
+class ActiveReportNotFoundValidationError(ValidationError):
+    """
+    Marshmallow validation error for active report does not exist
+    """
+
+    def __init__(self) -> None:
+        super().__init__(_("Active Report does not exist"), field_name="active_report")
+
+
 class ReportScheduleAlertRequiredDatabaseValidationError(ValidationError):
     """
     Marshmallow validation error for report schedule alert missing database field

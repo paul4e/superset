@@ -129,23 +129,3 @@ class ActiveReports(SupersetModelView, ActiveReportsMixin):
     @expose("/report/<int:report_id>")
     def report(self, report_id: int) -> FlaskResponse:
         return self.render_app_template()
-
-# class ActiveReports(BaseSupersetView):
-#
-#     default_view = 'viewer'
-#
-#     @expose('/viewer/')
-#     def viewer(self):
-#         payload = {
-#             "user": bootstrap_user_data(g.user, include_perms=True),
-#             "common": common_bootstrap_payload(),
-#         }
-#
-#         return self.render_template(
-#             "superset/basic.html",
-#             title=_("Active Reports Viewer").__str__(),
-#             entry="activeReports",
-#             bootstrap_data=json.dumps(
-#                 payload, default=utils.pessimistic_json_iso_dttm_ser
-#             )
-#         )

@@ -19,5 +19,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
+import './arjs-license';
 
 ReactDOM.render(<App />, document.getElementById('app'));

@@ -26,7 +26,9 @@ from superset.reports.commands.exceptions import (
     ChartNotFoundValidationError,
     DashboardNotFoundValidationError,
     ReportScheduleChartOrDashboardValidationError,
+    ActiveReportNotFoundValidationError,
 )
+from superset.active_reports.dao import ActiveReportsDAO
 
 logger = logging.getLogger(__name__)
 
@@ -47,9 +49,17 @@ class BaseReportScheduleCommand(BaseCommand):
         """ Validate chart or dashboard relation """
         chart_id = self._properties.get("chart")
         dashboard_id = self._properties.get("dashboard")
-        if chart_id and dashboard_id:
+
+        active_report_id = self._properties.get("active_report")
+
+        if (chart_id and dashboard_id and active_report_id) or (chart_id and dashboard_id) or (chart_id and active_report_id) or (dashboard_id and active_report_id):
             exceptions.append(ReportScheduleChartOrDashboardValidationError())
-        if chart_id:
+        if active_report_id:
+            active_report = ActiveReportsDAO.find_by_id(active_report_id)
+            if not active_report:
+                exceptions.append(ActiveReportNotFoundValidationError())
+            self._properties["active_report"] = active_report
+        elif chart_id:
             chart = ChartDAO.find_by_id(chart_id)
             if not chart:
                 exceptions.append(ChartNotFoundValidationError())

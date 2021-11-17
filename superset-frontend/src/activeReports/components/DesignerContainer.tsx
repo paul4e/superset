@@ -16,44 +16,59 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import React, {useEffect, useState} from 'react';
-import {templates,} from "@grapecity/activereports/reportdesigner";
-import {Report} from 'src/activeReports/types/Report';
-import {Designer, Viewer} from '@grapecity/activereports-react';
-import {getActiveReportEndpoint, getSlices, postActiveReportEndpoint, putActiveReportEndpoint} from "../utils";
-import {useReportList} from "../hooks/apiResources/reports";
-import {t} from "@superset-ui/core";
-import "@grapecity/activereports/styles/ar-js-ui.css";
-import "@grapecity/activereports/styles/ar-js-viewer.css";
-import "@grapecity/activereports/pdfexport";
-import "@grapecity/activereports/htmlexport";
-import "@grapecity/activereports/xlsxexport";
-import {Input} from "../../common/components";
-import {Form, FormItem} from "../../components/Form";
+import React, { useEffect, useState } from 'react';
+import { templates } from '@grapecity/activereports/reportdesigner';
+import { Report } from 'src/activeReports/types/Report';
+import {
+  Designer,
+  Viewer,
+  RDLReportDefinition,
+} from '@grapecity/activereports-react';
+
+import { t } from '@superset-ui/core';
+import {
+  getActiveReportEndpoint,
+  getSlices,
+  postActiveReportEndpoint,
+  putActiveReportEndpoint,
+} from '../utils';
+import { useReportList } from '../hooks/apiResources/reports';
+import '@grapecity/activereports/styles/ar-js-ui.css';
+import '@grapecity/activereports/styles/ar-js-viewer.css';
+import '@grapecity/activereports/pdfexport';
+import '@grapecity/activereports/htmlexport';
+import '@grapecity/activereports/xlsxexport';
+import { Input } from '../../common/components';
+import { Form, FormItem } from '../../components/Form';
 
 interface DesignerComponent {
   report: any;
   datasets: any[] | null;
 }
 
+interface SaveReportInfo {
+  definition: RDLReportDefinition;
+  displayName?: string | undefined;
+  id: string;
+}
 export function Upload(props: any) {
   // @ts-ignore
   const [files, setFiles] = useState();
 
   const handleChange = (e: any) => {
     const fileReader = new FileReader();
-    fileReader.readAsText(e.target.files[0], "UTF-8");
+    fileReader.readAsText(e.target.files[0], 'UTF-8');
     fileReader.onload = e => {
       // @ts-ignore
       setFiles(e.target.result);
       // @ts-ignore
-      const result = JSON.parse(e.target.result)
-      props.onChange(result)
+      const result = JSON.parse(e.target.result);
+      props.onChange(result);
     };
   };
   return (
     <>
-      <input type="file" onChange={handleChange}/>
+      <input type="file" onChange={handleChange} />
     </>
   );
 }
@@ -64,9 +79,9 @@ function DesignerComponent(props: DesignerComponent) {
   const currentResolveFn = React.useRef();
   // @ts-ignore
   const [allExports, setAllExports] = React.useState([
-    { label: "PDF", value: "pdf", available: true },
-    { label: "HTML", value: "html", available: true },
-    { label: "XLSX", value: "xlsx", available: true },
+    { label: 'PDF', value: 'pdf', available: true },
+    { label: 'HTML', value: 'html', available: true },
+    { label: 'XLSX', value: 'xlsx', available: true },
   ]);
   const [currentReport, setCurrentReport] = useState<Report>(props.report);
   const [reportName, setReportName] = useState<string>();
@@ -77,103 +92,117 @@ function DesignerComponent(props: DesignerComponent) {
   const [currentDatasets, setCurrentDatasets] = useState(props.datasets);
   // const [availableDatasets, setAvailableDatasets] = useState([]);
   const counter = React.useRef(0);
-  const listReports = useReportList()
+  const listReports = useReportList();
   // @ts-ignore
-  const [reportStorage, setReportStorage] = React.useState(new Array());
+  const [reportStorage, setReportStorage] = React.useState([]);
 
-  useEffect(()=>{
-    if(listReports.status === "complete"){
+  useEffect(() => {
+    if (listReports.status === 'complete') {
       setReportStorage(listReports.result);
     }
-  },[listReports])
-  //--------------- Get datasets
+  }, [listReports]);
+  // --------------- Get datasets
   useEffect(() => {
-    setCurrentDatasets(props.datasets)
-  }, [props.datasets])
-  //---------------Set current Report
+    setCurrentDatasets(props.datasets);
+  }, [props.datasets]);
+  // ---------------Set current Report
   useEffect(() => {
-    setCurrentReport(props.report)
-  }, [props.report])
-  //---------------Change of view
+    setCurrentReport(props.report);
+  }, [props.report]);
+  // ---------------Change of view
   useEffect(() => {
-    if(!designerVisible){
+    if (!designerVisible) {
       // @ts-ignore
-      var aboutButton = {
-        key: "$about",
-        iconUrl: "",
-        icon: "",
-        text: "Designer",
+      const aboutButton = {
+        key: '$about',
+        iconUrl: '',
+        icon: '',
+        text: 'Designer',
         enabled: true,
-        action:  () => setDesignerVisible(true),
+        action: () => setDesignerVisible(true),
       };
 
       // @ts-ignore
-      ViewerRef.current.toolbar.addItem(aboutButton)
+      ViewerRef.current.toolbar.addItem(aboutButton);
       // @ts-ignore
       ViewerRef.current.toolbar.updateLayout({
-        default: ['$about','$split','$navigation', '$split', '$refresh', '$split', '$history', '$split', '$mousemode', '$zoom', '$fullscreen', '$split', '$print', '$singlepagemode', '$continuousmode', '$galleymode'],
-        fullscreen: ["$fullscreen", "$split", "$print", "$split", "$about"],
-        mobile: ["$navigation", "$split", "$about"],
-      });// @ts-ignore
+        default: [
+          '$about',
+          '$split',
+          '$navigation',
+          '$split',
+          '$refresh',
+          '$split',
+          '$history',
+          '$split',
+          '$mousemode',
+          '$zoom',
+          '$fullscreen',
+          '$split',
+          '$print',
+          '$singlepagemode',
+          '$continuousmode',
+          '$galleymode',
+        ],
+        fullscreen: ['$fullscreen', '$split', '$print', '$split', '$about'],
+        mobile: ['$navigation', '$split', '$about'],
+      }); // @ts-ignore
     }
-  }, [designerVisible])
+  }, [designerVisible]);
 
   useEffect(() => {
     if (currentReport && currentDatasets) {
-      const report_data = currentReport.report_data;
+      const report_data = currentReport.report_data as RDLReportDefinition;
       const reportDefinition = {
         definition: report_data,
         // @ts-ignore
-        displayName: currentReport.report_name,//report_data.displayName,
+        displayName: currentReport.report_name || undefined, // report_data.displayName,
         id: currentReport.report_name,
-      }
+      } as SaveReportInfo;
       // @ts-ignore
       DesignerRef.current.setReport(reportDefinition);
     }
-  }, [currentReport, currentDatasets])
+  }, [currentReport, currentDatasets]);
 
   const onSaveReport = function (info: any) {
-    let slices: string[] = getSlices(info?.definition?.DataSets);
-    if(info.definition.DataSets.length > 0){
+    const slices: string[] = getSlices(info?.definition?.DataSets);
+    if (info.definition.DataSets.length > 0) {
       const report = {
-        "report_data": JSON.stringify(info.definition),
-        "report_name": info.displayName,
-        "slices": slices
+        report_data: JSON.stringify(info.definition),
+        report_name: info.displayName,
+        slices,
       };
-      console.log("report");
+      console.log('report');
       console.log(report);
-      setCurrentReport((current) => {
-        return {...current, ...report};
-      });
+      setCurrentReport(current => ({ ...current, ...report }));
       putActiveReportEndpoint(`/${currentReport.id}`, report);
-    }
-    else{
+    } else {
       alert("The report doesn't contain datasets");
     }
-    return Promise.resolve({displayName: info.id});
+    return Promise.resolve({ displayName: info.displayName });
   };
 
   const onSaveAsReport = function (info: any) {
-    window.$("#saveAs").modal("show");
-    return Promise.resolve({id: info.id, displayName: info.id});
+    window.$('#saveAs').modal('show');
+    return Promise.resolve({ id: info.id, displayName: info.id });
   };
 
   function onSelectReport(report: any) {
-    window.$("#dlgOpen").modal("hide");
+    window.$('#dlgOpen').modal('hide');
     getActiveReportEndpoint(`/${report.id}`).then(r => {
-      setCurrentReport((current) => {
+      setCurrentReport(current =>
         // @ts-ignore
-        return {...current, ..."json" in r ? r.json : null };
-      });
+        ({ ...current, ...('json' in r ? r.json : null) }),
+      );
       // @ts-ignore
-      if ("json" in r) {
-        window.location.assign(`/active_reports/report/${r.json.id}`)
+      if ('json' in r) {
+        window.location.assign(`/active_reports/report/${r.json.id}`);
       }
-    })
-    //window.location.href = `/active_reports/report/${report.id}`
+    });
+    // window.location.href = `/active_reports/report/${report.id}`
   }
 
-  function onCreateReport(){
+  function onCreateReport() {
     const reportId = `New Report ${++counter.current}`;
     return Promise.resolve({
       definition: templates.CPL,
@@ -181,85 +210,85 @@ function DesignerComponent(props: DesignerComponent) {
       displayName: reportId,
     });
   }
-  function onOpenReport(){
+  function onOpenReport() {
     return new Promise(function (resolve) {
       // @ts-ignore
       currentResolveFn.current = resolve;
-      window.$("#dlgOpen").modal("show");
+      window.$('#dlgOpen').modal('show');
     });
   }
 
-  function onReportPreview(reportView: any){
+  function onReportPreview(reportView: any) {
     setDesignerVisible(false);
     // @ts-ignore
     ViewerRef.current.open(reportView.definition);
     return Promise.resolve();
   }
 
-  const handleChangeUpload = (info: { id: string; Name: string; }) => {
+  const handleChangeUpload = (info: { id: string; Name: string }) => {
     const id = reportStorage.length;
-    info.id = "reporte_" + id;
-    //setCurrentReport({report_name: info.Name, report_data: JSON.stringify(info)});
-  }
+    info.id = `reporte_${id}`;
+    // setCurrentReport({report_name: info.Name, report_data: JSON.stringify(info)});
+  };
 
   // @ts-ignore
-  const Checkbox = ({ label, checked, onChange }) => {
-    return (
-      <label>
-        <input type="checkbox" checked={checked} onChange={onChange} />
-        { label }
-      </label>
-    );
-  };
+  const Checkbox = ({ label, checked, onChange }) => (
+    <label>
+      <input type="checkbox" checked={checked} onChange={onChange} />
+      {label}
+    </label>
+  );
 
   const handleCheckbox = (e: any) => {
     setCheckbox(!checked);
-  }
+  };
 
   const handleSaveAs = () => {
     // @ts-ignore
-    let slices: string[] = getSlices(currentReport?.report_data?.DataSets);
+    const slices: string[] = getSlices(currentReport?.report_data?.DataSets);
     const report = {
       report_data: JSON.stringify(currentReport.report_data),
       report_name: reportName,
-      slices: slices,
-      is_template: checked
-    }
-    console.log("report template")
-    console.log(report)
-    postActiveReportEndpoint('/', report).then(r => {
-      // @ts-ignore
-      if ("json" in r) {
-        const {id} = r.json;
-        window.location.href = `/active_reports/report/${id}`
-      }
-    } ).catch();
-  }
+      slices,
+      is_template: checked,
+    };
+    console.log('report template');
+    console.log(report);
+    postActiveReportEndpoint('/', report)
+      .then(r => {
+        // @ts-ignore
+        if ('json' in r) {
+          const { id } = r.json;
+          window.location.href = `/active_reports/report/${id}`;
+        }
+      })
+      .catch();
+  };
 
   const exportsSettings = {
     pdf: {
       title: `${reportName}`,
-      author: "SmartNow",
-      subject: "Web Reporting",
-      keywords: "reporting, exports",
-      userPassword: "",
-      ownerPassword: "",
-      printing: "none",
+      author: 'SmartNow',
+      subject: 'Web Reporting',
+      keywords: 'reporting, exports',
+      userPassword: '',
+      ownerPassword: '',
+      printing: 'none',
       copying: false,
       modifying: false,
       annotating: false,
       contentAccessibility: false,
       documentAssembly: false,
-      pdfVersion: "1.7",
+      pdfVersion: '1.7',
       autoPrint: true,
       filename: `${reportName}.pdf`,
     },
     xlsx: {
-      creator: "GrapeCity",
-      size: "Letter",
-      orientation: "Landscape",
-      sheetName: "Report",
-      password: "",
+      creator: 'GrapeCity',
+      size: 'Letter',
+      orientation: 'Landscape',
+      sheetName: 'Report',
+      password: '',
       filename: `${reportName}.xlsx`,
     },
     html: {
@@ -267,8 +296,8 @@ function DesignerComponent(props: DesignerComponent) {
       filename: `${reportName}.html`,
       autoPrint: true,
       multiPage: true,
-      embedImages: "external",
-      outputType: "html",
+      embedImages: 'external',
+      outputType: 'html',
     },
   };
 
@@ -276,25 +305,29 @@ function DesignerComponent(props: DesignerComponent) {
     <>
       <div
         id="designer-host"
-        style={{display: designerVisible ? "block" : "none"}}
-      >  {/* @ts-ignore */}
-        <Designer ref={DesignerRef}
-                  onCreate={onCreateReport}
-                  onSave={onSaveReport}
-                  onSaveAs={onSaveAsReport}
-                  onOpen={onOpenReport}
-                  onRender={onReportPreview}
+        style={{ display: designerVisible ? 'block' : 'none' }}
+      >
+        {' '}
+        {/* @ts-ignore */}
+        <Designer
+          ref={DesignerRef}
+          onCreate={onCreateReport}
+          onSave={onSaveReport}
+          onSaveAs={onSaveAsReport}
+          onOpen={onOpenReport}
+          onRender={onReportPreview}
         />
       </div>
       {!designerVisible && (
         <div id="viewer-host">
-          {/* @ts-ignore*/}
-          <Viewer ref={ViewerRef}
-                  exportsSettings={exportsSettings}
-                  availableExports={allExports
-                    .filter((exp) => exp.available)
-                    .map((exp) => exp.value)}
-                  sidebarVisible={true}
+          {/* @ts-ignore */}
+          <Viewer
+            ref={ViewerRef}
+            exportsSettings={exportsSettings}
+            availableExports={allExports
+              .filter(exp => exp.available)
+              .map(exp => exp.value)}
+            sidebarVisible
           />
         </div>
       )}
@@ -327,17 +360,15 @@ function DesignerComponent(props: DesignerComponent) {
                     }
                   />
                 </FormItem>
-                {/* @ts-ignore*/}
+                {/* @ts-ignore */}
                 <Checkbox
                   label="Is template"
                   checked={checked}
-                  onChange = {handleCheckbox}
-                >
-                </Checkbox>
+                  onChange={handleCheckbox}
+                />
               </Form>
             </div>
             <div className="modal-footer">
-
               <button
                 type="button"
                 className="btn btn-primary"
@@ -345,7 +376,8 @@ function DesignerComponent(props: DesignerComponent) {
                 onClick={handleSaveAs}
               >
                 Save
-              </button><button
+              </button>
+              <button
                 type="button"
                 className="btn btn-secondary"
                 data-dismiss="modal"
@@ -375,7 +407,7 @@ function DesignerComponent(props: DesignerComponent) {
             <div className="modal-body">
               <h2>Select Report:</h2>
               <div className="list-group">
-                {reportStorage.map((report) => (
+                {reportStorage.map(report => (
                   <button
                     type="button"
                     className="list-group-item list-group-item-action"
@@ -387,7 +419,7 @@ function DesignerComponent(props: DesignerComponent) {
               </div>
             </div>
             <div className="modal-footer">
-              <Upload onChange={handleChangeUpload}/>
+              <Upload onChange={handleChangeUpload} />
               <button
                 type="button"
                 className="btn btn-secondary"
@@ -402,6 +434,5 @@ function DesignerComponent(props: DesignerComponent) {
     </>
   );
 }
-
 
 export default DesignerComponent;

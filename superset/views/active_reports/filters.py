@@ -28,3 +28,9 @@ class ActiveReportFilter(BaseFilter):  # pylint: disable=too-few-public-methods
     def apply(self, query: Query, value: Any) -> Query:
         query = query.filter(ActiveReport.is_template == False)
         return query
+
+
+class ActiveReportTemplatesFilter(BaseFilter):  # pylint: disable=too-few-public-methods
+    def apply(self, query: Query, value: Any) -> Query:
+        query = query.filter(ActiveReport.is_template == True)
+        return query

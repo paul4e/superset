@@ -103,16 +103,19 @@ class EmailNotification(BaseNotification):  # pylint: disable=too-few-public-met
         if self._content.csv:
             csv_data = {__("%(name)s.csv", name=self._content.name): self._content.csv}
 
-        # ACTIVE_REPORTS_CODE
-        # TODO: definir el tipo de dato que se envia. Posiblemente FILE para pdf y excel
+        # ARJS
         if self._content.pdf:
             pdf_data = {__("%(name)s.pdf", name=self._content.name): self._content.pdf}
             return EmailContent(body=body, images=image, data=pdf_data)
 
+        # ARJS
         if self._content.excel:
-            excel = ""
-        if self._content.html:
-            html = ""
+            pdf_data = {__("%(name)s.xlsx", name=self._content.name): self._content.excel}
+            return EmailContent(body=body, images=image, data=pdf_data)
+
+        # if self._content.html:
+        #     pdf_data = {__("%(name)s.html", name=self._content.name): self._content.html}
+        #     return EmailContent(body=body, images=image, data=pdf_data)
         return EmailContent(body=body, images=image, data=csv_data)
 
     def _get_subject(self) -> str:

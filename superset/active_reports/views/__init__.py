@@ -15,5 +15,4 @@
 # specific language governing permissions and limitations
 # under the License.
 
-from .active_reports import ActiveReport
-
+from .active_reports_exports import ActiveReportsExports

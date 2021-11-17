@@ -1240,6 +1240,8 @@ SQLALCHEMY_DISPLAY_TEXT = "SQLAlchemy docs"
 
 # ACTIVE REPORTS
 ACTIVE_REPORTS_IS_ACTIVE = True
+ARJSSERVER_ENDPOINT = os.environ.get("ARJSSERVER_ENDPOINT", '')
+
 
 # -------------------------------------------------------------------
 # *                WARNING:  STOP EDITING  HERE                    *

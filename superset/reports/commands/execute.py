@@ -264,35 +264,39 @@ class BaseReportState:
         df = pd.read_csv(buf)
         return df
 
-    def _get_pdf_data(self):
+    def _get_arjs_exported_data(self, export_type):
         """
+        Realiza un request tipo post al endpoint del arjsserver. El endpoint es
+        definido en la configuracion en las variables de ambiente
 
-        :return:
+        :param export_type: Recibe el tipo de archivo a exportar. "pdf" | "excel"
+        :return: Devuelve un bytearray del archivo pdf o excel segun corresponda.
+                 Devuelve None en caso de error.
         """
-        ARJSSSERVER_ENDPOINT = app.config["ARJSSERVER_ENDPOINT"]
+        arjsserver_endpoint = app.config["ARJSSERVER_ENDPOINT"]
 
-        # Obtener
-        # query_params = {"columns": ["report_data"], "keys": ["none"]}
+        logger.info(f"Generando reporte tipo {export_type}. ARJSServer: {arjsserver_endpoint}")
+
+        # Obtiene la definicion del reporte ARJS
         report_data = self._report_schedule.active_report.report_data
 
-        response = requests.post(ARJSSSERVER_ENDPOINT, json=json.loads(report_data))
-        result = response.json()
-        pdf_data = result["pdf_data"] if result["pdf_data"] else None
-        return pdf_data
+        url = arjsserver_endpoint + f"arjs/export/{export_type}"
+        logger.info(f"request post: {url}")
 
-    def _get_excel_data(self) -> None:
-        """
+        try:
+            response = requests.post(url, json=json.loads(report_data))
+            result = response.json()
+        except Exception as e:
+            logger.error(f"Error al obtener el reporte. \n{e}")
+            return None
 
-        :return:
-        """
-        return None
-
-    def _get_html_data(self) -> None:
-        """
-
-        :return:
-        """
-        return None
+        exported_data = result["exportedData"] if result["exportedData"] else None
+        data = exported_data["data"] if (exported_data and exported_data["data"]) else None
+        if data:
+            result_byte_array = bytearray(data)
+        else:
+            result_byte_array = None
+        return result_byte_array
 
     def _get_notification_content(self) -> NotificationContent:
         """
@@ -317,15 +321,15 @@ class BaseReportState:
             # ACTIVE_REPORTS_CODE
             if feature_flag_manager.is_feature_enabled("ACTIVE_REPORTS_JS"):
                 if self._report_schedule.report_format == ReportDataFormat.PDF:
-                    pdf = self._get_pdf_data()
+                    pdf = self._get_arjs_exported_data("pdf");
                     if not pdf:
                         error_text = "Unexpected missing pdf"
-                if self._report_schedule.report_format == ReportDataFormat.PDF:
-                    excel = self._get_excel_data()
+                if self._report_schedule.report_format == ReportDataFormat.EXCEL:
+                    excel = self._get_arjs_exported_data("excel");
                     if not excel:
                         error_text = "Unexpected missing pdf"
-                if self._report_schedule.report_format == ReportDataFormat.PDF:
-                    html = self._get_html_data()
+                if self._report_schedule.report_format == ReportDataFormat.HTML:
+                    html = self._get_arjs_exported_data("html");
                     if not html:
                         error_text = "Unexpected missing pdf"
 

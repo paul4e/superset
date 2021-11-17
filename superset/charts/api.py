@@ -122,7 +122,8 @@ class ChartRestApi(BaseSupersetModelRestApi):
         "thumbnail",
         "screenshot",
         "cache_screenshot",
-        "odata"
+        "odata",
+        "get_data_test"
     }
     class_permission_name = "Chart"
     method_permission_name = MODEL_API_RW_METHOD_PERMISSION_MAP
@@ -802,6 +803,7 @@ class ChartRestApi(BaseSupersetModelRestApi):
               $ref: '#/components/responses/500'
         """
         chart = self.datamodel.get(pk, self._base_filters)
+        logger.debug(chart)
         if not chart:
             return self.response_404()
 
@@ -1408,3 +1410,105 @@ class ChartRestApi(BaseSupersetModelRestApi):
         )
         command.run()
         return self.response(200, message="OK")
+
+    #######################################################################################################################################
+    #######################################################################################################################################
+
+    @expose("/<int:pk>/data_test/", methods=["GET"])
+    @protect()
+    def get_data_test(self, pk: int) -> Response:
+        """
+        Takes a chart ID and uses the query context stored when the chart was saved
+        to return payload data response.
+        ---
+        get:
+          description: >-
+            Takes a chart ID and uses the query context stored when the chart was saved
+            to return payload data response.
+          parameters:
+          - in: path
+            schema:
+              type: integer
+            name: pk
+            description: The chart ID
+          - in: query
+            name: format
+            description: The format in which the data should be returned
+            schema:
+              type: string
+          - in: query
+            name: type
+            description: The type in which the data should be returned
+            schema:
+              type: string
+          responses:
+            200:
+              description: Query result
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ChartDataResponseSchema"
+            202:
+              description: Async job details
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ChartDataAsyncResponseSchema"
+            400:
+              $ref: '#/components/responses/400'
+            401:
+              $ref: '#/components/responses/401'
+            500:
+              $ref: '#/components/responses/500'
+        """
+        logger.debug(f"Entra al endpoint de prueba: pk{pk}")
+        chart = self.datamodel.get(pk, self._base_filters)
+        if not chart:
+            logger.debug("not chart")
+            return self.response_404()
+
+        try:
+            json_body = json.loads(chart.query_context)
+        except (TypeError, json.decoder.JSONDecodeError):
+            json_body = None
+
+        if json_body is None:
+            return self.response_400(
+                message=_(
+                    "Chart has no query context saved. Please save the chart again."
+                )
+            )
+
+        # override saved query context
+        json_body["result_format"] = request.args.get(
+            "format", ChartDataResultFormat.JSON
+        )
+        json_body["result_type"] = request.args.get("type", ChartDataResultType.FULL)
+
+        try:
+            command = ChartDataCommand()
+            query_context = command.set_query_context(json_body)
+            command.validate()
+        except QueryObjectValidationError as error:
+            return self.response_400(message=error.message)
+        except ValidationError as error:
+            return self.response_400(
+                message=_(
+                    "Request is incorrect: %(error)s", error=error.normalized_messages()
+                )
+            )
+
+        # TODO: support CSV, SQL query and other non-JSON types
+        if (
+            is_feature_enabled("GLOBAL_ASYNC_QUERIES")
+            and query_context.result_format == ChartDataResultFormat.JSON
+            and query_context.result_type == ChartDataResultType.FULL
+        ):
+            return self._run_async(command)
+
+        try:
+            form_data = json.loads(chart.params)
+        except (TypeError, json.decoder.JSONDecodeError):
+            form_data = {}
+
+        return self.get_data_response(command, form_data=form_data)
