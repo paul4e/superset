@@ -52,15 +52,8 @@ class ActiveReports(SupersetModelView, ActiveReportsMixin):
         "list",
         "report",
     }
-    class_permission_name = "Active_report"
+    class_permission_name = "ActiveReport"
     method_permission_name = MODEL_VIEW_RW_METHOD_PERMISSION_MAP
-
-    def pre_update(self, item: "SliceModelView") -> None:
-        # utils.validate_json(item.params)
-        check_ownership(item)
-
-    def pre_delete(self, item: "SliceModelView") -> None:
-        check_ownership(item)
 
     def render_app_template(self) -> FlaskResponse:
         payload = {
@@ -76,12 +69,9 @@ class ActiveReports(SupersetModelView, ActiveReportsMixin):
                 payload, default=utils.pessimistic_json_iso_dttm_ser
             )
         )
-
-    @expose('/viewer/')
-    def viewer(self):
-        return self.render_app_template()
-
+    
     @expose("/list/")
+    @has_access
     def list(self) -> FlaskResponse:
         if not is_feature_enabled("ENABLE_REACT_CRUD_VIEWS"):
             return super().list()
@@ -89,6 +79,7 @@ class ActiveReports(SupersetModelView, ActiveReportsMixin):
         return self.render_app_template()
 
     @expose("/add", methods=["GET", "POST"])
+    @has_access
     def add(self) -> FlaskResponse:
         # Extraer los datasources disponibles para el usuario
         datasources = [d.id for d in security_manager.get_user_datasources()]

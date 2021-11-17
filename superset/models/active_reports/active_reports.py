@@ -35,12 +35,14 @@ from superset import security_manager
 from superset.extensions import db
 
 metadata = Model.metadata  # pylint: disable=no-member
+
 active_report_user = Table(
     "active_report_user",
     metadata,
     Column("id", Integer, primary_key=True),
     Column("user_id", Integer, ForeignKey("ab_user.id")),
     Column("active_report_id", Integer, ForeignKey("active_reports.id")),
+    UniqueConstraint("active_report_id", "user_id"),
 )
 
 active_report_slices = Table(
@@ -56,7 +58,7 @@ active_report_slices = Table(
 class ActiveReport(Model, AuditMixinNullable):
 
     """
-    Report Schedules, supports alerts and reports
+    Active Reports.
     """
 
     __tablename__ = "active_reports"
@@ -68,7 +70,8 @@ class ActiveReport(Model, AuditMixinNullable):
     published = Column(Boolean, default=False)
     is_template = Column(Boolean, default=False)
     owners = relationship(security_manager.user_model, secondary=active_report_user)
-    slices = relationship(Slice, secondary=active_report_slices, backref="active_reports")
+    slices = relationship(Slice, secondary=active_report_slices,
+                          backref="active_reports")
 
     def __repr__(self) -> str:
         return str(self.report_name)
@@ -87,5 +90,5 @@ class ActiveReport(Model, AuditMixinNullable):
 
     @property
     def url(self) -> str:
-        return f"/active_reports/report/{self.id}" #f"/superset/dashboard/{self.slug or self.id}/"
+        return f"/active_reports/report/{self.id}"
 
