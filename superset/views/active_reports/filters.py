@@ -20,8 +20,8 @@ from sqlalchemy import or_
 from sqlalchemy.orm.query import Query
 
 from superset import security_manager
-from superset.views.base import BaseFilter
 from superset.models.active_reports import ActiveReport
+from superset.views.base import BaseFilter
 
 
 class ActiveReportFilter(BaseFilter):  # pylint: disable=too-few-public-methods

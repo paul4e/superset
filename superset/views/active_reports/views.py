@@ -15,45 +15,41 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import simplejson as json
 import logging
-from flask_appbuilder import expose, has_access
+
+import simplejson as json
 from flask import g
-
-from flask_babel import lazy_gettext as _
-from superset.utils import core as utils
-
+from flask_appbuilder import expose, has_access
 from flask_appbuilder.models.sqla.interface import SQLAInterface
+from flask_babel import lazy_gettext as _
+from sqlalchemy import and_, or_
+
+from superset import db, is_feature_enabled, security_manager
+from superset.active_reports.utils import sort
+from superset.constants import MODEL_VIEW_RW_METHOD_PERMISSION_MAP, RouteMethod
+from superset.models.active_reports import ActiveReport
+from superset.models.slice import Slice
 from superset.typing import FlaskResponse
+from superset.utils import core as utils
 from superset.views.active_reports.mixin import ActiveReportsMixin
-from superset.constants import RouteMethod, MODEL_VIEW_RW_METHOD_PERMISSION_MAP
 from superset.views.base import (
-    SupersetModelView,
     check_ownership,
     common_bootstrap_payload,
+    SupersetModelView,
 )
-from superset.views.utils import (
-    bootstrap_user_data,
-)
-from superset.models.active_reports import ActiveReport
-from superset import is_feature_enabled, security_manager
-from superset.models.slice import Slice
-from superset import db
-from sqlalchemy import and_, or_
+from superset.views.utils import bootstrap_user_data
 
 logger = logging.getLogger(__name__)
 
 
 class ActiveReports(SupersetModelView, ActiveReportsMixin):
-    route_base = '/active_reports'
+    route_base = "/active_reports"
     datamodel = SQLAInterface(ActiveReport)
     include_route_methods = RouteMethod.CRUD_SET | {
-        "viewer",
-        "list",
         "report",
     }
     class_permission_name = "ActiveReport"
-    method_permission_name = MODEL_VIEW_RW_METHOD_PERMISSION_MAP
+    method_permission_name = {**MODEL_VIEW_RW_METHOD_PERMISSION_MAP, "report": "read"}
 
     def render_app_template(self) -> FlaskResponse:
         payload = {
@@ -67,9 +63,9 @@ class ActiveReports(SupersetModelView, ActiveReportsMixin):
             entry="activeReports",
             bootstrap_data=json.dumps(
                 payload, default=utils.pessimistic_json_iso_dttm_ser
-            )
+            ),
         )
-    
+
     @expose("/list/")
     @has_access
     def list(self) -> FlaskResponse:
@@ -81,39 +77,44 @@ class ActiveReports(SupersetModelView, ActiveReportsMixin):
     @expose("/add", methods=["GET", "POST"])
     @has_access
     def add(self) -> FlaskResponse:
-        # Extraer los datasources disponibles para el usuario
         datasources = [d.id for d in security_manager.get_user_datasources()]
 
-        # Extraer los charts tipo tabla disponibles para el usuario, que se usaran
-        # como datasets en active reports
-        datasets = db.session.query(Slice).filter(
-            and_(
-                Slice.viz_type == 'table',
-                or_(
-                    Slice.datasource_id.in_(datasources)
-                ))) \
+        datasets = (
+            db.session.query(Slice)
+            .filter(
+                and_(
+                    Slice.viz_type == "table", or_(Slice.datasource_id.in_(datasources))
+                )
+            )
             .all()
+        )
 
         datasets = [
-            {"value": str(d.id) + "__" + d.slice_name, "label": repr(d)}
-            for d in datasets
+            {
+                "value": str(dataset.id) + "__" + dataset.slice_name,
+                "label": repr(dataset),
+            }
+            for dataset in datasets
         ]
 
-        templates = db.session.query(ActiveReport).filter(
-            ActiveReport.is_template == True
-        ).all()
+        templates = (
+            db.session.query(ActiveReport)
+            .filter(ActiveReport.is_template == True)
+            .all()
+        )
 
         templates = [
-            {"id": template.id, "name": template.report_name, "report": template.report_data}
+            {
+                "id": template.id,
+                "name": template.report_name,
+                "report": template.report_data,
+            }
             for template in templates
         ]
 
         payload = {
-            "datasets": sorted(
-                datasets,
-                key=lambda d: d['label'].lower() if isinstance(d['label'], str) else "",
-            ),
-            "templates": templates,
+            "datasets": sort(datasets, "label"),
+            "templates": sort(templates, "name"),
             "common": common_bootstrap_payload(),
             "user": bootstrap_user_data(g.user, include_perms=True),
         }
@@ -123,9 +124,10 @@ class ActiveReports(SupersetModelView, ActiveReportsMixin):
             entry="addReport",
             bootstrap_data=json.dumps(
                 payload, default=utils.pessimistic_json_iso_dttm_ser
-            )
+            ),
         )
 
     @expose("/report/<int:report_id>")
+    @has_access
     def report(self, report_id: int) -> FlaskResponse:
         return self.render_app_template()

@@ -14,6 +14,10 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+from typing import Any
+
+from flask_babel import lazy_gettext as _
+
 from sqlalchemy import and_, or_
 from sqlalchemy.orm.query import Query
 
@@ -21,7 +25,6 @@ from superset import db, security_manager
 from superset.models.active_reports import ActiveReport
 from superset.models.slice import Slice
 from superset.views.base import BaseFilter, is_user_admin
-from typing import Any
 
 
 class ActiveReportAccessFilter(BaseFilter):
@@ -47,8 +50,8 @@ class ActiveReportAccessFilter(BaseFilter):
 
         datasource_perm_query = (
             db.session.query(ActiveReport.id)
-                .join(ActiveReport.slices)
-                .filter(
+            .join(ActiveReport.slices)
+            .filter(
                 and_(
                     ActiveReport.published.is_(True),
                     or_(
@@ -62,8 +65,8 @@ class ActiveReportAccessFilter(BaseFilter):
 
         owner_ids_query = (
             db.session.query(ActiveReport.id)
-                .join(ActiveReport.owners)
-                .filter(
+            .join(ActiveReport.owners)
+            .filter(
                 security_manager.user_model.id
                 == security_manager.user_model.get_user_id()
             )
@@ -77,3 +80,18 @@ class ActiveReportAccessFilter(BaseFilter):
         )
 
         return query
+
+
+class ActiveReportAllTextFilter(BaseFilter):  # pylint: disable=too-few-public-methods
+    name = _("All Text")
+    arg_name = "report_all_text"
+
+    def apply(self, query: Query, value: Any) -> Query:
+        if not value:
+            return query
+        ilike_value = f"%{value}%"
+        return query.filter(
+            or_(
+                ActiveReport.report_name.ilike(ilike_value),
+            )
+        )

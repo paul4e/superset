@@ -22,22 +22,20 @@ from flask_appbuilder.models.sqla import Model
 from flask_appbuilder.security.sqla.models import User
 from marshmallow import ValidationError
 
-from superset.commands.base import BaseCommand
-from superset.dao.exceptions import DAOUpdateFailedError
-
-from superset.models.active_reports import ActiveReport
-from superset.active_reports.dao import ActiveReportsDAO
 from superset.active_reports.commands.exceptions import (
-    ActiveReportNotFoundError,
-    ActiveReportUpdateFailedError,
     ActiveReportForbiddenError,
     ActiveReportInvalidError,
+    ActiveReportNotFoundError,
+    ActiveReportUpdateFailedError,
 )
-from superset.exceptions import (
-    SupersetSecurityException,
-)
-from superset.views.base import check_ownership
+from superset.active_reports.dao import ActiveReportsDAO
+from superset.commands.base import BaseCommand
 from superset.commands.utils import populate_owners
+from superset.dao.exceptions import DAOUpdateFailedError
+from superset.exceptions import SupersetSecurityException
+from superset.models.active_reports import ActiveReport
+from superset.views.base import check_ownership
+
 # from superset.models.slice import Slice
 
 logger = logging.getLogger(__name__)
@@ -48,7 +46,8 @@ class UpdateActiveReportCommand(BaseCommand):
         self._actor = user
         self._model_id = model_id
         self._properties = data.copy()
-#         self._model: Optional[ActiveReport] = None
+
+    #         self._model: Optional[ActiveReport] = None
 
     def run(self) -> Model:
         self.validate()
@@ -61,7 +60,7 @@ class UpdateActiveReportCommand(BaseCommand):
         return report
 
     def validate(self) -> None:
-        slices_id: Optional[List[int]] = self._properties.get('slices')
+        slices_id: Optional[List[int]] = self._properties.get("slices")
         exceptions: List[ValidationError] = list()
         owner_ids: Optional[List[int]] = self._properties.get("owners")
 
@@ -82,17 +81,16 @@ class UpdateActiveReportCommand(BaseCommand):
         except ValidationError as ex:
             exceptions.append(ex)
 
-
-#         # Validate/Populate Slices
-#
+        #         # Validate/Populate Slices
+        #
         try:
             slices = ActiveReportsDAO.update_charts_for_report(slices_id)
             self._properties["slices"] = slices
         except Exception as ex:
-            exceptions.append(ex) # fix error msg
+            exceptions.append(ex)  # fix error msg
 
-#         if slices:
-#             self._model.slices = slices
+        #         if slices:
+        #             self._model.slices = slices
 
         if exceptions:
             exception = ActiveReportInvalidError()

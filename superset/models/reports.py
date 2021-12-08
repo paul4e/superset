@@ -36,11 +36,11 @@ from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy_utils import UUIDType
 
 from superset.extensions import security_manager
+from superset.models.active_reports import ActiveReport
 from superset.models.core import Database
 from superset.models.dashboard import Dashboard
 from superset.models.helpers import AuditMixinNullable
 from superset.models.slice import Slice
-from superset.models.active_reports import ActiveReport
 
 metadata = Model.metadata  # pylint: disable=no-member
 

@@ -25,6 +25,7 @@ from flask_babel import ngettext
 from marshmallow import ValidationError
 
 from superset import is_feature_enabled
+from superset.active_reports.filters import ActiveReportAccessFilter  # ARJS
 from superset.charts.filters import ChartFilter
 from superset.constants import MODEL_API_RW_METHOD_PERMISSION_MAP, RouteMethod
 from superset.dashboards.filters import DashboardAccessFilter
@@ -56,8 +57,6 @@ from superset.views.base_api import (
     statsd_metrics,
 )
 from superset.views.filters import FilterRelatedOwners
-
-from superset.active_reports.filters import ActiveReportAccessFilter  # ARJS
 
 logger = logging.getLogger(__name__)
 
@@ -197,10 +196,17 @@ class ReportScheduleRestApi(BaseSupersetModelRestApi):
         "creation_method",
         "dashboard_id",
         "chart_id",
-        "active_reports_id"  # ARJS
+        "active_reports_id",  # ARJS
     ]
     search_filters = {"name": [ReportScheduleAllTextFilter]}
-    allowed_rel_fields = {"owners", "chart", "dashboard", "database", "created_by", "active_report"}  # ARJS
+    allowed_rel_fields = {
+        "owners",
+        "chart",
+        "dashboard",
+        "database",
+        "created_by",
+        "active_report",
+    }  # ARJS
     filter_rel_fields = {
         "chart": [["id", ChartFilter, lambda: []]],
         "dashboard": [["id", DashboardAccessFilter, lambda: []]],

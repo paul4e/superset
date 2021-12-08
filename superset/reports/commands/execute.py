@@ -20,10 +20,10 @@ from datetime import datetime, timedelta
 from io import BytesIO
 from typing import Any, List, Optional
 from uuid import UUID
-import requests
-import prison
 
 import pandas as pd
+import prison
+import requests
 from celery.exceptions import SoftTimeLimitExceeded
 from flask_appbuilder.security.sqla.models import User
 from sqlalchemy.orm import Session
@@ -148,7 +148,7 @@ class BaseReportState:
             if self._report_schedule.active_report:
                 return get_url_path(
                     "ActiveReports.report",
-                    report_id=self._report_schedule.active_report_id
+                    report_id=self._report_schedule.active_report_id,
                 )
 
         if self._report_schedule.chart:
@@ -275,7 +275,9 @@ class BaseReportState:
         """
         arjsserver_endpoint = app.config["ARJSSERVER_ENDPOINT"]
 
-        logger.info(f"Generando reporte tipo {export_type}. ARJSServer: {arjsserver_endpoint}")
+        logger.info(
+            f"Generando reporte tipo {export_type}. ARJSServer: {arjsserver_endpoint}"
+        )
 
         # Obtiene la definicion del reporte ARJS
         report_data = self._report_schedule.active_report.report_data
@@ -291,7 +293,9 @@ class BaseReportState:
             return None
 
         exported_data = result["exportedData"] if result["exportedData"] else None
-        data = exported_data["data"] if (exported_data and exported_data["data"]) else None
+        data = (
+            exported_data["data"] if (exported_data and exported_data["data"]) else None
+        )
         if data:
             result_byte_array = bytearray(data)
         else:
@@ -321,15 +325,15 @@ class BaseReportState:
             # ACTIVE_REPORTS_CODE
             if feature_flag_manager.is_feature_enabled("ACTIVE_REPORTS_JS"):
                 if self._report_schedule.report_format == ReportDataFormat.PDF:
-                    pdf = self._get_arjs_exported_data("pdf");
+                    pdf = self._get_arjs_exported_data("pdf")
                     if not pdf:
                         error_text = "Unexpected missing pdf"
                 if self._report_schedule.report_format == ReportDataFormat.EXCEL:
-                    excel = self._get_arjs_exported_data("excel");
+                    excel = self._get_arjs_exported_data("excel")
                     if not excel:
                         error_text = "Unexpected missing pdf"
                 if self._report_schedule.report_format == ReportDataFormat.HTML:
-                    html = self._get_arjs_exported_data("html");
+                    html = self._get_arjs_exported_data("html")
                     if not html:
                         error_text = "Unexpected missing pdf"
 

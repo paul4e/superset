@@ -16,6 +16,7 @@
 # under the License.
 
 from flask_babel import lazy_gettext as _
+
 from superset.views.active_reports.filters import ActiveReportFilter
 
 
@@ -30,7 +31,10 @@ class ActiveReportsMixin:
         "report_name",
         "owners",
     )
-    list_columns = ["report_name", "creator", ]
+    list_columns = [
+        "report_name",
+        "creator",
+    ]
     order_columns = [
         "report_name",
         "modified",

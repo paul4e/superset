@@ -110,7 +110,9 @@ class EmailNotification(BaseNotification):  # pylint: disable=too-few-public-met
 
         # ARJS
         if self._content.excel:
-            pdf_data = {__("%(name)s.xlsx", name=self._content.name): self._content.excel}
+            pdf_data = {
+                __("%(name)s.xlsx", name=self._content.name): self._content.excel
+            }
             return EmailContent(body=body, images=image, data=pdf_data)
 
         # if self._content.html:

@@ -35,31 +35,49 @@ from superset.utils.core import (
     TimeRangeEndpoint,
 )
 
-report_name_description = (
-    "Nombre del Reporte"
-)
+report_name_description = "Nombre del Reporte"
 
-report_data_description = (
-    "Informacion del reporte"
-)
+report_data_description = "Informacion del reporte"
 
-slices_description = (
-    "Lista de Slices del reporte (Datasets)"
-)
+slices_description = "Lista de Slices del reporte (Datasets)"
 
 published_description = (
-    "Indica si el reporte es visible "
-    "en la lista de todos los reportes."
+    "Indica si el reporte es visible " "en la lista de todos los reportes."
 )
 
-is_template_description = (
-    "Indica si el reporte es un template para generar reportes."
+is_template_description = "Indica si el reporte es un template para generar reportes."
+
+owners_description = (
+    "Owner are users ids allowed to delete or change this dashboard. "
+    "If left empty you will be one of the owners of the dashboard."
 )
+
+openapi_spec_methods_override = {
+    "get": {"get": {"description": "Get a active report detail information."}},
+    "get_list": {
+        "get": {
+            "description": "Get a list of active reports, use Rison or JSON query "
+            "parameters for filtering, sorting, pagination and "
+            " for selecting specific columns and metadata.",
+        }
+    },
+    "info": {
+        "get": {
+            "description": "Several metadata information about active_report API endpoints.",
+        }
+    },
+    "related": {
+        "get": {
+            "description": "Get a list of all possible owners for a active_report. "
+            "Use `owners` has the `column_name` parameter"
+        }
+    },
+}
 
 
 class ActiveReportPostSchema(Schema):
     """
-    Schema to add a new chart.
+    Schema to add a new active report.
     """
 
     report_name = fields.String(
@@ -73,11 +91,12 @@ class ActiveReportPostSchema(Schema):
     slices = fields.List(fields.Integer(description=slices_description))
     published = fields.Boolean(description=published_description, allow_none=True)
     is_template = fields.Boolean(description=is_template_description, allow_none=True)
+    owners = fields.List(fields.Integer(description=owners_description))
 
 
 class ActiveReportPutSchema(Schema):
     """
-    Schema to update or patch a chart
+    Schema to update or patch a active_report
     """
 
     report_name = fields.String(
@@ -91,4 +110,4 @@ class ActiveReportPutSchema(Schema):
     slices = fields.List(fields.Integer(description=slices_description))
     published = fields.Boolean(description=published_description, allow_none=True)
     is_template = fields.Boolean(description=is_template_description, allow_none=True)
-
+    owners = fields.List(fields.Integer(description=owners_description))

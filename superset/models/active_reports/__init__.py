@@ -16,4 +16,3 @@
 # under the License.
 
 from .active_reports import ActiveReport
-

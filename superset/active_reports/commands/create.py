@@ -13,20 +13,20 @@
 
 import logging
 from datetime import datetime
-
-from superset.commands.utils import populate_owners
 from typing import Any, Dict, List, Optional
 
 from flask_appbuilder.models.sqla import Model
 from flask_appbuilder.security.sqla.models import User
 from marshmallow import ValidationError
 
-from superset.commands.base import BaseCommand
-from superset.dao.exceptions import DAOCreateFailedError
-
+from superset.active_reports.commands.exceptions import (
+    ActiveReportCreateFailedError,
+    ActiveReportInvalidError,
+)
 from superset.active_reports.dao import ActiveReportsDAO
-from superset.active_reports.commands.exceptions import ActiveReportCreateFailedError, ActiveReportInvalidError
-
+from superset.commands.base import BaseCommand
+from superset.commands.utils import populate_owners
+from superset.dao.exceptions import DAOCreateFailedError
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +49,7 @@ class CreateActiveReportCommand(BaseCommand):
     def validate(self) -> None:
         exceptions: List[ValidationError] = list()
         owner_ids: Optional[List[int]] = self._properties.get("owners")
-        slices_id: Optional[List[int]] = self._properties.get('slices')
+        slices_id: Optional[List[int]] = self._properties.get("slices")
 
         try:
             owners = populate_owners(self._actor, owner_ids)
@@ -67,5 +67,3 @@ class CreateActiveReportCommand(BaseCommand):
             self._properties["slices"] = slices
         except Exception as e:
             raise e
-
-

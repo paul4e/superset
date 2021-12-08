@@ -27,12 +27,13 @@ from sqlalchemy import (
     Table,
     Text,
 )
-from sqlalchemy.schema import UniqueConstraint
-from superset.models.helpers import AuditMixinNullable
 from sqlalchemy.orm import relationship
-from superset.models.slice import Slice
+from sqlalchemy.schema import UniqueConstraint
+
 from superset import security_manager
 from superset.extensions import db
+from superset.models.helpers import AuditMixinNullable
+from superset.models.slice import Slice
 
 metadata = Model.metadata  # pylint: disable=no-member
 
@@ -70,8 +71,9 @@ class ActiveReport(Model, AuditMixinNullable):
     published = Column(Boolean, default=False)
     is_template = Column(Boolean, default=False)
     owners = relationship(security_manager.user_model, secondary=active_report_user)
-    slices = relationship(Slice, secondary=active_report_slices,
-                          backref="active_reports")
+    slices = relationship(
+        Slice, secondary=active_report_slices, backref="active_reports"
+    )
 
     def __repr__(self) -> str:
         return str(self.report_name)
@@ -91,4 +93,3 @@ class ActiveReport(Model, AuditMixinNullable):
     @property
     def url(self) -> str:
         return f"/active_reports/report/{self.id}"
-
