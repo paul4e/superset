@@ -752,6 +752,7 @@ class Log(Model):  # pylint: disable=too-few-public-methods
 class FavStarClassName(str, enum.Enum):
     CHART = "slice"
     DASHBOARD = "Dashboard"
+    ACTIVE_REPORT = "ActiveReport"
 
 
 class FavStar(Model):  # pylint: disable=too-few-public-methods

@@ -84,8 +84,8 @@ function ReportList(props: ReportListProps) {//@ts-ignore
 
   // const reportIds = useMemo(() => reports.map(d => d.id), [reports]);
   // const [saveFavoriteStatus, favoriteStatus] = useFavoriteStatus(
-  //   'dashboard',
-  //   dashboardIds,
+  //   'active_reports',
+  //   active_reports_ids,
   //   addDangerToast,
   // ); //requiere implementar favstar para reportes
   // const [reportToEdit, setReportToEdit] = useState<Report | null>(

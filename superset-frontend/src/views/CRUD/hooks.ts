@@ -469,6 +469,7 @@ export function useImportResource(
 enum FavStarClassName {
   CHART = 'slice',
   DASHBOARD = 'Dashboard',
+  ACTIVE_REPORTS = 'ActiveReport',
 }
 
 type FavoriteStatusResponse = {
@@ -489,10 +490,15 @@ const favoriteApis = {
     method: 'GET',
     endpoint: '/api/v1/dashboard/favorite_status/',
   }),
+  active_reports: makeApi<Array<string | number>, FavoriteStatusResponse>({
+    requestType: 'rison',
+    method: 'GET',
+    endpoint: '/api/v1/active_reports/favorite_status/',
+  }),
 };
 
 export function useFavoriteStatus(
-  type: 'chart' | 'dashboard',
+  type: 'chart' | 'dashboard' | 'active_reports',
   ids: Array<string | number>,
   handleErrorMsg: (message: string) => void,
 ) {
@@ -526,7 +532,7 @@ export function useFavoriteStatus(
       const urlSuffix = isStarred ? 'unselect' : 'select';
       SupersetClient.get({
         endpoint: `/superset/favstar/${
-          type === 'chart' ? FavStarClassName.CHART : FavStarClassName.DASHBOARD
+          type === 'chart' ? FavStarClassName.CHART : type === 'active_reports' ? FavStarClassName.ACTIVE_REPORTS : FavStarClassName.DASHBOARD
         }/${id}/${urlSuffix}/`,
       }).then(
         ({ json }) => {

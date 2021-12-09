@@ -23,7 +23,7 @@ import {SupersetClient} from "@superset-ui/core";
 export function postActiveReportEndpoint(endpoint: string, report: any) {
   return SupersetClient.post({
     endpoint: `/api/v1/active_reports${endpoint}`,
-    headers: {'Content-Type': 'application/json'},
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(report)
   })
     .then(response => {

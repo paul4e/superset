@@ -98,6 +98,7 @@ function DesignerComponent(props: DesignerComponent) {
 
   useEffect(() => {
     if (listReports.status === 'complete') {
+      // @ts-ignore
       setReportStorage(listReports.result);
     }
   }, [listReports]);
@@ -322,6 +323,7 @@ function DesignerComponent(props: DesignerComponent) {
         <div id="viewer-host">
           {/* @ts-ignore */}
           <Viewer
+            // @ts-ignore
             ref={ViewerRef}
             exportsSettings={exportsSettings}
             availableExports={allExports
@@ -413,6 +415,7 @@ function DesignerComponent(props: DesignerComponent) {
                     className="list-group-item list-group-item-action"
                     onClick={() => onSelectReport(report)}
                   >
+                    {/* @ts-ignore */}
                     {report.report_name}
                   </button>
                 ))}

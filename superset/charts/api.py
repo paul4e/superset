@@ -31,7 +31,7 @@ from marshmallow import ValidationError
 from werkzeug.wrappers import Response as WerkzeugResponse
 from werkzeug.wsgi import FileWrapper
 
-from superset import is_feature_enabled, thumbnail_cache
+from superset import db, is_feature_enabled, thumbnail_cache
 from superset.charts.commands.bulk_delete import BulkDeleteChartCommand
 from superset.charts.commands.create import CreateChartCommand
 from superset.charts.commands.data import ChartDataCommand
@@ -64,8 +64,19 @@ from superset.charts.schemas import (
     screenshot_query_schema,
     thumbnail_query_schema,
 )
+from superset.charts.utils import (
+    convert_datetime,
+    generate_filters,
+    generate_metrics,
+    parse_list_parameter,
+    parse_multiple_list_parameter,
+    parse_time_range_parameter,
+)
 from superset.commands.importers.exceptions import NoValidFilesFoundError
 from superset.commands.importers.v1.utils import get_contents_from_bundle
+from superset.common.query_context import QueryContext
+from superset.common.query_object import QueryObject
+from superset.connectors.sqla.models import SqlaTable
 from superset.constants import MODEL_API_RW_METHOD_PERMISSION_MAP, RouteMethod
 from superset.exceptions import QueryObjectValidationError
 from superset.extensions import event_logger, security_manager
@@ -76,6 +87,7 @@ from superset.utils.core import (
     ChartDataResultFormat,
     ChartDataResultType,
     json_int_dttm_ser,
+    json_iso_dttm_ser,
 )
 from superset.utils.screenshots import ChartScreenshot
 from superset.utils.urls import get_url_path
@@ -86,13 +98,6 @@ from superset.views.base_api import (
 )
 from superset.views.core import CsvResponse, generate_download_headers
 from superset.views.filters import FilterRelatedOwners
-
-from superset.common.query_context import QueryContext
-from superset.common.query_object import QueryObject
-
-from superset.connectors.sqla.models import SqlaTable
-from superset import db
-from superset.charts.utils import parse_list_parameter, parse_time_range_parameter, convert_datetime
 
 logger = logging.getLogger(__name__)
 
@@ -123,7 +128,7 @@ class ChartRestApi(BaseSupersetModelRestApi):
         "screenshot",
         "cache_screenshot",
         "odata",
-        "get_data_test"
+        "get_data_test",
     }
     class_permission_name = "Chart"
     method_permission_name = MODEL_API_RW_METHOD_PERMISSION_MAP
@@ -246,7 +251,7 @@ class ChartRestApi(BaseSupersetModelRestApi):
 
     allowed_rel_fields = {"owners", "created_by"}
 
-    @expose("/odata/<table_name>/<table_schema>", methods=["GET"])
+    @expose("/odata/<slice_id>/<table_name>/<table_schema>", methods=["GET"])
     @protect()
     @safe
     @statsd_metrics
@@ -254,31 +259,48 @@ class ChartRestApi(BaseSupersetModelRestApi):
         action=lambda self, *args, **kwargs: f"{self.__class__.__name__}.get",
         log_to_statsd=False,
     )
-    def odata(self, table_name: str, table_schema: str = None) -> Response:
+    def odata(
+        self, slice_id: int, table_name: str, table_schema: str = None
+    ) -> Response:
         DEBUG_REQ_ARGS = "\n******\nREQUEST ARGS\n******\n"
         DEBUG_REQ_FORM = "\n******\nREQUEST FORM\n******\n"
         logger.debug(request.__dict__.items())
         logger.debug(f"{DEBUG_REQ_ARGS}{request.args}")
         logger.debug(f"{DEBUG_REQ_FORM}{request.form}")
-        data = {"values": {"id": 1,
-                           "text": "Hello world",
-                           'desc': "hola"}}
 
         # Validar si existe la tabla
         if table_schema == "None":
             table_schema = None
 
-        datasource = db.session.query(SqlaTable) \
-            .filter_by(table_name=table_name, schema=table_schema) \
+        datasource = (
+            db.session.query(SqlaTable)
+            .filter_by(table_name=table_name, schema=table_schema)
             .one_or_none()
+        )
 
         if datasource is None:
-            return self.response_400(message="No se ha encontrado el dataset")
+            return self.response_404()
 
         datasource_id = datasource.id
 
+        slice = ChartDAO.find_by_id(slice_id)
+
+        if slice is None:
+            return self.response_404()
+
+        query_context = json.loads(slice.query_context)
+        query = query_context["queries"][0]
+
+        logger.debug("#$$$$$$$$$$$$$$$$ query_context $###########################")
+        logger.debug(query_context)
+        logger.debug(
+            "#$$$$$$$$$$$$$$$$ query_context-query $###########################"
+        )
+        logger.debug(query)
+
         print(
-            f"table_name: {datasource.table_name}, table_schema: {datasource.schema}, datasource_id: {datasource.id}")
+            f"table_name: {datasource.table_name}, table_schema: {datasource.schema}, datasource_id: {datasource.id}, chart datasource_id:{slice.datasource_id}"
+        )
         # Recibir parametros del request/
 
         columns = request.args.get("$columns")
@@ -289,29 +311,37 @@ class ChartRestApi(BaseSupersetModelRestApi):
         row_limit = request.args.get("$top")
         time_range = request.args.get("$time_range")
         granularity = request.args.get("$time_column")
+        replace_filters = request.args.get("$replace_filters")
+        where = request.args.get("$where")
+        having = request.args.get("$having")
 
         # Transformar los parametros listas
 
+        logger.debug(f"\nmetrics\n{metrics}\n")
         columns = parse_list_parameter(columns) if columns else columns
         orderby = parse_list_parameter(orderby) if orderby else orderby
         groupby = parse_list_parameter(groupby) if groupby else groupby
-        filters = parse_list_parameter(filters) if filters else filters
-        metrics = parse_list_parameter(metrics) if metrics else metrics
-        time_range = parse_time_range_parameter(
-            time_range) if time_range else time_range
+        filters = parse_multiple_list_parameter(filters) if filters else filters
+        metrics = parse_multiple_list_parameter(metrics) if metrics else metrics
+        time_range = (
+            parse_time_range_parameter(time_range) if time_range else time_range
+        )
 
         logger.debug(f"table_name: {table_name}, table_schema: {table_schema}")
 
         # Validacion de parametros
 
         logger.debug(f"\nDATASOURCE COLUMNS\n{datasource.columns}\n")
+        logger.debug(f"\nmetrics\n{metrics}\n")
+        logger.debug(f"\nfilters\n{filters}\n")
 
         if columns:
             for column in columns:
                 if column not in datasource.columns:
                     return self.response_400(message="Columna Invalida")
         else:
-            columns = [col.column_name for col in datasource.columns]
+            columns = query["columns"]
+            # columns = [col.column_name for col in datasource.columns]
 
         if groupby:
             for column in groupby:
@@ -330,13 +360,18 @@ class ChartRestApi(BaseSupersetModelRestApi):
                 return self.response_400(message=error)
 
             if not granularity:
-                return self.response_400(message="Es necesario incluir el parametro $time_column cuando se usa $time_range")
+                return self.response_400(
+                    message="Es necesario incluir el parametro $time_column cuando se usa $time_range"
+                )
 
             if granularity not in columns:
-                return self.response_400(message="Se debe incluir la columna de tiempo en el parametro $columns.")
+                return self.response_400(
+                    message="Se debe incluir la columna de tiempo en el parametro $columns."
+                )
             if granularity not in datasource.dttm_cols:
                 return self.response_400(
-                    message="$time_column No es una columna de tiempo Valida del dataset.")
+                    message="$time_column No es una columna de tiempo Valida del dataset."
+                )
 
         if row_limit:
             try:
@@ -344,6 +379,21 @@ class ChartRestApi(BaseSupersetModelRestApi):
             except ValueError as error:
                 return self.response_400(message="$top Espera un valor entero.")
 
+        if metrics:
+            metrics = generate_metrics(metrics, datasource_id)
+            if not metrics:
+                return self.response_400(message="$metrics error!.")
+
+        if filters:
+            filters = generate_filters(filters, datasource_id)
+
+            if not filters:
+                return self.response_400(message="$metrics error!.")
+
+            if not replace_filters:
+                filters = query_context["queries"][0]["filters"] + filters
+
+            logger.debug(f"\n\nfiltersXX:\n{filters}\n\n")
 
         # crear query object
 
@@ -388,41 +438,35 @@ class ChartRestApi(BaseSupersetModelRestApi):
         # result_type: ChartDataResultType
         # result_format: ChartDataResultFormat
 
-
         new_query_context = {
-            "datasource": {
-                "id": datasource_id,
-                "type": "table"
-            },
+            "datasource": {"id": datasource_id, "type": "table"},
             "queries": [
                 {
-                    'time_range': time_range if time_range else 'No filter',
-                    'granularity': granularity,
-                    'filters': [
-                    ],
-                    'extras': {
-                        'time_range_endpoints': [
-                            'inclusive', 'exclusive'
-                        ],
-                        'having': '',
-                        'having_druid': [],
-                        'where': ''
+                    "time_range": time_range if time_range else "No filter",
+                    "granularity": granularity,
+                    "filters": filters if filters else [],
+                    "extras": {
+                        "time_range_endpoints": ["inclusive", "exclusive"],
+                        "having": "",
+                        "having_druid": [],
+                        "where": query_context["queries"][0]["extras"]["where"],
                     },
-                    'applied_time_extras': {},
-                    'columns': columns,
-                    'metrics': [],
-                    'orderby': [],
-                    'annotation_layers': [],
-                    'timeseries_limit': 0,
-                    'order_desc': True,
-                    'url_params': {},
-                    'custom_params': {},
-                    'custom_form_data': {}
+                    "applied_time_extras": {},
+                    "columns": columns,
+                    "metrics": metrics if metrics else [],
+                    "orderby": [],
+                    "annotation_layers": [],
+                    "row_limit": row_limit,
+                    "timeseries_limit": 0,
+                    "order_desc": True,
+                    "url_params": {},
+                    "custom_params": {},
+                    "custom_form_data": {},
                 }
             ],
             "result_format": ChartDataResultFormat.JSON,
             "result_type": ChartDataResultType.RESULTS,
-            "force": False
+            "force": False,
         }
         # query_object.columns = [column.column_name for column in
         #                         query_context.datasource.columns]
@@ -729,6 +773,10 @@ class ChartRestApi(BaseSupersetModelRestApi):
                 default=json_int_dttm_ser,
                 ignore_nan=True,
             )
+            logger.debug(response_data)
+            logger.debug(result["queries"][0])
+            logger.debug(type(result["queries"]))
+            # logger.debug(type(response_data["result"][0]["data"][0]["date"]))
             resp = make_response(response_data, 200)
             resp.headers["Content-Type"] = "application/json; charset=utf-8"
             return resp
@@ -802,6 +850,7 @@ class ChartRestApi(BaseSupersetModelRestApi):
             500:
               $ref: '#/components/responses/500'
         """
+        logger.debug(request)
         chart = self.datamodel.get(pk, self._base_filters)
         logger.debug(chart)
         if not chart:
@@ -905,6 +954,7 @@ class ChartRestApi(BaseSupersetModelRestApi):
             # CSV export submits regular form data
             try:
                 json_body = json.loads(request.form["form_data"])
+
             except (TypeError, json.JSONDecodeError):
                 pass
 
@@ -912,6 +962,7 @@ class ChartRestApi(BaseSupersetModelRestApi):
             return self.response_400(message=_("Request is not JSON"))
 
         try:
+            logger.debug(json_body)
             command = ChartDataCommand()
             query_context = command.set_query_context(json_body)
             command.validate()

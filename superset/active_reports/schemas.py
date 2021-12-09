@@ -35,6 +35,8 @@ from superset.utils.core import (
     TimeRangeEndpoint,
 )
 
+get_fav_star_ids_schema = {"type": "array", "items": {"type": "integer"}}
+
 report_name_description = "Nombre del Reporte"
 
 report_data_description = "Informacion del reporte"

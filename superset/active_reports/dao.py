@@ -28,7 +28,7 @@ from superset.dao.base import BaseDAO
 from superset.extensions import db
 from superset.models.active_reports import ActiveReport
 from superset.models.slice import Slice
-
+from superset.models.core import FavStar, FavStarClassName
 if TYPE_CHECKING:
     from superset.connectors.base.models import BaseDatasource
 
@@ -75,3 +75,18 @@ class ActiveReportsDAO(BaseDAO):
         if not slices:
             raise ChartNotFoundError()
         return slices
+
+    @staticmethod
+    def favorited_ids(
+        active_reports: List[ActiveReport], current_user_id: int
+    ) -> List[FavStar]:
+        ids = [arjs.id for arjs in active_reports]
+        return [
+            star.obj_id
+            for star in db.session.query(FavStar.obj_id)
+                .filter(
+                FavStar.class_name == FavStarClassName.ACTIVE_REPORT,
+                FavStar.obj_id.in_(ids),
+                FavStar.user_id == current_user_id,
+            ).all()
+        ]

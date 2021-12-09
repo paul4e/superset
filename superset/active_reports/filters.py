@@ -25,6 +25,18 @@ from superset import db, security_manager
 from superset.models.active_reports import ActiveReport
 from superset.models.slice import Slice
 from superset.views.base import BaseFilter, is_user_admin
+from superset.models.core import FavStar
+from superset.views.base_api import BaseFavoriteFilter
+
+
+class DashboardFavoriteFilter(BaseFavoriteFilter):
+    """
+    Custom filter for the GET list that filters all dashboards that a user has favored
+    """
+
+    arg_name = "active_report_is_favorite"
+    class_name = "ActiveReport"
+    model = ActiveReport
 
 
 class ActiveReportAccessFilter(BaseFilter):
@@ -72,10 +84,18 @@ class ActiveReportAccessFilter(BaseFilter):
             )
         )
 
+        users_favorite_active_reports_query = db.session.query(FavStar.obj_id).filter(
+            and_(
+                FavStar.user_id == security_manager.user_model.get_user_id(),
+                FavStar.class_name == "ActiveReport",
+            )
+        )
+
         query = query.filter(
             or_(
                 ActiveReport.id.in_(owner_ids_query),
                 ActiveReport.id.in_(datasource_perm_query),
+                ActiveReport.id.in_(users_favorite_active_reports_query)
             )
         )
 
@@ -95,3 +115,15 @@ class ActiveReportAllTextFilter(BaseFilter):  # pylint: disable=too-few-public-m
                 ActiveReport.report_name.ilike(ilike_value),
             )
         )
+
+
+class ActiveReportFilter(BaseFilter):  # pylint: disable=too-few-public-methods
+    def apply(self, query: Query, value: Any) -> Query:
+        query = query.filter(ActiveReport.is_template == False)
+        return query
+
+
+class ActiveReportTemplatesFilter(BaseFilter):  # pylint: disable=too-few-public-methods
+    def apply(self, query: Query, value: Any) -> Query:
+        query = query.filter(ActiveReport.is_template == True)
+        return query

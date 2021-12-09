@@ -17,7 +17,7 @@
 
 from flask_babel import lazy_gettext as _
 
-from superset.views.active_reports.filters import ActiveReportFilter
+from superset.active_reports.filters import ActiveReportAccessFilter
 
 
 class ActiveReportsMixin:
@@ -44,7 +44,7 @@ class ActiveReportsMixin:
         "report_name",
     ]
     base_order = ("changed_on", "desc")
-    base_filters = [["id", ActiveReportFilter, lambda: []]]
+    base_filters = [["id", ActiveReportAccessFilter, lambda: []]]
     label_columns = {
         "report_name": _("Name"),
         "creator": _("Creator"),

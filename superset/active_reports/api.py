@@ -30,6 +30,7 @@ from superset.active_reports.schemas import (
     ActiveReportPostSchema,
     ActiveReportPutSchema,
     openapi_spec_methods_override,
+    get_fav_star_ids_schema,
 )
 from superset.charts.schemas import ChartEntityResponseSchema
 from superset.constants import MODEL_API_RW_METHOD_PERMISSION_MAP, RouteMethod
@@ -60,7 +61,7 @@ class ActiveReportsRestApi(BaseSupersetModelRestApi):
     include_route_methods = RouteMethod.REST_MODEL_VIEW_CRUD_SET | {
         RouteMethod.RELATED,
         "get_charts",
-        "test",
+        "favorite_status",
     }
     class_permission_name = "ActiveReport"
     method_permission_name = MODEL_API_RW_METHOD_PERMISSION_MAP
@@ -392,103 +393,53 @@ class ActiveReportsRestApi(BaseSupersetModelRestApi):
         except ActiveReportNotFoundError:
             return self.response_404()
 
-    # @expose("/<int:report_id>/test/<int:option>", methods=["GET"])
-    # @protect()
-    # @safe
-    # @statsd_metrics
-    # def test(self, report_id: str, option: str) -> Response:
-    #     """Gets the chart definitions for a given report
-    #     ---
-    #     get:
-    #       description: >-
-    #         Get the chart definitions for a given report
-    #       parameters:
-    #       - in: path
-    #         schema:
-    #           type: string
-    #         name: id
-    #       responses:
-    #         200:
-    #           description: Report chart definitions
-    #           content:
-    #             application/json:
-    #               schema:
-    #                 type: object
-    #                 properties:
-    #                   result:
-    #                     type: array
-    #                     items:
-    #                       $ref: '#/components/schemas/ChartEntityResponseSchema'
-    #         302:
-    #           description: Redirects to the current digest
-    #         400:
-    #           $ref: '#/components/responses/400'
-    #         401:
-    #           $ref: '#/components/responses/401'
-    #         404:
-    #           $ref: '#/components/responses/404'
-    #     """
-    #     try:
-    #         report = ActiveReportsDAO.get_by_id(report_id)
-    #         logger.info(report)
-    #         logger.info(report.report_data)
-    #         report_dict = json.loads(report.report_data)
-    #         logger.info(report_dict)
-    #         # arjs_server_endpoint = app.config["ARJSSERVER_ENDPOINT"]
-    #         arjs_server_endpoint = "http://localhost:3000/"
-    #         logger.info(f"option: {option}")
-    #         logger.info(f"option type: {type(option)}")
-    #         if option == 1:
-    #             logger.info("atendiendo opcion 1")
-    #             api_url = arjs_server_endpoint+"arjs/export/pdf"
-    #
-    #         elif option == 2:
-    #             logger.info("atendiendo opcion 2")
-    #             api_url = arjs_server_endpoint + "arjs/export/excel"
-    #
-    #         elif option == 3:
-    #             logger.info("atendiendo opcion 3")
-    #             api_url = arjs_server_endpoint + "arjs/export/html"
-    #
-    #         elif option == 4:
-    #             logger.info("atendiendo opcion 4")
-    #             api_url = arjs_server_endpoint + f"arjs/{report_id}/data"
-    #             logger.info(arjs_server_endpoint)
-    #             logger.info(api_url)
-    #             response = requests.get(api_url)
-    #             logger.info(response.status_code)
-    #             logger.info(response)
-    #             logger.info(type(response))
-    #             logger.info(response.text)
-    #             return self.response(response.status_code, result=response.text)
-    #         else:
-    #             logger.info("atendiendo opcion default")
-    #             api_url = arjs_server_endpoint + f"arjs/{report_id}/data"
-    #             logger.info(arjs_server_endpoint)
-    #             logger.info(api_url)
-    #             response = requests.get(api_url)
-    #             logger.info(response.status_code)
-    #             logger.info(response)
-    #             logger.info(type(response))
-    #             logger.info(response.text)
-    #             return self.response(response.status_code, result=response.text)
-    #
-    #         # arjs_server_endpoint = os.environ.get("ARJSSERVER_ENDPOINT")
-    #         # api_url = arjs_server_endpoint if arjs_server_endpoint is not None else "http://localhost:3000/"
-    #         # api_url = "http://superset-arjs-service:3000/"
-    #         # api_url = "http://localhost:3000/arjs/export/pdf"
-    #         # api_url = "http://localhost:3000/arjs/export/html"
-    #         # api_url = "http://localhost:3000/arjs/export/excel"
-    #         # api_url = "http://localhost:3000/
-    #         response = requests.post(api_url, json=report_dict)
-    #         # response = requests.post(arjs_server_endpoint, json=report_dict)
-    #         # response = requests.get(arjs_server_endpoint+"julio")
-    #         logger.info(response.status_code)
-    #         logger.info(response)
-    #         logger.info(type(response))
-    #         logger.info(response.text)
-    #         # logger.info(response.json())
-    #
-    #         return self.response(response.status_code, result=response.text)
-    #     except ActiveReportNotFoundError:
-    #         return self.response_404()
+    @expose("/favorite_status/", methods=["GET"])
+    @protect()
+    @safe
+    @statsd_metrics
+    @rison(get_fav_star_ids_schema)
+    @event_logger.log_this_with_context(
+        action=lambda self, *args, **kwargs: f"{self.__class__.__name__}.favorite_status",
+        log_to_statsd=False,
+    )
+    def favorite_status(self, **kwargs: Any) -> Response:
+        """Favorite Stars for Active Reports
+        ---
+        get:
+          description: >-
+            Check favorited dashboards for current user
+          parameters:
+          - in: query
+            name: q
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/get_fav_star_ids_schema'
+          responses:
+            200:
+              description:
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/GetFavStarIdsSchema"
+            400:
+              $ref: '#/components/responses/400'
+            401:
+              $ref: '#/components/responses/401'
+            404:
+              $ref: '#/components/responses/404'
+            500:
+              $ref: '#/components/responses/500'
+        """
+        requested_ids = kwargs["rison"]
+        active_reports = ActiveReportsDAO.find_by_ids(requested_ids)
+        if not active_reports:
+            return self.response_404()
+        favorited_active_reports_ids = ActiveReportsDAO.favorited_ids(
+            active_reports, g.user.get_id()
+        )
+        res = [
+            {"id": request_id, "value": request_id in favorited_active_reports_ids}
+            for request_id in requested_ids
+        ]
+        return self.response(200, result=res)
