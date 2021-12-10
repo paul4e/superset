@@ -103,4 +103,5 @@ export enum FilterOperator {
   between = 'between',
   dashboardIsFav = 'dashboard_is_favorite',
   chartIsFav = 'chart_is_favorite',
+  activeReportIsFav = 'active_report_is_favorite',
 }

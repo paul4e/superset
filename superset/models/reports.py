@@ -130,11 +130,11 @@ class ReportSchedule(Model, AuditMixinNullable):
         Dashboard, backref="report_schedules", foreign_keys=[dashboard_id]
     )
 
-    # (Reports) M-O to active_reports
-    active_report_id = Column(Integer, ForeignKey("active_reports.id"), nullable=True)
-    active_report = relationship(
-        ActiveReport, backref="report_schedules", foreign_keys=[active_report_id]
-    )
+#     # (Reports) M-O to active_reports
+#     active_report_id = Column(Integer, ForeignKey("active_reports.id"), nullable=True)
+#     active_report = relationship(
+#         ActiveReport, backref="report_schedules", foreign_keys=[active_report_id]
+#     )
 
     # (Alerts) M-O to database
     database_id = Column(Integer, ForeignKey("dbs.id"), nullable=True)

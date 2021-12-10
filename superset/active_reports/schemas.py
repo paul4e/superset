@@ -90,6 +90,7 @@ class ActiveReportPostSchema(Schema):
         allow_none=True,
         validate=utils.validate_json,
     )
+    owners = fields.List(fields.Integer(description=owners_description))
     slices = fields.List(fields.Integer(description=slices_description))
     published = fields.Boolean(description=published_description, allow_none=True)
     is_template = fields.Boolean(description=is_template_description, allow_none=True)
@@ -109,6 +110,7 @@ class ActiveReportPutSchema(Schema):
         allow_none=True,
         validate=utils.validate_json,
     )
+    owners = fields.List(fields.Integer(description=owners_description))
     slices = fields.List(fields.Integer(description=slices_description))
     published = fields.Boolean(description=published_description, allow_none=True)
     is_template = fields.Boolean(description=is_template_description, allow_none=True)

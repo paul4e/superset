@@ -27,6 +27,7 @@ import {
 import {Input} from "../../../common/components";
 import {getSlices} from "../../utils";
 import {postActiveReportEndpoint} from "../../utils";
+import {addDangerToast, addSuccessToast} from "../../../messageToasts/actions";
 
 interface Dataset {
   label: string;
@@ -230,7 +231,6 @@ function AddReportContainer(
         });
         slices = getSlices(charts);
       }
-      console.log(charts);
       // if(auxDatasourcesTemplates.length !== 0){
       //   auxDatasourcesTemplates.map((templ:any) => {
       //     selectedDatasources.push(templ);
@@ -264,8 +264,7 @@ function AddReportContainer(
       report.slices = slices;
     }
 
-    postActiveReportEndpoint('/', report).then(r => {
-      console.log(r);
+    postActiveReportEndpoint('/', report, addSuccessToast, addDangerToast).then(r => {
       if(r){
         if ("json" in r) {
           const {id} = r.json;
@@ -281,7 +280,8 @@ function AddReportContainer(
       <StyledContainer>
         <Form layout="vertical">
           <h3>{t('New Report')}</h3>
-          <FormItem label={t('Name')} required>
+
+          <FormItem label={t('Name')}>
             <Input
               name="name"
               type="text"
@@ -291,7 +291,26 @@ function AddReportContainer(
               }
             />
           </FormItem>
-          <div className={'dataset'}>
+
+          <div className={'templates'}>
+            <Select
+              mode={'single'}
+              ariaLabel={t('templates')}
+              name="select-template"
+              header={<FormLabel>{t('Select template')}</FormLabel>}
+              onChange={handleOnChangeTemplate}
+              options={templates_list.map(tl => {
+                return {value: tl.id, label: tl.name}
+              })}
+              placeholder={t('Select templates')}
+              showSearch
+              value = { selectedTemplates?.value  }
+            />
+          </div>
+
+          <br />
+
+          <div className={'dataset-active-report'}>
             <Select
               mode={'multiple'}
               ariaLabel={t('Dataset')}
@@ -306,21 +325,9 @@ function AddReportContainer(
               })}
             />
           </div>
-          <div className={'templates'}>
-            <Select
-              ariaLabel={t('templates')}
-              name="select-template"
-              header={<FormLabel required>{t('Select template')}</FormLabel>}
-              onChange={handleOnChangeTemplate}
-              options={templates_list.map(tl => {
-                return {value: tl.id, label: tl.name}
-              })}
-              placeholder={t('Select templates')}
-              showSearch
-              value = { selectedTemplates?.value  }
-            />
-          </div>
+          <hr />
         </Form>
+
         <div className={'Report name'}>
         </div>
         <Button

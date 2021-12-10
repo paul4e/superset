@@ -113,9 +113,9 @@ class ReportScheduleRestApi(BaseSupersetModelRestApi):
         "validator_config_json",
         "validator_type",
         "working_timeout",
-        "active_report.id",  # ARJS
-        "active_report.report_name",  # ARJS
-        "active_report.report_data",  # ARJS
+#         "active_report.id",  # ARJS
+#         "active_report.report_name",  # ARJS
+#         "active_report.report_data",  # ARJS
     ]
     show_select_columns = show_columns + [
         "chart.datasource_id",
@@ -167,7 +167,7 @@ class ReportScheduleRestApi(BaseSupersetModelRestApi):
         "validator_config_json",
         "validator_type",
         "working_timeout",
-        "active_report",  # ARJS
+#         "active_report",  # ARJS
     ]
     edit_columns = add_columns
     add_model_schema = ReportSchedulePostSchema()
@@ -211,20 +211,20 @@ class ReportScheduleRestApi(BaseSupersetModelRestApi):
         "chart": [["id", ChartFilter, lambda: []]],
         "dashboard": [["id", DashboardAccessFilter, lambda: []]],
         "database": [["id", DatabaseFilter, lambda: []]],
-        "active_report": [[["id"], ActiveReportAccessFilter, lambda: []]],  # ARJS
+#         "active_report": [[["id"], ActiveReportAccessFilter, lambda: []]],  # ARJS
     }
     text_field_rel_fields = {
         "dashboard": "dashboard_title",
         "chart": "slice_name",
         "database": "database_name",
-        "active_report": "report_name",  # ARJS
+#         "active_report": "report_name",  # ARJS
     }
     related_field_filters = {
         "dashboard": "dashboard_title",
         "chart": "slice_name",
         "database": "database_name",
         "owners": RelatedFieldFilter("first_name", FilterRelatedOwners),
-        "active_report": "report_name",  # ARJS
+#         "active_report": "report_name",  # ARJS
     }
 
     apispec_parameter_schemas = {
