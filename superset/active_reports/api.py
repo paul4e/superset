@@ -1,8 +1,6 @@
-import json
 import logging
 from typing import Any, Optional
 
-import requests
 from flask import g, request, Response
 from flask_appbuilder.api import expose, permission_name, protect, rison, safe
 from flask_appbuilder.hooks import before_request
@@ -25,6 +23,7 @@ from superset.active_reports.dao import ActiveReportsDAO
 from superset.active_reports.filters import (
     ActiveReportAccessFilter,
     ActiveReportAllTextFilter,
+    ActiveReportFavoriteFilter
 )
 from superset.active_reports.schemas import (
     ActiveReportPostSchema,
@@ -121,7 +120,10 @@ class ActiveReportsRestApi(BaseSupersetModelRestApi):
     )
 
     base_filters = [["id", ActiveReportAccessFilter, lambda: []]]
-    search_filters = {"report_name": [ActiveReportAllTextFilter]}
+    search_filters = {
+        "report_name": [ActiveReportAllTextFilter],
+        "id": [ActiveReportFavoriteFilter]
+    }
     allowed_rel_fields = {"owners", "created_by"}
     related_field_filters = {
         "owners": RelatedFieldFilter("first_name", FilterRelatedOwners),

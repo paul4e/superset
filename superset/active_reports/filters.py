@@ -29,7 +29,7 @@ from superset.models.core import FavStar
 from superset.views.base_api import BaseFavoriteFilter
 
 
-class DashboardFavoriteFilter(BaseFavoriteFilter):
+class ActiveReportFavoriteFilter(BaseFavoriteFilter):
     """
     Custom filter for the GET list that filters all dashboards that a user has favored
     """
