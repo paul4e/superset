@@ -16,17 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'src/components/Modal';
 import { Row, Col, Input } from 'src/common/components';
 import Button from 'src/components/Button';
 import { AsyncSelect } from 'src/components/Select';
-import {t} from '@superset-ui/core';
+import { t } from '@superset-ui/core';
 import { Form, FormItem } from 'src/components/Form';
 import { getClientErrorObject } from 'src/utils/getClientErrorObject';
-import Report from "../../types/Report";
-import {getActiveReportEndpoint, getRelated, getSlices,  putActiveReport} from "../../utils";
-import {addDangerToast, addSuccessToast} from "../../../messageToasts/actions";
+import Report from '../../types/Report';
+import {
+  getActiveReportEndpoint,
+  getRelated,
+  getSlices,
+  putActiveReport,
+} from '../../utils';
+import {
+  addDangerToast,
+  addSuccessToast,
+} from '../../../messageToasts/actions';
 
 type PropertiesModalProps = {
   reportEdit: Report;
@@ -36,11 +44,11 @@ type PropertiesModalProps = {
 };
 
 export default function PropertiesModal({
-    reportEdit,
-    onHide,
-    show,
-    onSave
-  }: PropertiesModalProps) {
+  reportEdit,
+  onHide,
+  show,
+  onSave,
+}: PropertiesModalProps) {
   const [submitting, setSubmitting] = useState(false);
 
   // values of form inputs
@@ -49,7 +57,7 @@ export default function PropertiesModal({
   // const [cacheTimeout, setCacheTimeout] = useState(
   //   slice.cache_timeout != null ? reportEdit.cache_timeout : '',
   // );
-  const [owners, setOwners] = useState<{ value: any; label: string; }[]>();
+  const [owners, setOwners] = useState<{ value: any; label: string }[]>();
   function showError({ error, statusText, message }: any) {
     let errorText = error || statusText || t('An error has occurred');
     if (message === 'Forbidden') {
@@ -62,42 +70,44 @@ export default function PropertiesModal({
     });
   }
 
-  useEffect(() =>{
+  useEffect(() => {
     setOwners(
       reportEdit.owners.map((owner: any) => ({
         value: owner.id,
         label: `${owner.first_name} ${owner.last_name}`,
       })),
     );
-  },[reportEdit.owners])
+  }, [reportEdit.owners]);
   // update name after it's changed in another modal
   useEffect(() => {
     setName(reportEdit.report_name || '');
   }, [reportEdit.report_name]);
 
   const loadOptions = () => {
-    return getRelated( 'owners').then((response) =>{
+    return getRelated('owners').then(
+      response => {
         // @ts-ignore
         const { result } = response.json;
         return result.map((item: any) => ({
           value: item.value,
           label: item.text,
         }));
-    },
-    badResponse => {
-      getClientErrorObject(badResponse).then(showError);
-      return [];
-    },)
+      },
+      badResponse => {
+        getClientErrorObject(badResponse).then(showError);
+        return [];
+      },
+    );
   };
 
   const onSubmit = async (event: React.FormEvent) => {
     event.stopPropagation();
     event.preventDefault();
     setSubmitting(true);
-    let aux_slices: string[] = []
+    let aux_slices: string[] = [];
     const report = {
-      report_name: "",
-      report_data: "",
+      report_name: '',
+      report_data: '',
       slices: aux_slices,
       owners: [],
     };
@@ -107,18 +117,27 @@ export default function PropertiesModal({
       report.owners = owners.map(o => o.value);
     }
 
-    getActiveReportEndpoint(`/${reportEdit.id}`).then((response) => {
-      report.report_name = name;
-      // @ts-ignore
-      if ("json" in response) {
+    getActiveReportEndpoint(`/${reportEdit.id}`, addSuccessToast).then(
+      response => {
+        report.report_name = name;
         // @ts-ignore
-        report.slices = getSlices(JSON.parse(response.json.result.report_data).DataSets);
-        report.report_data = response.json.result.report_data;
-      }
-      putActiveReport(`/${reportEdit.id}`, report, addSuccessToast, addDangerToast);
-      onSave(reportEdit)
-      onHide();
-    })
+        if ('json' in response) {
+          // @ts-ignore
+          report.slices = getSlices(
+            JSON.parse(response.json.result.report_data).DataSets,
+          );
+          report.report_data = response.json.result.report_data;
+        }
+        putActiveReport(
+          `/${reportEdit.id}`,
+          report,
+          addSuccessToast,
+          addDangerToast,
+        );
+        onSave(reportEdit);
+        onHide();
+      },
+    );
     setSubmitting(false);
   };
 

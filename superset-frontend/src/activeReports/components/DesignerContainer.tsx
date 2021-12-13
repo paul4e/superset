@@ -16,21 +16,31 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import React, {useEffect, useState} from 'react';
-import {templates,} from "@grapecity/activereports/reportdesigner";
-import {Report} from 'src/activeReports/types/Report';
-import {Designer, RDLReportDefinition, Viewer} from '@grapecity/activereports-react';
-import {getActiveReportEndpoint, getSlices, postActiveReportEndpoint, putActiveReport} from "../utils";
-import {useReportList} from "../hooks/apiResources/reports";
-import {t} from "@superset-ui/core";
-import "@grapecity/activereports/styles/ar-js-ui.css";
-import "@grapecity/activereports/styles/ar-js-viewer.css";
-import "@grapecity/activereports/pdfexport";
-import "@grapecity/activereports/htmlexport";
-import "@grapecity/activereports/xlsxexport";
-import {Input} from "../../common/components";
-import {Form, FormItem} from "../../components/Form";
+import React, { useEffect, useState } from 'react';
+import { templates } from '@grapecity/activereports/reportdesigner';
+import { Report } from 'src/activeReports/types/Report';
+import {
+  Designer,
+  RDLReportDefinition,
+  Viewer,
+} from '@grapecity/activereports-react';
+import {
+  getActiveReportEndpoint,
+  getSlices,
+  postActiveReportEndpoint,
+  putActiveReport,
+} from '../utils';
+import { useReportList } from '../hooks/apiResources/reports';
+import { t } from '@superset-ui/core';
+import '@grapecity/activereports/styles/ar-js-ui.css';
+import '@grapecity/activereports/styles/ar-js-viewer.css';
+import '@grapecity/activereports/pdfexport';
+import '@grapecity/activereports/htmlexport';
+import '@grapecity/activereports/xlsxexport';
+import { Input } from '../../common/components';
+import { Form, FormItem } from '../../components/Form';
 import { addSuccessToast, addDangerToast } from 'src/messageToasts/actions';
+// import withToasts from 'src/messageToasts/enhancers/withToasts';
 
 interface DesignerComponent {
   report: any;
@@ -103,12 +113,12 @@ function DesignerComponent(props: DesignerComponent) {
   }, [props.report]);
   // ---------------Change of view
   useEffect(() => {
-    if(!designerVisible){
+    if (!designerVisible) {
       var aboutButton = {
-        key: "$about",
-        iconUrl: "",
-        icon: "",
-        text: "Designer",
+        key: '$about',
+        iconUrl: '',
+        icon: '',
+        text: 'Designer',
         enabled: true,
         action: () => setDesignerVisible(true),
       };
@@ -116,9 +126,26 @@ function DesignerComponent(props: DesignerComponent) {
       ViewerRef.current.toolbar.addItem(aboutButton);
       // @ts-ignore
       ViewerRef.current.toolbar.updateLayout({
-        default: ['$about','$split','$navigation', '$split', '$refresh', '$split', '$history', '$split', '$mousemode', '$zoom', '$fullscreen', '$split', '$print', '$singlepagemode', '$continuousmode', '$galleymode'],
-        fullscreen: ["$fullscreen", "$split", "$print", "$split", "$about"],
-        mobile: ["$navigation", "$split", "$about"],
+        default: [
+          '$about',
+          '$split',
+          '$navigation',
+          '$split',
+          '$refresh',
+          '$split',
+          '$history',
+          '$split',
+          '$mousemode',
+          '$zoom',
+          '$fullscreen',
+          '$split',
+          '$print',
+          '$singlepagemode',
+          '$continuousmode',
+          '$galleymode',
+        ],
+        fullscreen: ['$fullscreen', '$split', '$print', '$split', '$about'],
+        mobile: ['$navigation', '$split', '$about'],
       });
     }
   }, [designerVisible]);
@@ -128,12 +155,12 @@ function DesignerComponent(props: DesignerComponent) {
       const report_data = currentReport.report_data as RDLReportDefinition;
       const reportDefinition = {
         definition: report_data,
-        displayName: currentReport.report_name,//report_data.displayName,
+        displayName: currentReport.report_name, //report_data.displayName,
         id: currentReport.report_name,
       } as SaveReportInfo;
       // @ts-ignore
       DesignerRef.current.setReport(reportDefinition);
-      if(isInit){
+      if (isInit) {
         // @ts-ignore
         ViewerRef.current.open(reportDefinition.definition);
         setIsInit(false);
@@ -145,22 +172,21 @@ function DesignerComponent(props: DesignerComponent) {
     const slices: string[] = getSlices(info?.definition?.DataSets);
     if (info.definition.DataSets.length > 0) {
       const report = {
-        "report_data": info.definition,
-        "report_name": info.displayName,
-        "slices": slices
+        report_data: info.definition,
+        report_name: info.displayName,
+        slices: slices,
       };
-      setCurrentReport((current) => {
-        return {...current, ...report};
+      setCurrentReport(current => {
+        return { ...current, ...report };
       });
       report.report_data = JSON.stringify(info.definition);
       putActiveReport(
         `/${currentReport.id}`,
         report,
         addSuccessToast,
-        addDangerToast
-      )
-    }
-    else{
+        addDangerToast,
+      );
+    } else {
       addDangerToast("The report doesn't contain datasets");
     }
     return Promise.resolve({ displayName: info.displayName });
@@ -173,17 +199,17 @@ function DesignerComponent(props: DesignerComponent) {
 
   function onSelectReport(report: any) {
     window.$('#dlgOpen').modal('hide');
-    getActiveReportEndpoint(`/${report.id}`).then(r => {
+    getActiveReportEndpoint(`/${report.id}`, addDangerToast).then(r => {
       setCurrentReport(current => {
         // @ts-ignore
-        return {...current, ..."json" in r ? r.json : null };
+        return { ...current, ...('json' in r ? r.json : null) };
       });
-      if(r){
-        if ("json" in r) {
-          window.location.assign(`/active_reports/report/${r.json.id}`)
+      if (r) {
+        if ('json' in r) {
+          window.location.assign(`/active_reports/report/${r.json.id}`);
         }
       }
-    })
+    });
   }
 
   function onCreateReport() {
@@ -234,17 +260,19 @@ function DesignerComponent(props: DesignerComponent) {
       report_data: JSON.stringify(currentReport.report_data),
       report_name: reportName,
       slices: slices,
-      is_template: checked
-    }
-    postActiveReportEndpoint('/', report, addSuccessToast, addDangerToast).then(r => {
-      if(r){
-        if ("json" in r) {
-          const {id} = r.json;
-          window.location.href = `/active_reports/report/${id}`
+      is_template: checked,
+    };
+    postActiveReportEndpoint('/', report, addSuccessToast, addDangerToast)
+      .then(r => {
+        if (r) {
+          if ('json' in r) {
+            const { id } = r.json;
+            window.location.href = `/active_reports/report/${id}`;
+          }
         }
-      }
-    } ).catch();
-  }
+      })
+      .catch();
+  };
 
   const exportsSettings = {
     pdf: {
@@ -341,7 +369,7 @@ function DesignerComponent(props: DesignerComponent) {
                 </FormItem>
                 {/* @ts-ignore */}
                 <Checkbox
-                  label= '  is template'
+                  label="  is template"
                   checked={checked}
                   onChange={handleCheckbox}
                 />
@@ -380,7 +408,6 @@ function DesignerComponent(props: DesignerComponent) {
               >
                 <span aria-hidden="true">&times;</span>
               </button>
-
             </div>
             <div className="modal-body">
               <div className="list-group">

@@ -17,36 +17,40 @@
  * under the License.
  */
 
-import {SupersetClient, t} from "@superset-ui/core";
-import {FetchDataConfig} from "../components/ListView";
-import {PAGE_SIZE} from "../views/CRUD/utils";
-import Report from "./types/Report";
+import { SupersetClient, t } from '@superset-ui/core';
+import { FetchDataConfig } from '../components/ListView';
+import { PAGE_SIZE } from '../views/CRUD/utils';
+import Report from './types/Report';
 
 export function postActiveReportEndpoint(
   endpoint: string,
   report: any,
   addSuccessToast: (arg0: string) => void,
   addDangerToast: (arg0: string) => void,
-  )
-{
+) {
   return SupersetClient.post({
-      endpoint: `/api/v1/active_reports${endpoint}`,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(report)
+    endpoint: `/api/v1/active_reports${endpoint}`,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(report),
+  })
+    .then(response => {
+      if (
+        response.response.status !== 200 &&
+        response.response.status !== 201
+      ) {
+        addDangerToast(
+          t('An error has ocurred when save: %s', report.report_name),
+        );
+      } else {
+        addSuccessToast(t('Saved: %s', report.report_name));
+      }
+      return response;
     })
-      .then(response => {
-        if(response.response.status !== 200 && response.response.status !== 201){
-          addDangerToast(t('An error has ocurred when save: %s', report.report_name));
-        }
-        else{
-          addSuccessToast(t('Saved: %s', report.report_name));
-        }
-        return response;
-      }).catch(error => alert("An error has occurred, " + error))
+    .catch(error => addDangerToast(t('Error when save report: %s', error)));
 }
 
 export function deleteActiveReport(
-  { id, report_name : report_name }: Report,
+  { id, report_name: report_name }: Report,
   addSuccessToast: (arg0: string) => void,
   addDangerToast: (arg0: string) => void,
   refreshData: (arg0?: FetchDataConfig | null) => void,
@@ -73,7 +77,7 @@ export function deleteActiveReport(
 
   return SupersetClient.delete({
     endpoint: `/api/v1/active_reports/${id}`,
-    headers: {'Content-Type': 'application/json'},
+    headers: { 'Content-Type': 'application/json' },
   }).then(
     () => {
       if (chartFilter === 'Mine') refreshData(filters);
@@ -94,44 +98,51 @@ export function putActiveReport(
 ) {
   return SupersetClient.put({
     endpoint: `/api/v1/active_reports${endpoint}`,
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(report)
-  })
-    .then(response => {
-      if(response.response.status !== 200 && response.response.status !== 201){
-        addDangerToast(t('An error has ocurred when save: %s', report.report_name));
-      }
-      else{
-        addSuccessToast(t('Saved: %s', report.report_name));
-      }
-      return response;
-    })
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(report),
+  }).then(response => {
+    if (response.response.status !== 200 && response.response.status !== 201) {
+      addDangerToast(
+        t('An error has ocurred when save: %s', report.report_name),
+      );
+    } else {
+      addSuccessToast(t('Saved: %s', report.report_name));
+    }
+    return response;
+  });
 }
 
-export function getActiveReportEndpoint(endpoint: string) {
+export function getActiveReportEndpoint(
+  endpoint: string,
+  addDangerToast: (arg0: string) => void,
+) {
   return SupersetClient.get({
     endpoint: `/api/v1/active_reports${endpoint}`,
-    headers: {'Content-Type': 'application/json'},
+    headers: { 'Content-Type': 'application/json' },
   })
     .then(response => {
       return response;
-    }).catch(error => alert("An error has occurred, " + error))
+    })
+    .catch(error =>
+      addDangerToast(t('An error has ocurred when get reports: %s', error)),
+    );
 }
 
 export function getRelated(column_name: string) {
   return SupersetClient.get({
     endpoint: `/api/v1/active_reports/related/${column_name}`,
-    headers: {'Content-Type': 'application/json'},
+    headers: { 'Content-Type': 'application/json' },
   })
     .then(response => {
       return response;
-    }).catch(error => alert("An error has occurred, " + error))
+    })
+    .catch(error => alert('An error has occurred, ' + error));
 }
 
 export const getSlices = (info: any) => {
   const slices: string[] = [];
-  info.map((value:any) => {
-    slices.push(value.Query.CommandText.split("/")[1]);
+  info.map((value: any) => {
+    slices.push(value.Query.CommandText.split('/')[1]);
   });
-  return slices
-}
+  return slices;
+};
