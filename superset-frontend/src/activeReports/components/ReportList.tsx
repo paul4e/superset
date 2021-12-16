@@ -41,6 +41,7 @@ import PropertiesReportModal from './Modal/PropertiesModal';
 import { deleteActiveReport, getActiveReportEndpoint } from '../utils';
 import { useFavoriteStatus } from '../../views/CRUD/hooks';
 import FaveStar from '../../components/FaveStar';
+import ReportCard from './ReportCard';
 const PAGE_SIZE = 25;
 
 interface ReportListProps {
@@ -56,6 +57,7 @@ interface Report {
   changed_by_url: string;
   changed_on_delta_humanized: string;
   changed_by: Owner;
+  changed_on: string;
   report_name: string;
   id: number;
   published: boolean;
@@ -408,6 +410,29 @@ function ReportList(props: ReportListProps) {
     },
   ];
 
+  function renderCard(report: Report) {
+    return (
+      <ReportCard
+        report={report}
+        showThumbnails={
+          userKey
+            ? userKey.thumbnails
+            : isFeatureEnabled(FeatureFlag.THUMBNAILS)
+        }
+        hasPerm={hasPerm}
+        openReportEditModal={openReportEditModal}
+        bulkSelectEnabled={bulkSelectEnabled}
+        addDangerToast={addDangerToast}
+        addSuccessToast={addSuccessToast}
+        refreshData={refreshData}
+        loading={loading}
+        favoriteStatus={favoriteStatus[report.id]}
+        saveFavoriteStatus={saveFavoriteStatus}
+        //handleBulkChartExport={handleBulkChartExport}
+      />
+    );
+  }
+
   function handleBulkReportDelete(reportsToDelete: Report[]) {
     reportsToDelete.map((value: any) => {
       const endpoint = '/' + value.id;
@@ -567,12 +592,11 @@ function ReportList(props: ReportListProps) {
                     ? userKey.thumbnails
                     : isFeatureEnabled(FeatureFlag.THUMBNAILS)
                 }
-                renderCard={undefined} //renderCard
+                renderCard={renderCard}
                 defaultViewMode={
-                  'table'
-                  // isFeatureEnabled(FeatureFlag.LISTVIEWS_DEFAULT_CARD_VIEW)
-                  //   ? 'card'
-                  //   : 'table'
+                  isFeatureEnabled(FeatureFlag.LISTVIEWS_DEFAULT_CARD_VIEW)
+                    ? 'card'
+                    : 'table'
                 }
               />
             </>

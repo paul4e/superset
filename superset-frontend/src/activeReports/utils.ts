@@ -17,10 +17,21 @@
  * under the License.
  */
 
-import { SupersetClient, t } from '@superset-ui/core';
+import { styled, SupersetClient, t } from '@superset-ui/core';
 import { FetchDataConfig } from '../components/ListView';
 import { PAGE_SIZE } from '../views/CRUD/utils';
 import Report from './types/Report';
+
+export const CardStyles = styled.div`
+  cursor: pointer;
+  a {
+    text-decoration: none;
+  }
+  .ant-card-cover > div {
+    /* Height is calculated based on 300px width, to keep the same aspect ratio as the 800*450 thumbnails */
+    height: 168px;
+  }
+`;
 
 export function postActiveReportEndpoint(
   endpoint: string,
