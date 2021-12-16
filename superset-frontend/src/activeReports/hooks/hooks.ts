@@ -1,10 +1,9 @@
-import {useCallback, useEffect, useState} from "react";
-import {FetchDataConfig, FilterValue} from "../../components/ListView";
-import Report from "../types/Report";
-import {SupersetClient, t} from "@superset-ui/core";
-import rison from "rison";
-import {createErrorHandler} from "../../views/CRUD/utils";
-// import {FavoriteStatus} from "../../views/CRUD/types";
+import { useCallback, useEffect, useState } from 'react';
+import { FetchDataConfig, FilterValue } from '../../components/ListView';
+import Report from '../types/Report';
+import { SupersetClient, t } from '@superset-ui/core';
+import rison from 'rison';
+import { createErrorHandler } from '../../views/CRUD/utils';
 
 interface ListViewResourceState<D extends object = any> {
   loading: boolean;
@@ -63,7 +62,6 @@ export function useListViewResource<D extends object = any>(
         ),
       ),
     );
-    console.log(state.permissions)
   }, []);
 
   function hasPerm(perm: string) {
@@ -75,11 +73,11 @@ export function useListViewResource<D extends object = any>(
 
   const fetchData = useCallback(
     ({
-       pageIndex,
-       pageSize,
-       sortBy,
-       filters: filterValues,
-     }: FetchDataConfig) => {
+      pageIndex,
+      pageSize,
+      sortBy,
+      filters: filterValues,
+    }: FetchDataConfig) => {
       // set loading state, cache the last config for refreshing data.
       updateState({
         lastFetchDataConfig: {
@@ -162,8 +160,8 @@ export function useListViewResource<D extends object = any>(
   };
 }
 
-  // @ts-ignore
-  export const useReportEditModal = (
+// @ts-ignore
+export const useReportEditModal = (
   setReports: (report: Array<Report>) => void,
   reports: Array<Report>,
 ) => {
@@ -179,12 +177,13 @@ export function useListViewResource<D extends object = any>(
       report_name: report.report_name,
       report_data: report.report_data,
       thumbnail_url: report.thumbnail_url,
+      changed_on_delta_humanized: report.changed_on_delta_humanized,
       published: report.published,
       changed_by_name: report.changed_by_name,
       changed_by: report.changed_by,
       changed_on: report.changed_on,
       owners: report.owners,
-      is_template: report.is_template
+      is_template: report.is_template,
     });
   }
 
