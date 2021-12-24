@@ -16,24 +16,32 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import {styled, t} from '@superset-ui/core';//@ts-ignore
-import React, {useMemo, useState} from 'react';
+import { styled, SupersetClient, t } from '@superset-ui/core'; //@ts-ignore
+import React, { useMemo, useState } from 'react';
 import Owner from 'src/types/Owner';
-import withToasts from "../../messageToasts/enhancers/withToasts";
-import SubMenu, {SubMenuProps} from "../../components/Menu/SubMenu";
-import ConfirmStatusChange from "../../components/ConfirmStatusChange";
-import ListView, {FilterOperator, Filters, ListViewProps} from "../../components/ListView";
-import {FeatureFlag, isFeatureEnabled} from "../../featureFlags";
-import {useListViewResource} from "../../views/CRUD/hooks";
-import {getFromLocalStorage} from "../../utils/localStorageHelpers";
-import {Link} from "react-router-dom";
-import {DashboardStatus} from "../../views/CRUD/dashboard/types";
-import FacePile from "../../components/FacePile";
-import {createErrorHandler, createFetchRelated} from "../../views/CRUD/utils";
-import {deleteActiveReportEndpoint} from "../utils";
-// import {Tooltip} from "../../components/Tooltip";
-// import Icons from "../../components/Icons";
-
+import withToasts from '../../messageToasts/enhancers/withToasts';
+import SubMenu, { SubMenuProps } from '../../components/Menu/SubMenu';
+import ConfirmStatusChange from '../../components/ConfirmStatusChange';
+import ListView, {
+  Filter,
+  FilterOperator,
+  Filters,
+  ListViewProps,
+} from '../../components/ListView';
+import { FeatureFlag, isFeatureEnabled } from '../../featureFlags';
+import { useListViewResource } from '../hooks/hooks';
+import { getFromLocalStorage } from '../../utils/localStorageHelpers';
+import { Link } from 'react-router-dom';
+import { DashboardStatus } from '../../views/CRUD/dashboard/types';
+import FacePile from '../../components/FacePile';
+import { createErrorHandler, createFetchRelated } from '../../views/CRUD/utils';
+import { Tooltip } from '../../components/Tooltip';
+import Icons from 'src/components/Icons';
+import PropertiesReportModal from './Modal/PropertiesModal';
+import { deleteActiveReport, getActiveReportEndpoint } from '../utils';
+import { useFavoriteStatus } from '../../views/CRUD/hooks';
+import FaveStar from '../../components/FaveStar';
+import ReportCard from './ReportCard';
 const PAGE_SIZE = 25;
 
 interface ReportListProps {
@@ -48,33 +56,35 @@ interface Report {
   changed_by_name: string;
   changed_by_url: string;
   changed_on_delta_humanized: string;
-  changed_by: string;
+  changed_by: Owner;
+  changed_on: string;
   report_name: string;
   id: number;
   published: boolean;
   url: string;
-  // thumbnail_url: string;
+  thumbnail_url: string;
   owners: Owner[];
   created_by: object;
 }
 //@ts-ignore
 const Actions = styled.div`
-  color: ${({theme}) => theme.colors.grayscale.base};
+  color: ${({ theme }) => theme.colors.grayscale.base};
 `;
 //@ts-ignore
-function ReportList(props: ReportListProps) {//@ts-ignore
-  const {addDangerToast, addSuccessToast} = props;
+function ReportList(props: ReportListProps) {
+  //@ts-ignore
+  const { addDangerToast, addSuccessToast } = props;
   const {
     state: {
       loading,
       resourceCount: dashboardCount,
       resourceCollection: reports,
       bulkSelectEnabled,
-    },//@ts-ignore
+    }, //@ts-ignore
     setResourceCollection: setReports,
     hasPerm,
     fetchData,
-    toggleBulkSelect,//@ts-ignore
+    toggleBulkSelect, //@ts-ignore
     refreshData,
   } = useListViewResource<Report>(
     'active_reports',
@@ -82,21 +92,18 @@ function ReportList(props: ReportListProps) {//@ts-ignore
     addDangerToast,
   );
 
-  // const reportIds = useMemo(() => reports.map(d => d.id), [reports]);
-  // const [saveFavoriteStatus, favoriteStatus] = useFavoriteStatus(
-  //   'active_reports',
-  //   active_reports_ids,
-  //   addDangerToast,
-  // ); //requiere implementar favstar para reportes
-  // const [reportToEdit, setReportToEdit] = useState<Report | null>(
-  //   null,
-  // );
+  const reportIds = useMemo(() => reports.map(r => r.id), [reports]);
+  const [saveFavoriteStatus, favoriteStatus] = useFavoriteStatus(
+    'active_reports',
+    reportIds,
+    addDangerToast,
+  );
 
   // const [importingDashboard, showImportModal] = useState<boolean>(false);
   // const [passwordFields, setPasswordFields] = useState<string[]>([]);
   // const [preparingExport, setPreparingExport] = useState<boolean>(false);
 
-// Import modal.
+  // Import modal.
   // const openDashboardImportModal = () => {
   //   showImportModal(true);
   // };
@@ -110,7 +117,7 @@ function ReportList(props: ReportListProps) {//@ts-ignore
   //   refreshData();
   // };
 
-  const {userId} = props.user;
+  const { userId } = props.user;
   const userKey = getFromLocalStorage(userId.toString(), null);
 
   const canCreate = hasPerm('can_write');
@@ -118,61 +125,62 @@ function ReportList(props: ReportListProps) {//@ts-ignore
   const canDelete = hasPerm('can_write');
   const canExport = hasPerm('can_read');
 
-  const initialSort = [{id: 'changed_on_delta_humanized', desc: true}];
-
+  const initialSort = [{ id: 'changed_on_delta_humanized', desc: true }];
+  // @ts-ignore
+  const [reportToEdit, setReportToEdit] = useState<Report | null>(null);
 
   const columns = useMemo(
     () => [
-      // ...(props.user.userId
-      //   ? [
-      //     {
-      //       Cell: ({
-      //                row: {
-      //                  original: {id},
-      //                },
-      //              }: any) => (
-      //         <FaveStar
-      //           itemId={id}
-      //           saveFaveStar={saveFavoriteStatus}
-      //           isStarred={favoriteStatus[id]}
-      //         />
-      //       ),
-      //       Header: '',
-      //       id: 'id',
-      //       disableSortBy: true,
-      //       size: 'xs',
-      //     },
-      //   ]
-      //   : []),
+      ...(props.user.userId
+        ? [
+            {
+              Cell: ({
+                row: {
+                  original: { id },
+                },
+              }: any) => (
+                <FaveStar
+                  itemId={id}
+                  saveFaveStar={saveFavoriteStatus}
+                  isStarred={favoriteStatus[id]}
+                />
+              ),
+              Header: '',
+              id: 'id',
+              disableSortBy: true,
+              size: 'xs',
+            },
+          ]
+        : []),
       {
         Cell: ({
-                 row: {
-                   original: {url, report_name: reportName},
-                 },
-               }: any) => <Link to={url}>{reportName}</Link>,
+          row: {
+            original: { url, report_name: reportName },
+          },
+        }: any) => <Link to={url}>{reportName}</Link>,
         Header: t('Title'),
         accessor: 'report_name',
       },
 
       {
         Cell: ({
-                 row: {
-                   original: {
-                     changed_by_name: changedByName,
-                     changed_by_url: changedByUrl,
-                   },
-                 },
-               }: any) => <a href={changedByUrl}>{changedByName}</a>,
+          row: {
+            original: {
+              changed_by_name: changedByName,
+              changed_by_url: changedByUrl,
+            },
+          },
+        }: any) => <a href={changedByUrl}>{changedByName}</a>,
         Header: t('Modified by'),
         accessor: 'changed_by.first_name',
         size: 'xl',
       },
       {
         Cell: ({
-                 row: {
-                   original: {status},
-                 },
-               }: any) =>
+          row: {
+            original: { status },
+          },
+        }: any) =>
           status === DashboardStatus.PUBLISHED ? t('Published') : t('Draft'),
         Header: t('Status'),
         accessor: 'published',
@@ -180,20 +188,20 @@ function ReportList(props: ReportListProps) {//@ts-ignore
       },
       {
         Cell: ({
-                 row: {
-                   original: {changed_on_delta_humanized: changedOn},
-                 },
-               }: any) => <span className="no-wrap">{changedOn}</span>,
+          row: {
+            original: { changed_on_delta_humanized: changedOn },
+          },
+        }: any) => <span className="no-wrap">{changedOn}</span>,
         Header: t('Modified'),
         accessor: 'changed_on_delta_humanized',
         size: 'xl',
       },
       {
         Cell: ({
-                 row: {
-                   original: {created_by: createdBy},
-                 },
-               }: any) =>
+          row: {
+            original: { created_by: createdBy },
+          },
+        }: any) =>
           createdBy ? `${createdBy.first_name} ${createdBy.last_name}` : '',
         Header: t('Created by'),
         accessor: 'created_by',
@@ -202,109 +210,121 @@ function ReportList(props: ReportListProps) {//@ts-ignore
       },
       {
         Cell: ({
-                 row: {
-                   original: {owners = []},
-                 },
-               }: any) => <FacePile users={owners}/>,
+          row: {
+            original: { owners = [] },
+          },
+        }: any) => <FacePile users={owners} />,
         Header: t('Owners'),
         accessor: 'owners',
         disableSortBy: true,
         size: 'xl',
       },
-      // {
-      //   Cell: ({row: {original}}: any) => {
-      //     const handleDelete = () =>
-      //       handleDashboardDelete(
-      //         original,
-      //         refreshData,
-      //         addSuccessToast,
-      //         addDangerToast,
-      //       );
-      //     const handleEdit = () => openDashboardEditModal(original);
-      //     const handleExport = () => handleBulkDashboardExport([original]);
-      //
-      //     return (
-      //       <Actions className="actions">
-      //         {canDelete && (
-      //           <ConfirmStatusChange
-      //             title={t('Please confirm')}
-      //             description={
-      //               <>
-      //                 {t('Are you sure you want to delete')}{' '}
-      //                 <b>{original.dashboard_title}</b>?
-      //               </>
-      //             }
-      //             onConfirm={handleDelete}
-      //           >
-      //             {confirmDelete => (
-      //               <Tooltip
-      //                 id="delete-action-tooltip"
-      //                 title={t('Delete')}
-      //                 placement="bottom"
-      //               >
-      //                 <span
-      //                   role="button"
-      //                   tabIndex={0}
-      //                   className="action-button"
-      //                   onClick={confirmDelete}
-      //                 >
-      //                   <Icons.Trash data-test="dashboard-list-trash-icon"/>
-      //                 </span>
-      //               </Tooltip>
-      //             )}
-      //           </ConfirmStatusChange>
-      //         )}
-      //         {canExport && (
-      //           <Tooltip
-      //             id="export-action-tooltip"
-      //             title={t('Export')}
-      //             placement="bottom"
-      //           >
-      //             <span
-      //               role="button"
-      //               tabIndex={0}
-      //               className="action-button"
-      //               onClick={handleExport}
-      //             >
-      //               <Icons.Share/>
-      //             </span>
-      //           </Tooltip>
-      //         )}
-      //         {canEdit && (
-      //           <Tooltip
-      //             id="edit-action-tooltip"
-      //             title={t('Edit')}
-      //             placement="bottom"
-      //           >
-      //             <span
-      //               role="button"
-      //               tabIndex={0}
-      //               className="action-button"
-      //               onClick={handleEdit}
-      //             >
-      //               <Icons.EditAlt data-test="edit-alt"/>
-      //             </span>
-      //           </Tooltip>
-      //         )}
-      //       </Actions>
-      //     );
-      //   },
-      //   Header: t('Actions'),
-      //   id: 'actions',
-      //   hidden: !canEdit && !canDelete && !canExport,
-      //   disableSortBy: true,
-      // },
+      {
+        Cell: ({ row: { original } }: any) => {
+          const handleDelete = () =>
+            deleteActiveReport(
+              original,
+              addSuccessToast,
+              addDangerToast,
+              refreshData,
+            );
+          const handleEdit = () => openReportEditModal(original);
+
+          return (
+            <Actions className="actions">
+              {canDelete && (
+                <ConfirmStatusChange
+                  title={t('Please confirm')}
+                  description={
+                    <>
+                      {t('Are you sure you want to delete')}{' '}
+                      <b>{original.report_name}</b>?
+                    </>
+                  }
+                  onConfirm={handleDelete}
+                >
+                  {confirmDelete => (
+                    <Tooltip
+                      id="delete-action-tooltip"
+                      title={t('Delete')}
+                      placement="bottom"
+                    >
+                      <span
+                        role="button"
+                        tabIndex={0}
+                        className="action-button"
+                        onClick={confirmDelete}
+                      >
+                        <Icons.Trash data-test="dashboard-list-trash-icon" />
+                      </span>
+                    </Tooltip>
+                  )}
+                </ConfirmStatusChange>
+              )}
+              {/*{canExport && (*/}
+              {/*  <Tooltip*/}
+              {/*    id="export-action-tooltip"*/}
+              {/*    title={t('Export')}*/}
+              {/*    placement="bottom"*/}
+              {/*  >*/}
+              {/*    <span*/}
+              {/*      role="button"*/}
+              {/*      tabIndex={0}*/}
+              {/*      className="action-button"*/}
+              {/*      onClick={handleExport}*/}
+              {/*    >*/}
+              {/*      <Icons.Share/>*/}
+              {/*    </span>*/}
+              {/*  </Tooltip>*/}
+              {/*)}*/}
+              {canEdit && (
+                <Tooltip
+                  id="edit-action-tooltip"
+                  title={t('Edit')}
+                  placement="bottom"
+                >
+                  <span
+                    role="button"
+                    tabIndex={0}
+                    className="action-button"
+                    onClick={handleEdit}
+                  >
+                    <Icons.EditAlt data-test="edit-alt" />
+                  </span>
+                </Tooltip>
+              )}
+            </Actions>
+          );
+        },
+        Header: t('Actions'),
+        id: 'actions',
+        hidden: !canEdit && !canDelete && !canExport,
+        disableSortBy: true,
+      },
     ],
     [
       canEdit,
       canDelete,
       canExport,
-      // ...(props.user.userId ? [favoriteStatus] : []),
+      ...(props.user.userId ? [favoriteStatus] : []),
     ],
   );
-  // function openDashboardEditModal(dashboard: Dashboard) {
-  //   setDashboardToEdit(dashboard);
-  // }
+  function openReportEditModal(report: Report) {
+    setReportToEdit(report);
+  }
+
+  const favoritesFilter: Filter = {
+    Header: t('Favorite'),
+    id: 'id',
+    urlDisplay: 'favorite',
+    input: 'select',
+    operator: FilterOperator.activeReportIsFav,
+    unfilteredLabel: t('Any'),
+    selects: [
+      { label: t('Yes'), value: true },
+      { label: t('No'), value: false },
+    ],
+  };
 
   const filters: Filters = [
     {
@@ -360,7 +380,7 @@ function ReportList(props: ReportListProps) {//@ts-ignore
     //     { label: t('Draft'), value: false },
     //   ],
     // },
-    // ...(props.user.userId ? [favoritesFilter] : []),
+    ...(props.user.userId ? [favoritesFilter] : []),
     {
       Header: t('Search'),
       id: 'report_name',
@@ -390,14 +410,105 @@ function ReportList(props: ReportListProps) {//@ts-ignore
     },
   ];
 
-  function deleteReport( e: any ){
-    e.map((value:any)=> {
-      const endpoint = '/' + value.id;
-      deleteActiveReportEndpoint(endpoint);
-    })
-    window.location.href = `/active_reports/list`
+  function renderCard(report: Report) {
+    return (
+      <ReportCard
+        report={report}
+        showThumbnails={
+          userKey
+            ? userKey.thumbnails
+            : isFeatureEnabled(FeatureFlag.THUMBNAILS)
+        }
+        hasPerm={hasPerm}
+        openReportEditModal={openReportEditModal}
+        bulkSelectEnabled={bulkSelectEnabled}
+        addDangerToast={addDangerToast}
+        addSuccessToast={addSuccessToast}
+        refreshData={refreshData}
+        loading={loading}
+        favoriteStatus={favoriteStatus[report.id]}
+        saveFavoriteStatus={saveFavoriteStatus}
+        //handleBulkChartExport={handleBulkChartExport}
+      />
+    );
   }
-  //render card
+
+  function handleBulkReportDelete(reportsToDelete: Report[]) {
+    reportsToDelete.map((value: any) => {
+      const endpoint = '/' + value.id;
+      SupersetClient.delete({
+        endpoint: `/api/v1/active_reports/${endpoint}`,
+      }).then(
+        ({ json = {} }) => {
+          refreshData();
+          addSuccessToast(json.message);
+        },
+        createErrorHandler(errMsg =>
+          addDangerToast(
+            t('There was an issue deleting the selected charts: %s', errMsg),
+          ),
+        ),
+      );
+    });
+  }
+
+  function handleReportdEdit(report: Report) {
+    getActiveReportEndpoint(`/`, addDangerToast).then(response => {
+      let aux: {} = {};
+      // @ts-ignore
+      response.json.result.map(r => {
+        if (r.id === report.id) {
+          aux = r;
+        }
+      });
+      setReports(
+        reports.map(report => {
+          // @ts-ignore
+          if (report.id === aux.id) {
+            const {
+              // @ts-ignore
+              changed_by_name,
+              // @ts-ignore
+              changed_by_url,
+              // @ts-ignore
+              changed_on_delta_humanized,
+              // @ts-ignore
+              changed_by,
+              // @ts-ignore
+              changed_on,
+              // @ts-ignore
+              report_name,
+              // @ts-ignore
+              id,
+              // @ts-ignore
+              url,
+              // @ts-ignore
+              thumbnail_url,
+              // @ts-ignore
+              owners,
+              // @ts-ignore
+              created_by,
+            } = aux;
+            return {
+              ...report,
+              changed_by_name,
+              changed_by_url,
+              changed_on_delta_humanized,
+              changed_by,
+              changed_on,
+              report_name,
+              id,
+              url,
+              thumbnail_url,
+              owners,
+              created_by,
+            };
+          }
+          return report;
+        }),
+      );
+    });
+  }
 
   const subMenuButtons: SubMenuProps['buttons'] = [];
   if (canDelete || canExport) {
@@ -424,13 +535,11 @@ function ReportList(props: ReportListProps) {//@ts-ignore
 
   return (
     <>
-      <SubMenu name={t('Active Reports')} buttons={subMenuButtons}/>
+      <SubMenu name={t('Active Reports')} buttons={subMenuButtons} />
       <ConfirmStatusChange
         title={t('Please confirm')}
-        description={t(
-          'Are you sure you want to delete the selected dashboards?',
-        )}
-        onConfirm={deleteReport}//handleBulkDashboardDelete
+        description={t('Are you sure you want to delete the selected reports?')}
+        onConfirm={handleBulkReportDelete}
       >
         {confirmDelete => {
           const bulkActions: ListViewProps['bulkActions'] = [];
@@ -447,19 +556,23 @@ function ReportList(props: ReportListProps) {//@ts-ignore
               key: 'export',
               name: t('Export'),
               type: 'primary',
-              onSelect: () => console.log("handleBulkDashboardExport"),//handleBulkDashboardExport,
+              onSelect: () => console.log('handleBulkDashboardExport'), //handleBulkDashboardExport,
             });
           }
+
+          // @ts-ignore
           return (
             <>
-              {/*{dashboardToEdit && (*/}
-              {/*  <PropertiesModal*/}
-              {/*    dashboardId={dashboardToEdit.id}*/}
-              {/*    show*/}
-              {/*    onHide={() => setDashboardToEdit(null)}*/}
-              {/*    onSubmit={() => {console.log('handle report edit')}} //handleDashboardEdit*/}
-              {/*  />*/}
-              {/*)}*/}
+              {/*@ts-ignore*/}
+              {reportToEdit && (
+                <PropertiesReportModal
+                  reportEdit={reportToEdit}
+                  show
+                  onHide={() => setReportToEdit(null)}
+                  /*@ts-ignore*/
+                  onSave={handleReportdEdit}
+                />
+              )}
               <ListView<Report>
                 bulkActions={bulkActions}
                 bulkSelectEnabled={bulkSelectEnabled}
@@ -479,12 +592,11 @@ function ReportList(props: ReportListProps) {//@ts-ignore
                     ? userKey.thumbnails
                     : isFeatureEnabled(FeatureFlag.THUMBNAILS)
                 }
-                renderCard={undefined} //renderCard
+                renderCard={renderCard}
                 defaultViewMode={
-                  'table'
-                  // isFeatureEnabled(FeatureFlag.LISTVIEWS_DEFAULT_CARD_VIEW)
-                  //   ? 'card'
-                  //   : 'table'
+                  isFeatureEnabled(FeatureFlag.LISTVIEWS_DEFAULT_CARD_VIEW)
+                    ? 'card'
+                    : 'table'
                 }
               />
             </>
@@ -509,6 +621,5 @@ function ReportList(props: ReportListProps) {//@ts-ignore
     </>
   );
 }
-
 
 export default withToasts(ReportList);

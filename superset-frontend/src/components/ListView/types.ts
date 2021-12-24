@@ -105,4 +105,5 @@ export enum FilterOperator {
   chartIsFav = 'chart_is_favorite',
   engine_name = 'engine_name',
   title_or_name = 'title_or_name',
+  activeReportIsFav = 'active_report_is_favorite',
 }

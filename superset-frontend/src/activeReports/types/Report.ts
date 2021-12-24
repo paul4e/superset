@@ -22,6 +22,7 @@ export interface Report {
   id: number;
   url: string;
   report_name: string;
+  changed_on_delta_humanized: string;
   report_data?: string | null;
   thumbnail_url: string;
   published: boolean;

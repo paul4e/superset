@@ -17,73 +17,143 @@
  * under the License.
  */
 
-import {SupersetClient} from "@superset-ui/core";
+import { styled, SupersetClient, t } from '@superset-ui/core';
+import { FetchDataConfig } from '../components/ListView';
+import { PAGE_SIZE } from '../views/CRUD/utils';
+import Report from './types/Report';
 
+export const CardStyles = styled.div`
+  cursor: pointer;
+  a {
+    text-decoration: none;
+  }
+  .ant-card-cover > div {
+    /* Height is calculated based on 300px width, to keep the same aspect ratio as the 800*450 thumbnails */
+    height: 168px;
+  }
+`;
 
-export function postActiveReportEndpoint(endpoint: string, report: any) {
+export function postActiveReportEndpoint(
+  endpoint: string,
+  report: any,
+  addSuccessToast: (arg0: string) => void,
+  addDangerToast: (arg0: string) => void,
+) {
   return SupersetClient.post({
     endpoint: `/api/v1/active_reports${endpoint}`,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(report)
+    body: JSON.stringify(report),
   })
     .then(response => {
-      if(response.response.status !== 200){
-        alert("An error has occurred");
+      if (
+        response.response.status !== 200 &&
+        response.response.status !== 201
+      ) {
+        addDangerToast(
+          t('An error has ocurred when save: %s', report.report_name),
+        );
+      } else {
+        addSuccessToast(t('Saved: %s', report.report_name));
       }
       return response;
-    }).catch(error => alert("An error has occurred, " + error))
+    })
+    .catch(error => addDangerToast(t('Error when save report: %s', error)));
 }
 
-export function deleteActiveReportEndpoint(endpoint: string) {
+export function deleteActiveReport(
+  { id, report_name: report_name }: Report,
+  addSuccessToast: (arg0: string) => void,
+  addDangerToast: (arg0: string) => void,
+  refreshData: (arg0?: FetchDataConfig | null) => void,
+  chartFilter?: string,
+  userId?: number,
+) {
+  const filters = {
+    pageIndex: 0,
+    pageSize: PAGE_SIZE,
+    sortBy: [
+      {
+        id: 'changed_on_delta_humanized',
+        desc: true,
+      },
+    ],
+    filters: [
+      {
+        id: 'created_by',
+        operator: 'rel_o_m',
+        value: `${userId}`,
+      },
+    ],
+  };
+
   return SupersetClient.delete({
-    endpoint: `/api/v1/active_reports${endpoint}`,
-    headers: {'Content-Type': 'application/json'},
-  })
-    .then(response => {
-      if(response.response.status !== 200){
-        alert("An error has occurred");
-      }
-      else{
-        alert("Report deleted successfully");
-      }
-      return response;
-    }).catch(error => console.log(error))
+    endpoint: `/api/v1/active_reports/${id}`,
+    headers: { 'Content-Type': 'application/json' },
+  }).then(
+    () => {
+      if (chartFilter === 'Mine') refreshData(filters);
+      else refreshData();
+      addSuccessToast(t('Deleted: %s', report_name));
+    },
+    () => {
+      addDangerToast(t('There was an issue deleting: %s', report_name));
+    },
+  );
 }
 
-export function putActiveReportEndpoint(endpoint: string, report: any) {
+export function putActiveReport(
+  endpoint: string,
+  report: any,
+  addSuccessToast: (arg0: string) => void,
+  addDangerToast: (arg0: string) => void,
+) {
   return SupersetClient.put({
     endpoint: `/api/v1/active_reports${endpoint}`,
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(report)
-  })
-    .then(response => {
-        if(response.response.status !== 200){
-          alert("An error has occurred");
-        }
-        else{
-          alert("Saved successfully");
-        }
-        return response;
-    }).catch(error => alert("An error has occurred, " + error));
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(report),
+  }).then(response => {
+    if (response.response.status !== 200 && response.response.status !== 201) {
+      addDangerToast(
+        t('An error has ocurred when save: %s', report.report_name),
+      );
+    } else {
+      addSuccessToast(t('Saved: %s', report.report_name));
+    }
+    return response;
+  });
 }
 
-export function getActiveReportEndpoint(endpoint: string) {
+export function getActiveReportEndpoint(
+  endpoint: string,
+  addDangerToast: (arg0: string) => void,
+) {
   return SupersetClient.get({
     endpoint: `/api/v1/active_reports${endpoint}`,
-    headers: {'Content-Type': 'application/json'},
+    headers: { 'Content-Type': 'application/json' },
   })
     .then(response => {
-      if(response.response.status !== 200){
-        alert("An error has occurred when get the reports list ");
-      }
       return response;
-    }).catch(error => alert("An error has occurred, " + error))
+    })
+    .catch(error =>
+      addDangerToast(t('An error has ocurred when get reports: %s', error)),
+    );
+}
+
+export function getRelated(column_name: string) {
+  return SupersetClient.get({
+    endpoint: `/api/v1/active_reports/related/${column_name}`,
+    headers: { 'Content-Type': 'application/json' },
+  })
+    .then(response => {
+      return response;
+    })
+    .catch(error => alert('An error has occurred, ' + error));
 }
 
 export const getSlices = (info: any) => {
   const slices: string[] = [];
-  info.map((value:any) => {
-    slices.push(value.Query.CommandText.split("/")[1]);
+  info.map((value: any) => {
+    slices.push(value.Query.CommandText.split('/')[1]);
   });
-  return slices
-}
+  return slices;
+};

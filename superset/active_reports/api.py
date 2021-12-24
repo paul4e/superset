@@ -136,12 +136,12 @@ class ActiveReportsRestApi(BaseSupersetModelRestApi):
     #     "chart": "slice_name",
     #     "database": "database_name",
     # }
-    # filter_rel_fields = {
-    #     # "dashboard": "dashboard_title",
-    #     # "chart": "slice_name",
-    #     # "database": "database_name",
-    #     "owners": RelatedFieldFilter("first_name", FilterRelatedOwners),
-    # }
+#     filter_rel_fields = {
+#         # "dashboard": "dashboard_title",
+#         # "chart": "slice_name",
+#         # "database": "database_name",
+#         "owners": RelatedFieldFilter("first_name", FilterRelatedOwners),
+#     }
 
     # apispec_parameter_schemas = {
     #     "get_delete_ids_schema": get_delete_ids_schema,
