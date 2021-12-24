@@ -98,6 +98,7 @@ class ActiveReportsRestApi(BaseSupersetModelRestApi):
         "owners",
         "published",
     ]
+
     edit_columns = add_columns
     add_model_schema = ActiveReportPostSchema()
     edit_model_schema = ActiveReportPutSchema()
@@ -129,17 +130,18 @@ class ActiveReportsRestApi(BaseSupersetModelRestApi):
         "owners": RelatedFieldFilter("first_name", FilterRelatedOwners),
         "created_by": RelatedFieldFilter("first_name", FilterRelatedOwners),
     }
+    base_order = ("changed_on", "desc")
     # text_field_rel_fields = {
     #     "dashboard": "dashboard_title",
     #     "chart": "slice_name",
     #     "database": "database_name",
     # }
-    filter_rel_fields = {
-        # "dashboard": "dashboard_title",
-        # "chart": "slice_name",
-        # "database": "database_name",
-        "owners": RelatedFieldFilter("first_name", FilterRelatedOwners),
-    }
+    # filter_rel_fields = {
+    #     # "dashboard": "dashboard_title",
+    #     # "chart": "slice_name",
+    #     # "database": "database_name",
+    #     "owners": RelatedFieldFilter("first_name", FilterRelatedOwners),
+    # }
 
     # apispec_parameter_schemas = {
     #     "get_delete_ids_schema": get_delete_ids_schema,

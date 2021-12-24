@@ -17,6 +17,7 @@
 
 from flask_appbuilder import Model
 from sqlalchemy import (
+    BLOB,
     Boolean,
     Column,
     DateTime,
@@ -27,14 +28,14 @@ from sqlalchemy import (
     String,
     Table,
     Text,
-    BLOB,
 )
-from sqlalchemy.schema import UniqueConstraint
-from superset.models.helpers import AuditMixinNullable
 from sqlalchemy.orm import relationship
-from superset.models.slice import Slice
+from sqlalchemy.schema import UniqueConstraint
+
 from superset import security_manager
 from superset.extensions import db
+from superset.models.helpers import AuditMixinNullable
+from superset.models.slice import Slice
 
 
 class ActiveReportExport(Model, AuditMixinNullable):
@@ -48,5 +49,5 @@ class ActiveReportExport(Model, AuditMixinNullable):
 
     id = Column(Integer, primary_key=True)
     report_data = Column(BLOB, nullable=False)
-    active_report_id = Column(Integer, ForeignKey('active_reports.id'), nullable=False)
+    active_report_id = Column(Integer, ForeignKey("active_reports.id"), nullable=False)
     active_report = relationship("active_reports")

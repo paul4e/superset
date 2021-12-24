@@ -1,21 +1,22 @@
 import logging
-from superset.security import SupersetSecurityManager
+
 from flask_appbuilder.const import (
-    LOGMSG_ERR_SEC_AUTH_LDAP_TLS,
-    LOGMSG_WAR_SEC_NOLDAP_OBJ,
-    LOGMSG_WAR_SEC_LOGIN_FAILED,
     LOGMSG_ERR_SEC_ADD_REGISTER_USER,
-    LOGMSG_ERR_SEC_AUTH_LDAP
+    LOGMSG_ERR_SEC_AUTH_LDAP,
+    LOGMSG_ERR_SEC_AUTH_LDAP_TLS,
+    LOGMSG_WAR_SEC_LOGIN_FAILED,
+    LOGMSG_WAR_SEC_NOLDAP_OBJ,
 )
+
+from superset.security import SupersetSecurityManager
 
 log = logging.getLogger(__name__)
 
-class CDASecurityManager(SupersetSecurityManager):
 
+class CDASecurityManager(SupersetSecurityManager):
     def __init__(self, appbuilder):
         log.info("Starting CustomSecurityManager")
         super(CDASecurityManager, self).__init__(appbuilder)
-
 
     def auth_user_ldap(self, username, password):
         """
@@ -255,13 +256,12 @@ class CDASecurityManager(SupersetSecurityManager):
         )
         log.debug("LDAP search returned: {0}".format(search_result))
 
-
         valid_results = self._validate_ldap_search_result(search_result)
-        
+
         log.debug("LDAP search valid results {0}".format(valid_results))
 
         # only continue if 0 or 1 results were returned
-        #if len(search_result) > 1:
+        # if len(search_result) > 1:
         if not valid_results:
             log.error(
                 "LDAP search for '{0}' in scope '{1}' returned multiple results".format(
@@ -271,7 +271,9 @@ class CDASecurityManager(SupersetSecurityManager):
             return None, None
 
         try:
-            valid_search_result = self._get_valid_record_from_ldap_search_result(search_result)
+            valid_search_result = self._get_valid_record_from_ldap_search_result(
+                search_result
+            )
             # # extract the DN
             # user_dn = search_result[0][0]
             # # extract the other attributes
@@ -283,20 +285,24 @@ class CDASecurityManager(SupersetSecurityManager):
             # extract the other attributes
             user_info = valid_search_result[0][1]
             # return
-            log.debug("LDAP search valid results user_dn: {0}, user_info: {1}".format(user_dn,user_info))
+            log.debug(
+                "LDAP search valid results user_dn: {0}, user_info: {1}".format(
+                    user_dn, user_info
+                )
+            )
             return user_dn, user_info
         except (IndexError, NameError):
             return None, None
-    
+
     def _validate_ldap_search_result(self, results):
         valid = 0
         for record in results:
-            if (record[0]):
-                valid=+1
-        
+            if record[0]:
+                valid = +1
+
         return valid == 1
-    
+
     def _get_valid_record_from_ldap_search_result(self, results):
         for record in results:
-            if (record[0]):
+            if record[0]:
                 return [record]

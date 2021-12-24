@@ -95,6 +95,34 @@ const SavedQueryList = lazy(
     ),
 );
 
+const ReportDefinitionList = lazy(
+  () =>
+    import(
+      /* webpackChunkName: "SavedQueryList" */ 'src/reportsintegration/report_definition/ReportDefinitionList'
+    ),
+);
+
+const ReportEngineList = lazy(
+  () =>
+    import(
+      /* webpackChunkName: "ReportEngineList" */ 'src/reportsintegration/report_engine/ReportEngineList'
+    ),
+);
+
+const AddReportDefinition = lazy(
+  () =>
+    import(
+      /* webpackChunkName: "AddReportDefinition" */ 'src/reportsintegration/report_definition/containers/AddReportDefinitionPage'
+    ),
+);
+
+const AddReportEngine = lazy(
+  () =>
+    import(
+      /* webpackChunkName: "AddReportEngine" */ 'src/reportsintegration/report_engine/containers/AddReportEnginePage'
+    ),
+);
+
 type Routes = {
   path: string;
   Component: React.ComponentType;
@@ -168,6 +196,22 @@ export const routes: Routes = [
     props: {
       isReportEnabled: true,
     },
+  },
+  {
+    path: '/report_definitions/list/',
+    Component: ReportDefinitionList,
+  },
+  {
+    path: '/report_engines/list/',
+    Component: ReportEngineList,
+  },
+  {
+    path: '/report_definitions/add/',
+    Component: AddReportDefinition,
+  },
+  {
+    path: '/report_engines/add/',
+    Component: AddReportEngine,
   },
 ];
 

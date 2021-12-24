@@ -15,31 +15,28 @@
 # specific language governing permissions and limitations
 # under the License.
 
-import simplejson as json
 import logging
-from flask_appbuilder import expose, has_access
+
+import simplejson as json
 from flask import g
-
-from flask_babel import lazy_gettext as _
-from superset.utils import core as utils
-
+from flask_appbuilder import expose, has_access
 from flask_appbuilder.models.sqla.interface import SQLAInterface
+from flask_babel import lazy_gettext as _
+from sqlalchemy import and_, or_
+
+from superset import db, is_feature_enabled, security_manager
+from superset.active_reports.models import ActiveReportExport
+from superset.constants import MODEL_VIEW_RW_METHOD_PERMISSION_MAP, RouteMethod
+from superset.models.slice import Slice
 from superset.typing import FlaskResponse
+from superset.utils import core as utils
 from superset.views.active_reports.mixin import ActiveReportsMixin
-from superset.constants import RouteMethod, MODEL_VIEW_RW_METHOD_PERMISSION_MAP
 from superset.views.base import (
-    SupersetModelView,
     check_ownership,
     common_bootstrap_payload,
+    SupersetModelView,
 )
-from superset.views.utils import (
-    bootstrap_user_data,
-)
-from superset.active_reports.models import ActiveReportExport
-from superset import is_feature_enabled, security_manager
-from superset.models.slice import Slice
-from superset import db
-from sqlalchemy import and_, or_
+from superset.views.utils import bootstrap_user_data
 
 logger = logging.getLogger(__name__)
 
@@ -48,9 +45,8 @@ logger = logging.getLogger(__name__)
 
 
 class ActiveReportsExports(SupersetModelView, ActiveReportsMixin):
-    route_base = '/active_reports'
+    route_base = "/active_reports"
     datamodel = SQLAInterface(ActiveReportExport)
-    include_route_methods = RouteMethod.CRUD_SET | {
-    }
+    include_route_methods = RouteMethod.CRUD_SET | {}
     class_permission_name = "Active_report"  # Usar mismo permiso que active reports o generar un permiso adicional para exportar.
     method_permission_name = MODEL_VIEW_RW_METHOD_PERMISSION_MAP
