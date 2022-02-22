@@ -1,8 +1,11 @@
 import logging
 
-from flask import Response, request, g
+from flask import Response, request, g, make_response, jsonify, send_file
 from flask_appbuilder.api import expose, protect
 from marshmallow import ValidationError
+from pathlib import Path
+from io import BytesIO
+import base64
 
 from flask_appbuilder.models.sqla.interface import SQLAInterface
 from superset.constants import MODEL_API_RW_METHOD_PERMISSION_MAP, RouteMethod
@@ -11,10 +14,14 @@ from superset.reports_integration.api.report_definitions.schemas import (
     ReportDefinitionPutSchema
 )
 from superset.reports_integration.models.report_definitions import ReportDefinition
-from superset.reports_integration.api.report_definitions.commands.create import CreateReportDefinitionCommand
-from superset.reports_integration.api.report_definitions.commands.delete import DeleteReportDefinitionCommand
-from superset.reports_integration.api.report_definitions.commands.update import UpdateReportDefinitionCommand
-from superset.reports_integration.api.report_definitions.commands.export_report import ExportReportDefinitionCommand
+from superset.reports_integration.api.report_definitions.commands.create import \
+    CreateReportDefinitionCommand
+from superset.reports_integration.api.report_definitions.commands.delete import \
+    DeleteReportDefinitionCommand
+from superset.reports_integration.api.report_definitions.commands.update import \
+    UpdateReportDefinitionCommand
+from superset.reports_integration.api.report_definitions.commands.export_report import \
+    ExportReportDefinitionCommand
 from superset.reports_integration.api.report_definitions.commands.exceptions import (
     ReportDefinitionInvalidError,
     ReportDefinitionNotFoundError,
@@ -22,7 +29,8 @@ from superset.reports_integration.api.report_definitions.commands.exceptions imp
     ReportDefinitionCreateFailedError,
     ReportDefinitionUpdateFailedError,
 )
-from superset.reports_integration.api.report_definitions.filters import (ReportDefinitionFilter, ReportDefinitionTitleOrNameFilter)
+from superset.reports_integration.api.report_definitions.filters import (
+    ReportDefinitionFilter, ReportDefinitionTitleOrNameFilter)
 from superset.views.filters import FilterRelatedOwners
 from superset.views.base_api import (
     BaseSupersetModelRestApi,
@@ -50,7 +58,12 @@ class ReportDefinitionRestApi(BaseSupersetModelRestApi):
     show_columns = [
         "id",
         "report_name",
-        "report_title"
+        "report_title",
+        "owners.first_name",
+        "owners.id",
+        "owners.last_name",
+        "owners.username",
+        "description",
     ]
 
     list_columns = [
@@ -72,6 +85,7 @@ class ReportDefinitionRestApi(BaseSupersetModelRestApi):
         "owners.username",
         "owners.first_name",
         "owners.last_name",
+        "description",
     ]
 
     add_columns = [
@@ -175,7 +189,7 @@ class ReportDefinitionRestApi(BaseSupersetModelRestApi):
                 exc_info=True,
             )
 
-    @expose("/", methods=["PUT"])
+    @expose("/<int:pk>", methods=["PUT"])
     @protect()
     def put(self, pk: int) -> Response:
         """Changes a ReportDefinition
@@ -243,7 +257,7 @@ class ReportDefinitionRestApi(BaseSupersetModelRestApi):
                 exc_info=True,
             )
 
-    @expose("/", methods=["DELETE"])
+    @expose("/<int:pk>", methods=["DELETE"])
     @protect()
     def delete(self, pk: int) -> Response:
         """Deletes a ReportDefinition
@@ -300,14 +314,44 @@ class ReportDefinitionRestApi(BaseSupersetModelRestApi):
         #     item = ValidateReportSchema().load(request.json)
         # except ValidationError as error:
         #     return self.response_400(message=error.messages)
-
+        print(format_type)
         try:
             response = ExportReportDefinitionCommand(g.user, pk, format_type).run()
             if response:
-                body = {
-                    "content": response.content
-                }
-                return self.response(200, json=body)
+                if format_type == "HTML":
+                    body = {
+                        "content": response.content
+                    }
+                    return self.response(200, json=body, )
+                elif format_type == "PDF":
+                    print("**** PDF ****")
+                    print(response.headers)
+
+                    print(response.content)
+                    print(type(response.content))
+                    print(response.encoding)
+                    # print(response.text)
+                    print("**** PDF ****")
+                    # _ret_json = jsonify({'body': response.content, 'encoding': 'unicode_escape'})
+                    # resp = make_response(_ret_json, 200)
+                    # resp.headers["Content-Type"] = "application/pdf;"
+                    # return resp
+
+                    file_content = BytesIO(response.content)
+                    # return send_file(file_content, as_attachment=True,
+                    #                  mimetype='application/pdf',
+                    #                  attachment_filename='pdf')
+                    encoded_string = base64.b64encode(file_content.read())
+                    print(encoded_string)
+                    body = {
+                        "content": encoded_string
+                    }
+                    return self.response(200, json=body, )
+
+                # body = {
+                #     "content": response.content
+                # }
+                # return self.response(200, json=body, )
             else:
                 self.response_400(message="Reporte invalido")
         except Exception as e:

@@ -61,7 +61,7 @@ export function postActiveReportEndpoint(
 }
 
 export function deleteActiveReport(
-  { id, report_name: report_name }: Report,
+  { id, report_name }: Report,
   addSuccessToast: (arg0: string) => void,
   addDangerToast: (arg0: string) => void,
   refreshData: (arg0?: FetchDataConfig | null) => void,

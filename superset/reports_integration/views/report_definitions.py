@@ -17,7 +17,9 @@ class ReportDefinitionView(SupersetModelView, ReportDefinitionMixin):
     class_permission_name = "ReportDefinitions"
     method_permission_name = MODEL_VIEW_RW_METHOD_PERMISSION_MAP
 
-    include_route_methods = RouteMethod.CRUD_SET
+    include_route_methods = RouteMethod.CRUD_SET | {
+        "render_report",
+    }
 
     def pre_add(self, item: "ReportDefinitionView") -> None:
         item.report_definition = bytes(item.report_definition, 'utf-8')
@@ -36,4 +38,9 @@ class ReportDefinitionView(SupersetModelView, ReportDefinitionMixin):
         if not is_feature_enabled("ENABLE_REACT_CRUD_VIEWS"):
             return super().list()
 
+        return super().render_app_template()
+
+    @expose("/render_report/<report_definition_id>/<render_format>")
+    @has_access
+    def render_report(self, report_definition_id: int, render_format: str):
         return super().render_app_template()

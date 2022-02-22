@@ -52,7 +52,7 @@ class ValidateReportDefinitionCommand(BaseCommand):
 
     def validate(self) -> None:
         exceptions: List[ValidationError] = list()
-
+        print(self._model_id)
         self._model = ReportEngineDAO.find_by_id(self._model_id)
         if not self._model:
             raise ReportEngineNotFoundError()

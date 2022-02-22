@@ -8,9 +8,8 @@ from superset.commands.exceptions import (
     CreateFailedError,
     DeleteFailedError,
     UpdateFailedError,
+    ForbiddenError
 )
-
-from superset.exceptions import SupersetErrorException, SupersetErrorsException
 
 
 class ReportEngineInvalidError(CommandInvalidError):
@@ -38,5 +37,9 @@ class ReportEngineCreateFailedError(CreateFailedError):
 
 class ReportEngineUpdateFailedError(UpdateFailedError):
     message = _("Reports Engine could not be updated")
+
+
+class ReportEngineForbiddenError(ForbiddenError):
+    message = _("Changing this report is forbidden")
 
 

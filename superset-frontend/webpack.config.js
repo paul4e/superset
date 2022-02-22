@@ -17,6 +17,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
@@ -39,6 +40,11 @@ const APP_DIR = path.resolve(__dirname, './');
 // output dir
 const BUILD_DIR = path.resolve(__dirname, '../superset/static/assets');
 const ROOT_DIR = path.resolve(__dirname, '..');
+
+const cMapsDir = path.join(
+  path.dirname(require.resolve('pdfjs-dist/package.json')),
+  'cmaps',
+);
 
 const {
   mode = 'development',
@@ -135,6 +141,37 @@ const plugins = [
     inject: true,
     chunks: [],
     filename: '500.html',
+  }),
+  // new CopyPlugin({
+  //   patterns: [
+  //     // './node_modules/pdfjs-dist/build/pdf.worker.js',
+  //     // 'pdf.worker.js',
+  //     // path.resolve(
+  //     //   APP_DIR,
+  //     //   // './node_modules/pdfjs-dist/build',
+  //     //   './node_modules/pdfjs-dist/build/pdf.worker.js',
+  //     // ),
+  //     {
+  //       from: path.resolve(
+  //         APP_DIR,
+  //         // './node_modules/pdfjs-dist/build',
+  //         './node_modules/pdfjs-dist/build/pdf.worker.js',
+  //       ),
+  //       to: path.resolve(output.publicPath, 'pdf.worker.js'),
+  //     },
+  //   ],
+  // }),
+  new CopyPlugin({
+    patterns: [
+      { from: cMapsDir, to: 'cmaps/' },
+      {
+        from: path.resolve(
+          APP_DIR,
+          './node_modules/pdfjs-dist/build/pdf.worker.js',
+        ),
+        to: path.resolve(output.path, 'pdf.worker.js'),
+      },
+    ],
   }),
 ];
 

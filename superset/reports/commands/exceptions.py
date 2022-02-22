@@ -62,6 +62,14 @@ class ActiveReportNotFoundValidationError(ValidationError):
         super().__init__(_("Active Report does not exist"), field_name="active_report")
 
 
+class ReportDefinitionNotFoundValidationError(ValidationError):
+    """
+    Marshmallow validation error for reportDefinition does not exist
+    """
+
+    def __init__(self) -> None:
+        super().__init__(_("Report Definition does not exist"), field_name="report_definition")
+
 class ReportScheduleAlertRequiredDatabaseValidationError(ValidationError):
     """
     Marshmallow validation error for report schedule alert missing database field
@@ -86,7 +94,7 @@ class ReportScheduleChartOrDashboardValidationError(ValidationError):
     """
 
     def __init__(self) -> None:
-        super().__init__(_("Choose a chart or dashboard not both"), field_name="chart")
+        super().__init__(_("Choose only one of the following: chart, dashboard, active report, external report"), field_name="chart")
 
 
 class ReportScheduleInvalidError(CommandInvalidError):

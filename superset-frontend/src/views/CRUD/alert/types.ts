@@ -41,6 +41,12 @@ export type ActiveReportObjetc = {
   id: number;
 };
 
+export type ReportDefinitionObject = {
+  report_title: string;
+  report_definition: string;
+  id: number;
+};
+
 export type DatabaseObject = {
   database_name: string;
   id: number;
@@ -70,7 +76,8 @@ export type AlertObject = {
   created_on?: string;
   crontab?: string;
   dashboard?: MetaObject;
-  active_report?: MetaObject;
+  active_report?: MetaObject; // ARJS
+  report_definition?: MetaObject; // BIRT
   database?: MetaObject;
   description?: string;
   grace_period?: number;

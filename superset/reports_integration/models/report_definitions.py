@@ -34,7 +34,8 @@ class ReportDefinition(Model, AuditMixinNullable):
     id = Column(Integer, primary_key=True)
     report_name = Column(String(250), nullable=False)
     report_title = Column(String(250))
-    parameters = Column(Text)
+    json_metadata = Column(Text)
+    description = Column(Text)
     report_definition = Column(LargeBinary, nullable=False)
     owners = relationship(security_manager.user_model, secondary=report_definition_user)
 

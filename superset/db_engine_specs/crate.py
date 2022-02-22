@@ -15,13 +15,15 @@
 # specific language governing permissions and limitations
 # under the License.
 from datetime import datetime
-from typing import Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING, List
 
 from superset.db_engine_specs.base import BaseEngineSpec
 from superset.utils import core as utils
 
 if TYPE_CHECKING:
     from superset.connectors.sqla.models import TableColumn
+
+from sqlalchemy.engine.reflection import Inspector
 
 
 class CrateEngineSpec(BaseEngineSpec):
@@ -60,3 +62,13 @@ class CrateEngineSpec(BaseEngineSpec):
     def alter_new_orm_column(cls, orm_col: "TableColumn") -> None:
         if orm_col.type == "TIMESTAMP":
             orm_col.python_date_format = "epoch_ms"
+
+    # @classmethod
+    # def get_table_names(
+    #     cls, database: "Database", inspector: Inspector, schema: Optional[str]
+    # ) -> List[str]:
+    #     """Need to consider foreign tables for PostgreSQL"""
+    #     print("Custom get table names")
+    #     tables = inspector.get_table_names(schema)
+    #     tables.extend(inspector.get_foreign_table_names(schema))
+    #     return sorted(tables)

@@ -62,6 +62,7 @@ from superset.models.tags import FavStarUpdater
 from superset.result_set import SupersetResultSet
 from superset.utils import cache as cache_util, core as utils
 from superset.utils.memoized import memoized
+import traceback
 
 config = app.config
 custom_password_store = config["SQLALCHEMY_CUSTOM_PASSWORD_STORE"]
@@ -527,15 +528,21 @@ class Database(
         :param force: whether to force refresh the cache
         :return: list of tables
         """
+        print("get_all_table_names_in_schema")
+        print(f"schema: {schema}")
+        print(f"inspector: {self.inspector}")
+
         try:
             tables = self.db_engine_spec.get_table_names(
                 database=self, inspector=self.inspector, schema=schema
             )
+            print(f"tables: {tables}")
             return [
                 utils.DatasourceName(table=table, schema=schema) for table in tables
             ]
         except Exception as ex:  # pylint: disable=broad-except
             logger.warning(ex)
+            logger.error(ex.__traceback__)
 
     @cache_util.memoized_func(
         key=lambda self, schema, *args, **kwargs: f"db:{self.id}:schema:{schema}:view_list",  # type: ignore
@@ -559,6 +566,7 @@ class Database(
         :param force: whether to force refresh the cache
         :return: list of views
         """
+        print("get_all_table_vies_in_schema")
         try:
             views = self.db_engine_spec.get_view_names(
                 database=self, inspector=self.inspector, schema=schema
@@ -566,6 +574,7 @@ class Database(
             return [utils.DatasourceName(table=view, schema=schema) for view in views]
         except Exception as ex:  # pylint: disable=broad-except
             logger.warning(ex)
+            # traceback.print_exc()
 
     @cache_util.memoized_func(
         key=lambda self, *args, **kwargs: f"db:{self.id}:schema_list",

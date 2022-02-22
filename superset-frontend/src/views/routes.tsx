@@ -123,6 +123,13 @@ const AddReportEngine = lazy(
     ),
 );
 
+const ReportDefinitionPage = lazy(
+  () =>
+    import(
+      /* webpackChunkName: "ReportDefinitionPage" */ 'src/reportsintegration/report_definition/containers/ReportDefinitionPage'
+    ),
+);
+
 type Routes = {
   path: string;
   Component: React.ComponentType;
@@ -212,6 +219,11 @@ export const routes: Routes = [
   {
     path: '/report_engines/add/',
     Component: AddReportEngine,
+  },
+  {
+    path:
+      '/report_definitions/render_report/:report_definition_id/:render_format/',
+    Component: ReportDefinitionPage,
   },
 ];
 

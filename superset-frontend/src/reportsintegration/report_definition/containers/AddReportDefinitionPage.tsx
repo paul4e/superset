@@ -3,9 +3,9 @@ import React /* , {  useState,  useMemo } */, {
   useState,
 } from 'react';
 import withToasts from 'src/messageToasts/enhancers/withToasts';
-import { styled, SupersetClient } from '@superset-ui/core';
+import { SupersetClient } from '@superset-ui/core';
 import AddReportDefinition from '../components/AddReportDefinition';
-import { MAX_ADVISABLE_VIZ_GALLERY_WIDTH } from '../../../explore/components/controls/VizTypeControl/VizTypeGallery';
+// import { MAX_ADVISABLE_VIZ_GALLERY_WIDTH } from '../../../explore/components/controls/VizTypeControl/VizTypeGallery';
 
 interface AddReportDefinitionPageProps {
   addDangerToast: (msg: string) => void;
@@ -15,49 +15,76 @@ interface AddReportDefinitionPageProps {
   };
 }
 
-const ESTIMATED_NAV_HEIGHT = '56px';
+// const StyledContainer = styled.div`
+//   ${({ theme }) => `
+//     flex: 1 1 auto;
+//     display: flex;
+//     flex-direction: column;
+//     justify-content: flex-start;
+//     width: 100%;
+//     max-width: ${MAX_ADVISABLE_VIZ_GALLERY_WIDTH}px;
+//     border-radius: ${theme.gridUnit}px;
+//     background-color: ${theme.colors.grayscale.light5};
+//     margin-left: auto;
+//     margin-right: auto;
+//     padding-left: ${theme.gridUnit * 4}px;
+//     padding-right: ${theme.gridUnit * 4}px;
+//     padding-bottom: ${theme.gridUnit * 4}px;
+//
+//     h3 {
+//       padding-bottom: ${theme.gridUnit * 3}px;
+//     }
+//
+//     .file-upload {
+//       display: flex;
+//       flex: 1 1 auto;
+//       align-items: flex-start;
+//       flex-direction: column;
+//       width: 100%;
+//       height: 100px;
+//       margin: 20px;
+//     }
+//     .fupload-report-definition {
+//       display: flex;
+//       justify-content: space-between;
+//       flex-direction: column;
+//       align-items: start;
+//     }
+//     .page-title {
+//       margin: 15px;
+//       border-bottom: 1px solid ${theme.colors.grayscale.light2};
+//     }
+//     .page-title > h1 {
+//       margin-left: 15px;
+//       color: ${theme.colors.grayscale.dark2};
+//     }
+//     .input-name {
+//       margin: 20px;
+//     }
+//     .select-engine {
+//       margin: 20px;
+//     }
+//     .input-description {
+//       margin: 20px
+//     }
+//
+//     .json-editor {
+//       display: flex;
+//       flex-direction: column;
+//       align-item: flex-start;
+//       margin-left: 2rem;
+//     }
+//
+//     .ant-form-item-label {
+//       display: flex;
+//       flex-direction: column;
+//       align-item: flex-start;
+//     }
+//
+//   `}
+// `;
 
-const StyledContainer = styled.div`
-  ${({ theme }) => `
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    width: 100%;
-    max-width: ${MAX_ADVISABLE_VIZ_GALLERY_WIDTH}px;
-    max-height: calc(100vh - ${ESTIMATED_NAV_HEIGHT});
-    border-radius: ${theme.gridUnit}px;
-    background-color: ${theme.colors.grayscale.light5};
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: ${theme.gridUnit * 4}px;
-    padding-right: ${theme.gridUnit * 4}px;
-    padding-bottom: ${theme.gridUnit * 4}px;
-
-    h3 {
-      padding-bottom: ${theme.gridUnit * 3}px;
-    }
-
-    & .dataset {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-
-      & > div {
-        min-width: 200px;
-        width: 300px;
-      }
-
-      & > span {
-        color: ${theme.colors.grayscale.light1};
-        margin-left: ${theme.gridUnit * 4}px;
-        margin-top: ${theme.gridUnit * 6}px;
-      }
-    }
-  `}
-`;
-
-export interface ReportEngine {
+interface ReportEngine {
   id: number;
   verbose_name: string;
   engine_type: string;
@@ -92,11 +119,7 @@ function AddReportDefinitionPage(props: AddReportDefinitionPageProps) {
 
   return (
     <>
-      <StyledContainer>
-        <h1 key="page-title">AddReportDefinitionPage</h1>
-
-        <AddReportDefinition reportEngines={reportEngines} />
-      </StyledContainer>
+      <AddReportDefinition reportEngines={reportEngines} />
     </>
   );
 }

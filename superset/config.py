@@ -402,6 +402,7 @@ DEFAULT_FEATURE_FLAGS: Dict[str, bool] = {
     "ALLOW_FULL_CSV_EXPORT": False,
     "UX_BETA": False,
     "ACTIVE_REPORTS_JS": True,
+    "ACTIVE_EXTERNAL_REPORTS": True,
 }
 
 # Feature flags may also be set via 'SUPERSET_FEATURE_' prefixed environment vars.
@@ -1243,6 +1244,9 @@ SQLALCHEMY_DISPLAY_TEXT = "SQLAlchemy docs"
 ACTIVE_REPORTS_IS_ACTIVE = True
 ARJSSERVER_ENDPOINT = os.environ.get("ARJSSERVER_ENDPOINT", "")
 
+#BIRT ENGINE
+BIRT_ENGINE_IS_ACTIVE = True
+BIRTENGINE_ENDPOINT = os.environ.get("BIRTENGINE_ENDPOINT", "")
 
 # -------------------------------------------------------------------
 # *                WARNING:  STOP EDITING  HERE                    *

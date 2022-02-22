@@ -16,13 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import React, { FunctionComponent, useState, useEffect } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import {
-  styled,
-  t,
-  SupersetClient,
   css,
+  FeatureFlag,
+  styled,
+  SupersetClient,
   SupersetTheme,
+  t,
 } from '@superset-ui/core';
 import rison from 'rison';
 import { useSingleViewResource } from 'src/views/CRUD/hooks';
@@ -33,7 +34,7 @@ import Modal from 'src/components/Modal';
 import TimezoneSelector from 'src/components/TimezoneSelector';
 import { Radio } from 'src/components/Radio';
 import { AsyncSelect, NativeGraySelect as Select } from 'src/components/Select';
-import { FeatureFlag, isFeatureEnabled } from 'src/featureFlags';
+import { isFeatureEnabled } from 'src/featureFlags';
 import withToasts from 'src/messageToasts/enhancers/withToasts';
 import Owner from 'src/types/Owner';
 import TextAreaControl from 'src/explore/components/controls/TextAreaControl';
@@ -41,6 +42,8 @@ import { AlertReportCronScheduler } from './components/AlertReportCronScheduler'
 import { NotificationMethod } from './components/NotificationMethod';
 
 import {
+  ActiveReportObjetc,
+  ReportDefinitionObject,
   AlertObject,
   ChartObject,
   DashboardObject,
@@ -48,7 +51,6 @@ import {
   MetaObject,
   Operator,
   Recipient,
-  ActiveReportObjetc,
 } from './types';
 
 const SELECT_PAGE_SIZE = 2000; // temporary fix for paginated query
@@ -77,6 +79,8 @@ interface AlertReportModalProps {
 const NOTIFICATION_METHODS: NotificationMethod[] = ['Email', 'Slack'];
 const DEFAULT_NOTIFICATION_FORMAT = 'PNG';
 const DEFAULT_ARJS_NOTIFICATION_FORMAT = 'PDF'; // ARJS
+const DEFAULT_REPORT_DEFINITION_NOTIFICATION_FORMAT = 'PDF'; // BIRT
+
 const CONDITIONS = [
   {
     label: t('< (Smaller than)'),
@@ -432,6 +436,9 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
     [],
   ); // ARJS
 
+  const [reportDefinitionOptions, setReportDefinitionOptions] = useState<
+    MetaObject[]
+  >([]); // BIRT
   // Chart metadata
   const [chartVizType, setChartVizType] = useState<string>('');
 
@@ -443,6 +450,10 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
   const ARJSFormatOptionEnabled =
     contentType === 'active_report' &&
     (isFeatureEnabled(FeatureFlag.ALERTS_ATTACH_REPORTS) || isReport); // TODO: METER FUNCIONALIDAD DE ARJS BAJO UNA FEATURE FLAG
+
+  const ReportDefinitionOptionEnabled =
+    contentType === 'report_definition' &&
+    (isFeatureEnabled(FeatureFlag.ALERTS_ATTACH_REPORTS) || isReport);
 
   const [
     notificationAddState,
@@ -545,6 +556,11 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
       active_report:
         contentType === 'active_report'
           ? currentAlert?.active_report?.value
+          : null,
+      // BIRT
+      report_definition:
+        contentType === 'report_definition'
+          ? currentAlert?.report_definition?.value
           : null,
     };
 
@@ -687,7 +703,7 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
 
   // ARJS
   const getActiveReportsData = (db?: MetaObject) => {
-    const active_report = db || currentAlert?.dashboard;
+    const active_report = db || currentAlert?.active_report;
 
     if (!active_report || active_report.label) {
       return null;
@@ -702,6 +718,58 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
         arjs.value === active_report.id
       ) {
         result = arjs;
+      }
+    });
+
+    return result;
+  };
+
+  // BIRT
+  const loadReportDefinitionsOptions = (input = '') => {
+    const query = rison.encode({ filter: input, page_size: SELECT_PAGE_SIZE });
+    return SupersetClient.get({
+      endpoint: `/api/v1/report/related/report_definition?q=${query}`,
+    }).then(
+      response => {
+        const list = response.json.result.map((item: any) => ({
+          value: item.value,
+          label: item.text,
+        }));
+
+        setReportDefinitionOptions(list);
+
+        // Find source if current alert has one set
+        if (
+          currentAlert &&
+          currentAlert.active_report &&
+          !currentAlert.active_report.label
+        ) {
+          updateAlertState('report_definition', getReportDefinitionsData());
+        }
+
+        return list;
+      },
+      badResponse => [],
+    );
+  };
+
+  // BIRT
+  const getReportDefinitionsData = (db?: MetaObject) => {
+    const report_definition = db || currentAlert?.report_definition;
+
+    if (!report_definition || report_definition.label) {
+      return null;
+    }
+
+    let result;
+
+    // Cycle through dashboard options to find the selected option
+    reportDefinitionOptions.forEach(rd => {
+      if (
+        report_definition.value === rd.value ||
+        report_definition.value === rd.id
+      ) {
+        result = rd;
       }
     });
 
@@ -853,6 +921,7 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
     updateAlertState('dashboard', dashboard || undefined);
     updateAlertState('chart', null);
     updateAlertState('active_report', null);
+    updateAlertState('report_definition', null);
   };
 
   const onChartChange = (chart: SelectValue) => {
@@ -860,12 +929,21 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
     updateAlertState('chart', chart || undefined);
     updateAlertState('dashboard', null);
     updateAlertState('active_report', null);
+    updateAlertState('report_definition', null);
   };
 
   const onARJSChange = (active_report: SelectValue) => {
     updateAlertState('dashboard', null);
     updateAlertState('chart', null);
     updateAlertState('active_report', active_report || undefined);
+    updateAlertState('report_definition', null);
+  };
+
+  const onReportDefinitionChange = (report_definition: SelectValue) => {
+    updateAlertState('report_definition', report_definition || undefined);
+    updateAlertState('dashboard', null);
+    updateAlertState('chart', null);
+    updateAlertState('active_report', null);
   };
 
   const onActiveSwitch = (checked: boolean) => {
@@ -942,7 +1020,9 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
       currentAlert.working_timeout !== undefined &&
       ((contentType === 'dashboard' && !!currentAlert.dashboard) ||
         (contentType === 'chart' && !!currentAlert.chart) ||
-        (contentType === 'active_report' && !!currentAlert.active_report)) &&
+        (contentType === 'active_report' && !!currentAlert.active_report) ||
+        (contentType === 'report_definition' &&
+          !!currentAlert.report_definition)) &&
       checkNotificationSettings()
     ) {
       if (isReport) {
@@ -1008,13 +1088,18 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
           ? 'chart'
           : resource.dashboard
           ? 'dashboard'
-          : 'active_report',
+          : resource.active_report
+          ? 'active_report'
+          : 'report_definition',
       );
       setReportFormat(
         resource.chart
           ? resource.report_format || DEFAULT_NOTIFICATION_FORMAT
           : resource.active_report
           ? resource.report_format || DEFAULT_ARJS_NOTIFICATION_FORMAT
+          : resource.report_definition
+          ? resource.report_format ||
+            DEFAULT_REPORT_DEFINITION_NOTIFICATION_FORMAT
           : DEFAULT_NOTIFICATION_FORMAT,
       );
       const validatorConfig =
@@ -1054,6 +1139,13 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
               label: (resource.active_report as ActiveReportObjetc).report_name,
             }
           : undefined,
+        report_definition: resource.report_definition
+          ? getReportDefinitionsData(resource.report_definition) || {
+              value: (resource.report_definition as ReportDefinitionObject).id,
+              label: (resource.report_definition as ReportDefinitionObject)
+                .report_title,
+            }
+          : undefined,
         owners: (resource.owners || []).map(owner => ({
           value: owner.id,
           label: `${(owner as Owner).first_name} ${(owner as Owner).last_name}`,
@@ -1084,6 +1176,7 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
     currentAlertSafe.dashboard,
     currentAlertSafe.chart,
     currentAlertSafe.active_report,
+    currentAlertSafe.report_definition,
     contentType,
     notificationSettings,
     conditionNotNull,
@@ -1376,6 +1469,9 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
               <StyledRadio value="active_report">
                 {t('Active Reports')}
               </StyledRadio>
+              <StyledRadio value="report_definition">
+                {t('External Report')}
+              </StyledRadio>
             </Radio.Group>
             <AsyncSelect
               className={
@@ -1437,6 +1533,26 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
               cacheOptions
               onChange={onARJSChange}
             />
+            <AsyncSelect
+              className={
+                contentType === 'report_definition'
+                  ? 'async-select'
+                  : 'hide-dropdown async-select'
+              }
+              name="report_definition"
+              value={
+                currentAlert && currentAlert.report_definition
+                  ? {
+                      value: currentAlert.report_definition.value,
+                      label: currentAlert.report_definition.label,
+                    }
+                  : undefined
+              }
+              loadOptions={loadReportDefinitionsOptions}
+              defaultOptions // load options on render
+              cacheOptions
+              onChange={onReportDefinitionChange}
+            />
             {formatOptionEnabled && (
               <div className="inline-container">
                 <StyledRadioGroup
@@ -1460,6 +1576,17 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
                   <StyledRadio value="PDF">{t('Send as PDF')}</StyledRadio>
                   <StyledRadio value="HTML">{t('Send as HTML')}</StyledRadio>
                   <StyledRadio value="EXCEL">{t('Send as EXCEL')}</StyledRadio>
+                </StyledRadioGroup>
+              </div>
+            )}
+            {ReportDefinitionOptionEnabled && (
+              <div className="inline-container">
+                <StyledRadioGroup
+                  onChange={onFormatChange}
+                  value={reportFormat}
+                >
+                  <StyledRadio value="PDF">{t('Send as PDF')}</StyledRadio>
+                  <StyledRadio value="HTML">{t('Send as HTML')}</StyledRadio>
                 </StyledRadioGroup>
               </div>
             )}

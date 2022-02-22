@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import logging
 import os
+
 from typing import Any, Callable, Dict, TYPE_CHECKING
 
 import wtforms_json
@@ -200,6 +201,7 @@ class SupersetAppInitializer:
             ReportEngineView,
             ReportDefinitionView
         )
+        from superset.reports_integration.report_engines.birt_api import BIRTApi
         #
         # Setup API views
         #
@@ -221,6 +223,7 @@ class SupersetAppInitializer:
         appbuilder.add_api(ActiveReportsRestApi)
         appbuilder.add_api(ReportEngineRestApi)
         appbuilder.add_api(ReportDefinitionRestApi)
+        appbuilder.add_api(BIRTApi)
         #
         # Setup regular views
         #

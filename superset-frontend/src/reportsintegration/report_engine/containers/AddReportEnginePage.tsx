@@ -1,18 +1,25 @@
-import React /* , {  useState,  useMemo } */, {
-  useEffect,
-  useState,
-} from 'react';
+import React /* , {  useState,  useMemo, useEffect } */ from 'react';
 import withToasts from 'src/messageToasts/enhancers/withToasts';
-import { styled, SupersetClient } from '@superset-ui/core';
+import { styled } from '@superset-ui/core';
+// import { styled, SupersetClient } from '@superset-ui/core';
 import AddReportEngine from '../components/AddReportEngine';
 import { MAX_ADVISABLE_VIZ_GALLERY_WIDTH } from '../../../explore/components/controls/VizTypeControl/VizTypeGallery';
+import { reportEngineTypeOption } from '../types';
 
 interface AddReportEnginePageProps {
   addDangerToast: (msg: string) => void;
   addSuccessToast: (msg: string) => void;
+  ReportEngine: (engine: ReportEngine) => void;
   user: {
     userId: string | number;
   };
+  reportEngineType: reportEngineTypeOption;
+  reportEngineTypes: reportEngineTypeOption[];
+  reportEngineName: string;
+  changeReportEngineType: (valor: string) => void;
+  onRENameChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  description: string;
+  changeDescription: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 const ESTIMATED_NAV_HEIGHT = '56px';
@@ -33,7 +40,12 @@ const StyledContainer = styled.div`
     padding-left: ${theme.gridUnit * 4}px;
     padding-right: ${theme.gridUnit * 4}px;
     padding-bottom: ${theme.gridUnit * 4}px;
-
+    
+    & .add-report-engine {
+      margin: 10px
+      padding-top: 15px
+    }
+    
     h3 {
       padding-bottom: ${theme.gridUnit * 3}px;
     }
@@ -57,22 +69,31 @@ const StyledContainer = styled.div`
   `}
 `;
 
-export interface ReportEngine {
+interface ReportEngine {
   id: number;
   verbose_name: string;
   engine_type: string;
+  description: string;
 }
 
-function AddReportDefinitionPage(props: AddReportEnginePageProps) {
+function AddReportEnginePage(props: AddReportEnginePageProps) {
   return (
     <>
       <StyledContainer>
-        <h1 key="page-title">AddReportEnginePage</h1>
+        <h1 key="page-title">New Report Engine Folder</h1>
 
-        <AddReportEngine />
+        <AddReportEngine
+          reportEngineType={props.reportEngineType}
+          reportEngineTypes={props.reportEngineTypes}
+          reportEngineName={props.reportEngineName}
+          changeReportEngineType={props.changeReportEngineType}
+          onRENameChange={props.onRENameChange}
+          description={props.description}
+          changeDescription={props.changeDescription}
+        />
       </StyledContainer>
     </>
   );
 }
 
-export default withToasts(AddReportDefinitionPage);
+export default withToasts(AddReportEnginePage);

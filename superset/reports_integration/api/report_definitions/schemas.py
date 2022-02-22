@@ -15,11 +15,13 @@ class ReportDefinitionPostSchema(Schema):
                                  validate=Length(1, 250))
     report_definition = fields.String(required=True)
     owners = fields.List(fields.Integer())
-    engines = fields.List(fields.String(required=True))
+    engines = fields.List(fields.Integer(required=True))
+    description = fields.String(allow_none=True)
 
 
 class ReportDefinitionPutSchema(Schema):
     report_name = fields.String(required=True, description=report_name_description,
                                 validate=Length(1, 250))
-    report_title = fields.String(required=True, description=report_name_description,
-                                 validate=Length(1, 250))
+    description = fields.String(allow_none=True)
+    owners = fields.List(fields.Integer())
+    # engines = fields.List(fields.Integer(required=True))

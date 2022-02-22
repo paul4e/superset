@@ -292,6 +292,7 @@ yarl==1.6.2
     # via aiohttp
 zipp==3.4.1
     # via -r requirements/base.in
+psycopg2Crate==0.0.2
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

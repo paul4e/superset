@@ -17,14 +17,14 @@
  * under the License.
  */
 import { styled, /* SupersetClient, */ t } from '@superset-ui/core';
-import React, { /* useState, */ useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import React, { /* useState, */ useMemo, useState } from 'react';
+// import { Link } from 'react-router-dom';
 // import rison from 'rison';
 import { isFeatureEnabled, FeatureFlag } from 'src/featureFlags';
 import {
   createFetchRelated,
   createErrorHandler,
-  handleDashboardDelete,
+  // handleDashboardDelete,
 } from 'src/views/CRUD/utils';
 import {
   useListViewResource /* useFavoriteStatus */,
@@ -40,7 +40,7 @@ import ListView, {
   FilterOperator,
 } from 'src/components/ListView';
 import { getFromLocalStorage } from 'src/utils/localStorageHelpers';
-import Owner from 'src/types/Owner';
+// import Owner from 'src/types/Owner';
 import withToasts from 'src/messageToasts/enhancers/withToasts';
 import FacePile from 'src/components/FacePile';
 import Icons from 'src/components/Icons';
@@ -52,6 +52,11 @@ import { Tooltip } from 'src/components/Tooltip';
 // import Dashboard from 'src/dashboard/containers/Dashboard';
 
 // import { DashboardStatus } from './types';
+import PropertiesModal from 'src/reportsintegration/report_definition/components/PropertiesModal';
+import ReportDefinitionModal from './components/ReportDefinitionModal';
+import ReportDefinition from '../types/ReportDefinition';
+import { handleDeleteReportDefinition } from '../utils';
+import { useReportDefinitionEditModal } from './hooks';
 
 const PAGE_SIZE = 25;
 // const PASSWORDS_NEEDED_MESSAGE = t(
@@ -75,18 +80,18 @@ interface ReportDefinitionListProps {
   };
 }
 
-interface ReportDefinition {
-  changed_by_name: string;
-  changed_by_url: string;
-  changed_on_delta_humanized: string;
-  changed_by: string;
-  report_title: string;
-  report_name: string;
-  id: number;
-  url: string;
-  owners: Owner[];
-  created_by: object;
-}
+// interface ReportDefinition {
+//   changed_by_name: string;
+//   changed_by_url: string;
+//   changed_on_delta_humanized: string;
+//   changed_by: string;
+//   report_title: string;
+//   report_name: string;
+//   id: number;
+//   url: string;
+//   owners: Owner[];
+//   created_by: object;
+// }
 
 const Actions = styled.div`
   color: ${({ theme }) => theme.colors.grayscale.base};
@@ -102,7 +107,7 @@ function ReportDefinitionList(props: ReportDefinitionListProps) {
       resourceCollection: reportDefinitions,
       bulkSelectEnabled,
     },
-    // setResourceCollection: setReportDefinitions,
+    setResourceCollection: setReportDefinitions,
     hasPerm,
     fetchData,
     toggleBulkSelect,
@@ -112,6 +117,37 @@ function ReportDefinitionList(props: ReportDefinitionListProps) {
     t('Report Definitions'),
     addDangerToast,
   );
+  const [openReportDefinitionId, setOpenReportDefinitionId] = useState<
+    number | undefined
+  >(undefined);
+  const [
+    openReportDefinitionModalOpen,
+    setOpenReportDefinitionModalOpen,
+  ] = useState<boolean>(false);
+
+  const handleOpenReportDefinitionModal = ({
+    modalOpen = false,
+  }: { modalOpen?: boolean } = {}) => {
+    // Set database and modal
+    setOpenReportDefinitionModalOpen(modalOpen);
+  };
+
+  const handleOpenReportDefinition = ({
+    reportDefinitionId = undefined,
+  }: {
+    reportDefinitionId?: number;
+  }) => {
+    console.log(reportDefinitionId);
+    setOpenReportDefinitionId(reportDefinitionId);
+    handleOpenReportDefinitionModal({ modalOpen: true });
+  };
+
+  const {
+    reportDefinitionCurrentlyEditing,
+    handleReportDefinitionUpdated,
+    openReportDefinitionEditModal,
+    closeReportDefinitionEditModal,
+  } = useReportDefinitionEditModal(setReportDefinitions, reportDefinitions);
   // const reportDefinitionIds = useMemo(
   //   () => reportDefinitions.map(report => report.id),
   //   [reportDefinitions],
@@ -252,9 +288,18 @@ function ReportDefinitionList(props: ReportDefinitionListProps) {
       {
         Cell: ({
           row: {
-            original: { url, report_name },
+            original: { id, report_name },
           },
-        }: any) => <Link to={url}>{report_name}</Link>,
+        }: any) => (
+          <a
+            href="#"
+            onClick={() =>
+              handleOpenReportDefinition({ reportDefinitionId: id })
+            }
+          >
+            {report_name}
+          </a>
+        ),
         Header: t('Title'),
         accessor: 'report_name',
       },
@@ -319,13 +364,13 @@ function ReportDefinitionList(props: ReportDefinitionListProps) {
       {
         Cell: ({ row: { original } }: any) => {
           const handleDelete = () =>
-            handleDashboardDelete(
+            handleDeleteReportDefinition(
               original,
-              refreshData,
               addSuccessToast,
               addDangerToast,
+              refreshData,
             );
-          // const handleEdit = () => openDashboardEditModal(original);
+          const handleEdit = () => openReportDefinitionEditModal(original);
           // const handleExport = () => handleBulkDashboardExport([original]);
 
           return (
@@ -336,7 +381,7 @@ function ReportDefinitionList(props: ReportDefinitionListProps) {
                   description={
                     <>
                       {t('Are you sure you want to delete')}{' '}
-                      <b>{original.dashboard_title}</b>?
+                      <b>{original.report_name}</b>?
                     </>
                   }
                   onConfirm={handleDelete}
@@ -353,7 +398,7 @@ function ReportDefinitionList(props: ReportDefinitionListProps) {
                         className="action-button"
                         onClick={confirmDelete}
                       >
-                        <Icons.Trash data-test="dashboard-list-trash-icon" />
+                        <Icons.Trash data-test="report-definitions-list-trash-icon" />
                       </span>
                     </Tooltip>
                   )}
@@ -385,7 +430,7 @@ function ReportDefinitionList(props: ReportDefinitionListProps) {
                     role="button"
                     tabIndex={0}
                     className="action-button"
-                    // onClick={handleEdit}
+                    onClick={handleEdit}
                   >
                     <Icons.EditAlt data-test="edit-alt" />
                   </span>
@@ -568,6 +613,14 @@ function ReportDefinitionList(props: ReportDefinitionListProps) {
   return (
     <>
       <SubMenu name={t('Report Definitions')} buttons={subMenuButtons} />
+      {reportDefinitionCurrentlyEditing && (
+        <PropertiesModal
+          onHide={closeReportDefinitionEditModal}
+          onSave={handleReportDefinitionUpdated}
+          show
+          reportDefition={reportDefinitionCurrentlyEditing}
+        />
+      )}
       <ConfirmStatusChange
         title={t('Please confirm')}
         description={t(
@@ -631,6 +684,11 @@ function ReportDefinitionList(props: ReportDefinitionListProps) {
         }}
       </ConfirmStatusChange>
 
+      <ReportDefinitionModal
+        onHide={handleOpenReportDefinitionModal}
+        show={openReportDefinitionModalOpen}
+        reportDefinitionId={openReportDefinitionId}
+      />
       {/* <ImportModelsModal
         resourceName="dashboard"
         resourceLabel={t("dashboard")}

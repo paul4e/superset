@@ -10,12 +10,18 @@ from superset.reports_integration.report_engines.base_engine import (
 )
 from superset.reports_integration.models.report_definitions import ReportDefinition
 from superset.reports_integration.models.report_engines import ReportEngineTypes
+
+from superset import app
+
 BIRTENGINE_HOST = "http://localhost:8081/"
 reports_path = "/home/aymaru/Documents/smartnow/proyectos/spring-boot/birtengine-test/reports"
 
-HOST_BIRT = "http://localhost:8081"
-ENDPOINT_VALIDATE_BIRT = "/report/validate"
-ENDPOINT_RENDER_REPORT_BIRT = "/report/export"
+# HOST_BIRT = "http://localhost:8081"
+birtengine_endpoint = app.config["BIRTENGINE_ENDPOINT"]
+
+HOST_BIRT = birtengine_endpoint if birtengine_endpoint else "http://localhost:8081/"
+ENDPOINT_VALIDATE_BIRT = "report/validate"
+ENDPOINT_RENDER_REPORT_BIRT = "report/export"
 
 
 def get_birt_report_engine() -> "BIRTReportEngine":

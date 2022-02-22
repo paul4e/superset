@@ -1070,6 +1070,7 @@ class Superset(BaseSupersetView):  # pylint: disable=too-many-public-methods
         query = DatabaseFilter("id", SQLAInterface(Database, db.session)).apply(
             query, None
         )
+        print("tables A")
         database = query.filter_by(id=db_id).one_or_none()
         if not database:
             return json_error_response("Not found", 404)
@@ -1077,8 +1078,9 @@ class Superset(BaseSupersetView):  # pylint: disable=too-many-public-methods
         force_refresh_parsed = force_refresh.lower() == "true"
         schema_parsed = utils.parse_js_uri_path_item(schema, eval_undefined=True)
         substr_parsed = utils.parse_js_uri_path_item(substr, eval_undefined=True)
-
+        print("tables B")
         if schema_parsed:
+            print("tables C")
             tables = (
                 database.get_all_table_names_in_schema(
                     schema=schema_parsed,
@@ -1098,6 +1100,7 @@ class Superset(BaseSupersetView):  # pylint: disable=too-many-public-methods
                 or []
             )
         else:
+            print("tables D")
             tables = database.get_all_table_names_in_database(
                 cache=True, force=False, cache_timeout=24 * 60 * 60
             )

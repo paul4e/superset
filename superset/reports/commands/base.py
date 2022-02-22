@@ -19,7 +19,8 @@ from typing import Any, Dict, List
 
 from marshmallow import ValidationError
 
-from superset.active_reports.dao import ActiveReportsDAO
+from superset.active_reports.dao import ActiveReportsDAO  # ARJS
+from superset.reports_integration.api.report_definitions.dao import ReportDefinitionDAO  # BIRT
 from superset.charts.dao import ChartDAO
 from superset.commands.base import BaseCommand
 from superset.dashboards.dao import DashboardDAO
@@ -28,6 +29,7 @@ from superset.reports.commands.exceptions import (
     ChartNotFoundValidationError,
     DashboardNotFoundValidationError,
     ReportScheduleChartOrDashboardValidationError,
+    ReportDefinitionNotFoundValidationError
 )
 
 logger = logging.getLogger(__name__)
@@ -49,15 +51,14 @@ class BaseReportScheduleCommand(BaseCommand):
         """ Validate chart or dashboard relation """
         chart_id = self._properties.get("chart")
         dashboard_id = self._properties.get("dashboard")
-
+        # ARJS
         active_report_id = self._properties.get("active_report")
+        #BIRT
+        report_definition_id = self._properties.get("report_definition")
 
-        if (
-            (chart_id and dashboard_id and active_report_id)
-            or (chart_id and dashboard_id)
-            or (chart_id and active_report_id)
-            or (dashboard_id and active_report_id)
-        ):
+        options = [chart_id, dashboard_id, active_report_id, report_definition_id]
+        iter_options = iter(options)
+        if any(iter_options) and any(iter_options):
             exceptions.append(ReportScheduleChartOrDashboardValidationError())
         if active_report_id:
             active_report = ActiveReportsDAO.find_by_id(active_report_id)
@@ -74,5 +75,10 @@ class BaseReportScheduleCommand(BaseCommand):
             if not dashboard:
                 exceptions.append(DashboardNotFoundValidationError())
             self._properties["dashboard"] = dashboard
+        elif report_definition_id:
+            report_definition = ReportDefinitionDAO.find_by_id(report_definition_id)
+            if not report_definition:
+                exceptions.append(ReportDefinitionNotFoundValidationError())
+            self._properties["report_definition"] = report_definition
         elif not update:
             exceptions.append(ReportScheduleChartOrDashboardValidationError())

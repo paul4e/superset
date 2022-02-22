@@ -13,6 +13,7 @@ from superset.reports_integration.api.report_engines.commands.exceptions import 
 )
 from superset.reports_integration.api.report_engines.dao import ReportEngineDAO
 from superset.dao.exceptions import DAOCreateFailedError
+from superset.commands.utils import populate_owners
 
 logger = logging.getLogger(__name__)
 
@@ -35,9 +36,24 @@ class CreateReportEngineCommand(BaseCommand):
     def validate(self) -> None:
         exceptions: List[ValidationError] = list()
         reports_engine_type: Optional[str] = self._properties.get("reports_engine_type")
+        verbose_name: Optional[str] = self._properties.get("verbose_name")
+        # description: Optional[str] = self._properties.get("description")
+        owner_ids: Optional[List[int]] = self._properties.get("owners")
 
         if not reports_engine_type:
             exceptions.append(ReportEngineRequiredFieldValidationError("reports_engine_type"))
+
+        if not verbose_name:
+            exceptions.append(ReportEngineRequiredFieldValidationError("verbose_name"))
+
+        # if not description:
+        #     exceptions.append(ReportEngineRequiredFieldValidationError("description"))
+
+        try:
+            owners = populate_owners(self._actor, owner_ids)
+            self._properties["owners"] = owners
+        except ValidationError as ex:
+            exceptions.append(ex)
 
         if exceptions:
             exception = ReportEngineInvalidError()

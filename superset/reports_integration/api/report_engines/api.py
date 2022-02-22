@@ -50,7 +50,12 @@ class ReportEngineRestApi(BaseSupersetModelRestApi):
     show_columns = [
         "id",
         "verbose_name",
-        "reports_engine_type"
+        "reports_engine_type",
+        "owners.first_name",
+        "owners.id",
+        "owners.last_name",
+        "owners.username",
+        "description",
     ]
 
     list_columns = [
@@ -72,6 +77,8 @@ class ReportEngineRestApi(BaseSupersetModelRestApi):
         "owners.username",
         "owners.first_name",
         "owners.last_name",
+        "reports_engine_type",
+        "description",
     ]
 
     add_columns = [
@@ -155,7 +162,7 @@ class ReportEngineRestApi(BaseSupersetModelRestApi):
         """
         if not request.is_json:
             return self.response_400(message="Request is not JSON")
-
+        print(request.json)
         try:
             item = self.add_model_schema.load(request.json)
         except ValidationError as error:

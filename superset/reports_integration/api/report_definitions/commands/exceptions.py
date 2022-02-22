@@ -7,6 +7,7 @@ from superset.commands.exceptions import (
     CreateFailedError,
     DeleteFailedError,
     UpdateFailedError,
+    ForbiddenError,
 )
 
 from superset.exceptions import SupersetErrorException, SupersetErrorsException
@@ -37,3 +38,7 @@ class ReportDefinitionCreateFailedError(CreateFailedError):
 
 class ReportDefinitionUpdateFailedError(UpdateFailedError):
     message = _("Report Definition could not be updated")
+
+
+class ReportDefinitionForbiddenError(ForbiddenError):
+    message = _("Changing this report is forbidden")

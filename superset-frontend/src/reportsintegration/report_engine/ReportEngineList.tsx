@@ -16,16 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { styled, t } from '@superset-ui/core';
+import { styled, SupersetClient, t } from '@superset-ui/core';
 import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 // import rison from 'rison';
 import { FeatureFlag, isFeatureEnabled } from 'src/featureFlags';
-import {
-  createErrorHandler,
-  createFetchRelated,
-  handleDashboardDelete,
-} from 'src/views/CRUD/utils';
+import { createErrorHandler, createFetchRelated } from 'src/views/CRUD/utils';
 import { useListViewResource } from 'src/views/CRUD/hooks';
 import ConfirmStatusChange from 'src/components/ConfirmStatusChange';
 // import handleResourceExport from 'src/utils/export';
@@ -37,7 +33,6 @@ import ListView, {
   ListViewProps,
 } from 'src/components/ListView';
 import { getFromLocalStorage } from 'src/utils/localStorageHelpers';
-import Owner from 'src/types/Owner';
 import withToasts from 'src/messageToasts/enhancers/withToasts';
 import FacePile from 'src/components/FacePile';
 import Icons from 'src/components/Icons';
@@ -45,6 +40,10 @@ import Icons from 'src/components/Icons';
 // import PropertiesModal from 'src/dashboard/components/PropertiesModal';
 import { Tooltip } from 'src/components/Tooltip';
 import ReportEngineModal from './components/ReportEngineModal';
+import ReportEngine from '../types/ReportEngine';
+import { handleDeleteReportEngine } from '../utils';
+import { useReportEngineEditModal } from './hooks';
+import PropertiesModal from './components/PropertiesModal';
 // import ImportModelsModal from 'src/components/ImportModal/index';
 
 // import Dashboard from 'src/dashboard/containers/Dashboard';
@@ -73,21 +72,19 @@ interface ReportEngineListProps {
   };
 }
 
-interface ReportEngine {
-  changed_by_name: string;
-  changed_by_url: string;
-  changed_on_delta_humanized: string;
-  changed_by: string;
-  verbose_name: string;
-  id: number;
-  url: string;
-  owners: Owner[];
-  created_by: object;
-}
-
 const Actions = styled.div`
   color: ${({ theme }) => theme.colors.grayscale.base};
 `;
+
+export function postReportEngines(body: any) {
+  return SupersetClient.post({
+    endpoint: encodeURI(`/api/v1/report_engines/`),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  })
+    .then(response => response.json)
+    .catch(error => alert(`An error has occurred, ${error}`));
+}
 
 function ReportEngineList(props: ReportEngineListProps) {
   const { addDangerToast, addSuccessToast } = props;
@@ -99,7 +96,7 @@ function ReportEngineList(props: ReportEngineListProps) {
       resourceCollection: reportEngines,
       bulkSelectEnabled,
     },
-    // setResourceCollection: setReportDefinitions,
+    setResourceCollection: setReportEngines,
     hasPerm,
     fetchData,
     toggleBulkSelect,
@@ -113,6 +110,13 @@ function ReportEngineList(props: ReportEngineListProps) {
   const [reportEngineModalOpen, setreportEngineModalOpen] = useState<boolean>(
     false,
   );
+
+  const {
+    reportEngineCurrentlyEditing,
+    handleReportEngineUpdated,
+    openReportEngineEditModal,
+    closeReportEngineEditModal,
+  } = useReportEngineEditModal(setReportEngines, reportEngines);
   // const reportDefinitionIds = useMemo(
   //   () => reportDefinitions.map(report => report.id),
   //   [reportDefinitions],
@@ -266,7 +270,16 @@ function ReportEngineList(props: ReportEngineListProps) {
         Header: t('Title'),
         accessor: 'verbose_name',
       },
-
+      {
+        Cell: ({
+          row: {
+            original: { reports_engine_type },
+          },
+        }: any) => <span className="no-wrap">{reports_engine_type}</span>,
+        Header: t('Engine Type'),
+        accessor: 'reports_engine_type',
+        size: 'xl',
+      },
       {
         Cell: ({
           row: {
@@ -327,14 +340,13 @@ function ReportEngineList(props: ReportEngineListProps) {
       {
         Cell: ({ row: { original } }: any) => {
           const handleDelete = () =>
-            handleDashboardDelete(
+            handleDeleteReportEngine(
               original,
-              refreshData,
               addSuccessToast,
               addDangerToast,
+              refreshData,
             );
-          // const handleEdit = () => openDashboardEditModal(original);
-          // const handleExport = () => handleBulkDashboardExport([original]);
+          const handleEdit = () => openReportEngineEditModal(original);
 
           return (
             <Actions className="actions">
@@ -344,7 +356,7 @@ function ReportEngineList(props: ReportEngineListProps) {
                   description={
                     <>
                       {t('Are you sure you want to delete')}{' '}
-                      <b>{original.dashboard_title}</b>?
+                      <b>{original.verbose_name}</b>?
                     </>
                   }
                   onConfirm={handleDelete}
@@ -367,22 +379,6 @@ function ReportEngineList(props: ReportEngineListProps) {
                   )}
                 </ConfirmStatusChange>
               )}
-              {canExport && (
-                <Tooltip
-                  id="export-action-tooltip"
-                  title={t('Export')}
-                  placement="bottom"
-                >
-                  <span
-                    role="button"
-                    tabIndex={0}
-                    className="action-button"
-                    // onClick={handleExport}
-                  >
-                    <Icons.Share />
-                  </span>
-                </Tooltip>
-              )}
               {canEdit && (
                 <Tooltip
                   id="edit-action-tooltip"
@@ -393,7 +389,7 @@ function ReportEngineList(props: ReportEngineListProps) {
                     role="button"
                     tabIndex={0}
                     className="action-button"
-                    // onClick={handleEdit}
+                    onClick={handleEdit}
                   >
                     <Icons.EditAlt data-test="edit-alt" />
                   </span>
@@ -404,14 +400,13 @@ function ReportEngineList(props: ReportEngineListProps) {
         },
         Header: t('Actions'),
         id: 'actions',
-        hidden: !canEdit && !canDelete && !canExport,
+        hidden: !canEdit && !canDelete,
         disableSortBy: true,
       },
     ],
     [
       canEdit,
       canDelete,
-      canExport,
       // ...(props.user.userId ? [favoriteStatus] : []),
     ],
   );
@@ -576,6 +571,14 @@ function ReportEngineList(props: ReportEngineListProps) {
   return (
     <>
       <SubMenu name={t('Report Engines')} buttons={subMenuButtons} />
+      {reportEngineCurrentlyEditing && (
+        <PropertiesModal
+          onHide={closeReportEngineEditModal}
+          onSave={handleReportEngineUpdated}
+          show
+          reportEngine={reportEngineCurrentlyEditing}
+        />
+      )}
       <ConfirmStatusChange
         title={t('Please confirm')}
         description={t(
@@ -640,12 +643,12 @@ function ReportEngineList(props: ReportEngineListProps) {
       </ConfirmStatusChange>
 
       <ReportEngineModal
+        user={props.user}
         reportEngineId={undefined}
         show={reportEngineModalOpen}
         onHide={handleReportEngineEditModal}
-        onDatabaseAdd={() => {
-          refreshData();
-        }}
+        onReportEngineAdd={postReportEngines}
+        refreshData={refreshData}
       />
 
       {/* <ImportModelsModal

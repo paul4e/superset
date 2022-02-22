@@ -41,6 +41,7 @@ from superset.models.core import Database
 from superset.models.dashboard import Dashboard
 from superset.models.helpers import AuditMixinNullable
 from superset.models.slice import Slice
+from superset.reports_integration.models.report_definitions import ReportDefinition
 
 metadata = Model.metadata  # pylint: disable=no-member
 
@@ -130,11 +131,17 @@ class ReportSchedule(Model, AuditMixinNullable):
         Dashboard, backref="report_schedules", foreign_keys=[dashboard_id]
     )
 
-#     # (Reports) M-O to active_reports
-#     active_report_id = Column(Integer, ForeignKey("active_reports.id"), nullable=True)
-#     active_report = relationship(
-#         ActiveReport, backref="report_schedules", foreign_keys=[active_report_id]
-#     )
+    # (Reports) M-O to active_reports
+    active_report_id = Column(Integer, ForeignKey("active_reports.id"), nullable=True)
+    active_report = relationship(
+        ActiveReport, backref="report_schedules", foreign_keys=[active_report_id]
+    )
+
+    # (Reports) M-O to reports_definitions
+    report_definition_id = Column(Integer, ForeignKey("report_definitions.id"), nullable=True)
+    report_definition = relationship(
+        ReportDefinition, backref="report_schedules", foreign_keys=[report_definition_id]
+    )
 
     # (Alerts) M-O to database
     database_id = Column(Integer, ForeignKey("dbs.id"), nullable=True)

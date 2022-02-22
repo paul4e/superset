@@ -12,16 +12,18 @@ class ReportEnginesPostSchema(Schema):
     reports_engine_type = fields.String(required=True,
                                         description=reports_engine_type_description,
                                         validate=validate.OneOf(["BIRT"]))
+    description = fields.String(allow_none=True)
+    owners = fields.List(fields.Integer())
 
 
 class ReportEnginesPutSchema(Schema):
     verbose_name = fields.String(required=True, description=verbose_name_description,
                                  validate=Length(1, 250))
-    reports_engine_type = fields.String(required=True,
-                                        description=reports_engine_type_description,
-                                        validate=validate.OneOf(["BIRT"]))
+    description = fields.String(allow_none=True)
+    owners = fields.List(fields.Integer())
 
 
 class ValidateReportSchema(Schema):
     report_definition = fields.String(required=True)
     report_name = fields.String(required=True, validate=Length(1, 250))
+

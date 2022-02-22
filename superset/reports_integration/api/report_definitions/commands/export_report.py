@@ -28,14 +28,16 @@ class ExportReportDefinitionCommand(BaseCommand):
 
         try:
             engine_type = ReportDefinitionDAO.get_report_engine_type(self._model_id)
-            print("engine_type")
-            print(engine_type)
-            birt_engine = get_report_engine(engine_type)
+            # print("engine_type")
+            # print(engine_type)
+            report_engine = get_report_engine(engine_type)
             rpt_definition = self._model.report_definition.decode('ascii')
-            print("rpt_definition")
-            print(type(rpt_definition))
-            print(rpt_definition)
-            response = birt_engine.render_report(self._model.report_name, rpt_definition, self._format_type)
+            # print("rpt_definition")
+            # print(type(rpt_definition))
+            # print(rpt_definition)
+            response = report_engine.render_report(self._model.report_name, rpt_definition, self._format_type)
+            # print(response.content)
+
             return response
         except DAODeleteFailedError as ex:
             logger.exception(ex.exception)

@@ -61,6 +61,7 @@ class ReportEngine(Model, AuditMixinNullable):
     report_definitions = relationship(ReportDefinition,
                                       secondary=report_definition_engine,
                                       backref="engines")
+    description = Column(Text)
     owners = relationship(security_manager.user_model, secondary=report_engine_user)
     reports_engine_type = Column(Enum(ReportEngineTypes))
 

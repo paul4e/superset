@@ -74,6 +74,8 @@ from superset.utils.screenshots import (
     DashboardScreenshot,
 )
 from superset.utils.urls import get_url_path
+from superset.reports_integration.report_engines.utils import get_report_engine
+from superset.reports_integration.api.report_definitions.dao import ReportDefinitionDAO
 
 logger = logging.getLogger(__name__)
 
@@ -150,6 +152,13 @@ class BaseReportState:
                     "ActiveReports.report",
                     report_id=self._report_schedule.active_report_id,
                 )
+        if feature_flag_manager.is_feature_enabled("ACTIVE_EXTERNAL_REPORTS"):
+            if self._report_schedule.report_definition:
+                return get_url_path(
+                    "ReportDefinitionView.render_report",
+                    report_definition_id=self._report_schedule.report_definition_id,
+                    render_format=self._report_schedule.report_format.upper()
+                )
 
         if self._report_schedule.chart:
             if csv:
@@ -175,8 +184,8 @@ class BaseReportState:
     def _get_user(self) -> User:
         user = (
             self._session.query(User)
-            .filter(User.username == app.config["THUMBNAIL_SELENIUM_USER"])
-            .one_or_none()
+                .filter(User.username == app.config["THUMBNAIL_SELENIUM_USER"])
+                .one_or_none()
         )
         if not user:
             raise ReportScheduleSelleniumUserNotFoundError()
@@ -302,6 +311,17 @@ class BaseReportState:
             result_byte_array = None
         return result_byte_array
 
+    def _get_report_definition_exported_data(self, export_type):
+        tmp_report_definition = self._report_schedule.report_definition
+        engine_type = ReportDefinitionDAO.get_report_engine_type(self._report_schedule.report_definition_id)
+        report_engine = get_report_engine(engine_type)
+        rpt_definition = tmp_report_definition.report_definition.decode('ascii')
+        response = report_engine.render_report(tmp_report_definition.report_name,
+                                               rpt_definition,
+                                               export_type)
+        result_bytearray = bytearray(response.content)
+        return result_bytearray
+
     def _get_notification_content(self) -> NotificationContent:
         """
         Gets a notification content, this is composed by a title and a screenshot
@@ -323,7 +343,7 @@ class BaseReportState:
             or self._report_schedule.type == ReportScheduleType.REPORT
         ):
             # ACTIVE_REPORTS_CODE
-            if feature_flag_manager.is_feature_enabled("ACTIVE_REPORTS_JS"):
+            if feature_flag_manager.is_feature_enabled("ACTIVE_REPORTS_JS") and self._report_schedule.active_report:
                 if self._report_schedule.report_format == ReportDataFormat.PDF:
                     pdf = self._get_arjs_exported_data("pdf")
                     if not pdf:
@@ -331,11 +351,22 @@ class BaseReportState:
                 if self._report_schedule.report_format == ReportDataFormat.EXCEL:
                     excel = self._get_arjs_exported_data("excel")
                     if not excel:
-                        error_text = "Unexpected missing pdf"
+                        error_text = "Unexpected missing excel"
                 if self._report_schedule.report_format == ReportDataFormat.HTML:
                     html = self._get_arjs_exported_data("html")
                     if not html:
+                        error_text = "Unexpected missing html"
+
+            # BIRT
+            if feature_flag_manager.is_feature_enabled("ACTIVE_EXTERNAL_REPORTS") and self._report_schedule.report_definition:
+                if self._report_schedule.report_format == ReportDataFormat.PDF:
+                    pdf = self._get_report_definition_exported_data("PDF")
+                    if not pdf:
                         error_text = "Unexpected missing pdf"
+                if self._report_schedule.report_format == ReportDataFormat.HTML:
+                    html = self._get_report_definition_exported_data("HTML")
+                    if not html:
+                        error_text = "Unexpected missing html"
 
             if self._report_schedule.report_format == ReportDataFormat.VISUALIZATION:
                 screenshot_data = self._get_screenshot()
@@ -366,6 +397,14 @@ class BaseReportState:
             name = (
                 f"{self._report_schedule.name}: "
                 f"{self._report_schedule.active_report.report_name}"
+            )
+        elif (
+            feature_flag_manager.is_feature_enabled("ACTIVE_EXTERNAL_REPORTS")
+            and self._report_schedule.report_definition
+        ):
+            name = (
+                f"{self._report_schedule.name}: "
+                f"{self._report_schedule.report_definition.report_title}"
             )
         elif self._report_schedule.chart:
             name = (

@@ -198,6 +198,7 @@ class ReportSchedulePostSchema(Schema):
         validate=validate.OneOf(choices=tuple(key.value for key in ReportDataFormat)),
     )
     active_report = fields.Integer(required=False, allow_none=True)
+    report_definition = fields.Integer(required=False, allow_none=True)
 
     @validates_schema
     def validate_report_references(  # pylint: disable=unused-argument,no-self-use
@@ -285,3 +286,4 @@ class ReportSchedulePutSchema(Schema):
         validate=validate.OneOf(choices=tuple(key.value for key in ReportDataFormat)),
     )
     active_report = fields.Integer(required=False, allow_none=True)
+    report_definition = fields.Integer(required=False, allow_none=True)
