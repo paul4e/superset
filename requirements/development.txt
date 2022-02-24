@@ -21,7 +21,6 @@ jmespath==0.10.0          # via boto3, botocore
 jsonlines==1.2.0          # via tabulator
 linear-tsv==1.1.0         # via tabulator
 mysqlclient==1.4.2.post1  # via -r requirements/development.in
-crate-smartnow==1.6       # via -r requirements/development.in
 openpyxl==3.0.5           # via tabulator
 pillow==7.2.0             # via -r requirements/development.in
 psycopg2-binary==2.8.5    # via -r requirements/development.in
@@ -41,6 +40,8 @@ wrapt==1.12.1             # via deprecated
 xlrd==1.2.0               # via tabulator
 geojson==2.5.0            # via -r requirements/development.in
 xlsxwriter==1.3.8          # via -r requirements/development.in
+crate-smartnow==1.4.6
+psycopg2Crate==2.9.4
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
