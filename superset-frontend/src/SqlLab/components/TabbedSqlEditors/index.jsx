@@ -20,7 +20,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Dropdown } from 'src/components/Dropdown';
 import { EditableTabs } from 'src/components/Tabs';
-import { Menu } from 'src/common/components';
+import { Menu } from 'src/components/Menu';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import URI from 'urijs';
@@ -30,6 +30,7 @@ import { areArraysShallowEqual } from 'src/reduxUtils';
 import { Tooltip } from 'src/components/Tooltip';
 import { detectOS } from 'src/utils/common';
 import * as Actions from 'src/SqlLab/actions/sqlLab';
+import { EmptyStateBig } from 'src/components/EmptyState';
 import SqlEditor from '../SqlEditor';
 import TabStatusIcon from '../TabStatusIcon';
 
@@ -64,6 +65,10 @@ const TabTitleWrapper = styled.div`
   align-items: center;
 `;
 
+const StyledTab = styled.span`
+  line-height: 24px;
+`;
+
 const TabTitle = styled.span`
   margin-right: ${({ theme }) => theme.gridUnit * 2}px;
   text-transform: none;
@@ -84,9 +89,8 @@ class TabbedSqlEditors extends React.PureComponent {
     this.removeQueryEditor = this.removeQueryEditor.bind(this);
     this.renameTab = this.renameTab.bind(this);
     this.toggleLeftBar = this.toggleLeftBar.bind(this);
-    this.removeAllOtherQueryEditors = this.removeAllOtherQueryEditors.bind(
-      this,
-    );
+    this.removeAllOtherQueryEditors =
+      this.removeAllOtherQueryEditors.bind(this);
     this.duplicateQueryEditor = this.duplicateQueryEditor.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
@@ -258,9 +262,9 @@ class TabbedSqlEditors extends React.PureComponent {
     );
     const warning = isFeatureEnabled(FeatureFlag.SQLLAB_BACKEND_PERSISTENCE)
       ? ''
-      : `${t(
-          '-- Note: Unless you save your query, these tabs will NOT persist if you clear your cookies or change browsers.',
-        )}\n\n`;
+      : t(
+          '-- Note: Unless you save your query, these tabs will NOT persist if you clear your cookies or change browsers.\n\n',
+        );
     const qe = {
       title: t('Untitled Query %s', queryCount),
       dbId:
@@ -315,6 +319,7 @@ class TabbedSqlEditors extends React.PureComponent {
   }
 
   render() {
+    const noQueryEditors = this.props.queryEditors?.length === 0;
     const editors = this.props.queryEditors.map(qe => {
       let latestQuery;
       if (qe.latestQueryId) {
@@ -402,8 +407,40 @@ class TabbedSqlEditors extends React.PureComponent {
       );
     });
 
+    const emptyTab = (
+      <StyledTab>
+        <TabTitle>{t('Add a new tab')}</TabTitle>
+        <Tooltip
+          id="add-tab"
+          placement="bottom"
+          title={
+            userOS === 'Windows'
+              ? t('New tab (Ctrl + q)')
+              : t('New tab (Ctrl + t)')
+          }
+        >
+          <i data-test="add-tab-icon" className="fa fa-plus-circle" />
+        </Tooltip>
+      </StyledTab>
+    );
+
+    const emptyTabState = (
+      <EditableTabs.TabPane
+        key={0}
+        data-key={0}
+        tab={emptyTab}
+        closable={false}
+      >
+        <EmptyStateBig
+          image="empty_sql_chart.svg"
+          description={t('Add a new tab to create SQL Query')}
+        />
+      </EditableTabs.TabPane>
+    );
+
     return (
       <EditableTabs
+        destroyInactiveTabPane
         activeKey={this.props.tabHistory[this.props.tabHistory.length - 1]}
         id="a11y-query-editor-tabs"
         className="SqlEditorTabs"
@@ -411,7 +448,9 @@ class TabbedSqlEditors extends React.PureComponent {
         onChange={this.handleSelect}
         fullWidth={false}
         hideAdd={this.props.offline}
+        onTabClick={() => noQueryEditors && this.newQueryEditor()}
         onEdit={this.handleEdit}
+        type={noQueryEditors ? 'card' : 'editable-card'}
         addIcon={
           <Tooltip
             id="add-tab"
@@ -427,6 +466,7 @@ class TabbedSqlEditors extends React.PureComponent {
         }
       >
         {editors}
+        {noQueryEditors && emptyTabState}
       </EditableTabs>
     );
   }

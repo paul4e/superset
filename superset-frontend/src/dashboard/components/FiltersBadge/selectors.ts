@@ -17,15 +17,18 @@
  * under the License.
  */
 import {
+  DataMaskStateWithId,
+  DataMaskType,
   ensureIsArray,
   FeatureFlag,
+  Filters,
   FilterState,
   isFeatureEnabled,
+  NativeFilterType,
 } from '@superset-ui/core';
 import { NO_TIME_RANGE, TIME_FILTER_MAP } from 'src/explore/constants';
 import { getChartIdsInFilterScope } from 'src/dashboard/util/activeDashboardFilters';
-import { ChartConfiguration, Filters } from 'src/dashboard/reducers/types';
-import { DataMaskStateWithId, DataMaskType } from 'src/dataMask/types';
+import { ChartConfiguration } from 'src/dashboard/reducers/types';
 import { areObjectsEqual } from 'src/reduxUtils';
 import { Layout } from '../../types';
 import { getTreeCheckedItems } from '../nativeFilters/FiltersConfigModal/FiltersConfigForm/FilterScope/utils';
@@ -268,11 +271,13 @@ export const selectNativeIndicatorsForChart = (
     nativeFilterIndicators =
       nativeFilters &&
       Object.values(nativeFilters)
-        .filter(nativeFilter =>
-          getTreeCheckedItems(nativeFilter.scope, dashboardLayout).some(
-            layoutItem =>
-              dashboardLayout[layoutItem]?.meta?.chartId === chartId,
-          ),
+        .filter(
+          nativeFilter =>
+            nativeFilter.type === NativeFilterType.NATIVE_FILTER &&
+            getTreeCheckedItems(nativeFilter.scope, dashboardLayout).some(
+              layoutItem =>
+                dashboardLayout[layoutItem]?.meta?.chartId === chartId,
+            ),
         )
         .map(nativeFilter => {
           const column = nativeFilter.targets[0]?.column?.name;

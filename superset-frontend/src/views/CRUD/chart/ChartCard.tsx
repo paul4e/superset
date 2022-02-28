@@ -25,7 +25,8 @@ import Chart from 'src/types/Chart';
 
 import ListViewCard from 'src/components/ListViewCard';
 import Label from 'src/components/Label';
-import { Dropdown, Menu } from 'src/common/components';
+import { Dropdown } from 'src/common/components';
+import { Menu } from 'src/components/Menu';
 import FaveStar from 'src/components/FaveStar';
 import FacePile from 'src/components/FacePile';
 import { handleChartDelete, CardStyles } from '../utils';
@@ -66,7 +67,7 @@ export default function ChartCard({
   const canEdit = hasPerm('can_write');
   const canDelete = hasPerm('can_write');
   const canExport =
-    hasPerm('can_read') && isFeatureEnabled(FeatureFlag.VERSIONED_EXPORT);
+    hasPerm('can_export') && isFeatureEnabled(FeatureFlag.VERSIONED_EXPORT);
   const theme = useTheme();
 
   const menu = (
@@ -142,6 +143,8 @@ export default function ChartCard({
       <ListViewCard
         loading={loading}
         title={chart.slice_name}
+        certifiedBy={chart.certified_by}
+        certificationDetails={chart.certification_details}
         cover={
           !isFeatureEnabled(FeatureFlag.THUMBNAILS) || !showThumbnails ? (
             <></>

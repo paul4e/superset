@@ -19,8 +19,9 @@
 import { snakeCase, isEqual } from 'lodash';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { SuperChart, logging, Behavior } from '@superset-ui/core';
+import { SuperChart, logging, Behavior, t } from '@superset-ui/core';
 import { Logger, LOG_ACTIONS_RENDER_CHART } from 'src/logger/LogUtils';
+import { EmptyStateBig } from 'src/components/EmptyState';
 
 const propTypes = {
   annotationData: PropTypes.object,
@@ -29,6 +30,7 @@ const propTypes = {
   datasource: PropTypes.object,
   initialValues: PropTypes.object,
   formData: PropTypes.object.isRequired,
+  labelColors: PropTypes.object,
   height: PropTypes.number,
   width: PropTypes.number,
   setControlValue: PropTypes.func,
@@ -100,6 +102,7 @@ class ChartRenderer extends React.Component {
         nextProps.height !== this.props.height ||
         nextProps.width !== this.props.width ||
         nextProps.triggerRender ||
+        nextProps.labelColors !== this.props.labelColors ||
         nextProps.formData.color_scheme !== this.props.formData.color_scheme ||
         nextProps.cacheBusterProp !== this.props.cacheBusterProp
       );
@@ -160,13 +163,8 @@ class ChartRenderer extends React.Component {
   }
 
   render() {
-    const {
-      chartAlert,
-      chartStatus,
-      vizType,
-      chartId,
-      refreshOverlayVisible,
-    } = this.props;
+    const { chartAlert, chartStatus, vizType, chartId, refreshOverlayVisible } =
+      this.props;
 
     // Skip chart rendering
     if (
@@ -234,6 +232,15 @@ class ChartRenderer extends React.Component {
         queriesData={queriesResponse}
         onRenderSuccess={this.handleRenderSuccess}
         onRenderFailure={this.handleRenderFailure}
+        noResults={
+          <EmptyStateBig
+            title={t('No results were returned for this query')}
+            description={t(
+              'Make sure that the controls are configured properly and the datasource contains data for the selected time range',
+            )}
+            image="chart.svg"
+          />
+        }
       />
     );
   }

@@ -20,7 +20,8 @@ import React from 'react';
 import { styled, t } from '@superset-ui/core';
 import { Form, FormItem, FormProps } from 'src/components/Form';
 import Select, { propertyComparator } from 'src/components/Select/Select';
-import { Col, InputNumber, Row } from 'src/common/components';
+import { Col, Row } from 'src/common/components';
+import { InputNumber } from 'src/components/Input';
 import Button from 'src/components/Button';
 import {
   COMPARATOR,
@@ -57,22 +58,22 @@ const operatorOptions = [
   { value: COMPARATOR.BETWEEN_OR_RIGHT_EQUAL, label: '< x ≤', order: 10 },
 ];
 
-const targetValueValidator = (
-  compare: (targetValue: number, compareValue: number) => boolean,
-  rejectMessage: string,
-) => (targetValue: number | string) => (
-  _: any,
-  compareValue: number | string,
-) => {
-  if (
-    !targetValue ||
-    !compareValue ||
-    compare(Number(targetValue), Number(compareValue))
-  ) {
-    return Promise.resolve();
-  }
-  return Promise.reject(new Error(rejectMessage));
-};
+const targetValueValidator =
+  (
+    compare: (targetValue: number, compareValue: number) => boolean,
+    rejectMessage: string,
+  ) =>
+  (targetValue: number | string) =>
+  (_: any, compareValue: number | string) => {
+    if (
+      !targetValue ||
+      !compareValue ||
+      compare(Number(targetValue), Number(compareValue))
+    ) {
+      return Promise.resolve();
+    }
+    return Promise.reject(new Error(rejectMessage));
+  };
 
 const targetValueLeftValidator = targetValueValidator(
   (target: number, val: number) => target > val,

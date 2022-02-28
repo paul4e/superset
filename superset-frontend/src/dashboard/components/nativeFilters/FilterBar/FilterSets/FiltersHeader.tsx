@@ -17,12 +17,17 @@
  * under the License.
  */
 import React, { FC } from 'react';
-import { styled, t, useTheme } from '@superset-ui/core';
+import {
+  DataMaskState,
+  FilterSet,
+  NativeFilterType,
+  styled,
+  t,
+  useTheme,
+} from '@superset-ui/core';
 import { Collapse, Typography, Tooltip } from 'src/common/components';
-import { DataMaskState } from 'src/dataMask/types';
 import Icons from 'src/components/Icons';
 import { areObjectsEqual } from 'src/reduxUtils';
-import { FilterSet } from 'src/dashboard/reducers/types';
 import { getFilterValueForDisplay } from './utils';
 import { useFilters } from '../state';
 import { getFilterBarTestId } from '../index';
@@ -68,7 +73,9 @@ export type FiltersHeaderProps = {
 const FiltersHeader: FC<FiltersHeaderProps> = ({ dataMask, filterSet }) => {
   const theme = useTheme();
   const filters = useFilters();
-  const filterValues = Object.values(filters);
+  const filterValues = Object.values(filters).filter(
+    nativeFilter => nativeFilter.type === NativeFilterType.NATIVE_FILTER,
+  );
 
   let resultFilters = filterValues ?? [];
   if (filterSet?.nativeFilters) {

@@ -42,6 +42,7 @@ import Select, { propertyComparator } from 'src/components/Select/Select';
 import { FeatureFlag, isFeatureEnabled } from 'src/featureFlags';
 import withToasts from 'src/components/MessageToasts/withToasts';
 import Owner from 'src/types/Owner';
+import { Checkbox } from 'src/common/components';
 import TextAreaControl from 'src/explore/components/controls/TextAreaControl';
 import { useCommonConf } from 'src/views/CRUD/data/database/state';
 import {
@@ -54,6 +55,7 @@ import {
   Operator,
   Recipient,
 } from 'src/views/CRUD/alert/types';
+import { InfoTooltipWithTrigger } from '@superset-ui/chart-controls';
 import { AlertReportCronScheduler } from './components/AlertReportCronScheduler';
 import { NotificationMethod } from './components/NotificationMethod';
 
@@ -153,6 +155,7 @@ const DEFAULT_ALERT = {
   sql: '',
   validator_config_json: {},
   validator_type: '',
+  force_screenshot: false,
   grace_period: undefined,
 };
 
@@ -339,6 +342,10 @@ const StyledRadioGroup = styled(Radio.Group)`
   margin-left: ${({ theme }) => theme.gridUnit * 5.5}px;
 `;
 
+const StyledCheckbox = styled(Checkbox)`
+  margin-left: ${({ theme }) => theme.gridUnit * 5.5}px;
+`;
+
 // Notification Method components
 const StyledNotificationAddButton = styled.div`
   color: ${({ theme }) => theme.colors.primary.dark1};
@@ -408,15 +415,14 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
     conf?.ALERT_REPORTS_NOTIFICATION_METHODS || DEFAULT_NOTIFICATION_METHODS;
 
   const [disableSave, setDisableSave] = useState<boolean>(true);
-  const [
-    currentAlert,
-    setCurrentAlert,
-  ] = useState<Partial<AlertObject> | null>();
+  const [currentAlert, setCurrentAlert] =
+    useState<Partial<AlertObject> | null>();
   const [isHidden, setIsHidden] = useState<boolean>(true);
   const [contentType, setContentType] = useState<string>('dashboard');
   const [reportFormat, setReportFormat] = useState<string>(
     DEFAULT_NOTIFICATION_FORMAT,
   );
+  const [forceScreenshot, setForceScreenshot] = useState<boolean>(false);
 
   // Dropdown options
   const [conditionNotNull, setConditionNotNull] = useState<boolean>(false);
@@ -432,10 +438,8 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
     contentType === 'chart' &&
     (isFeatureEnabled(FeatureFlag.ALERTS_ATTACH_REPORTS) || isReport);
 
-  const [
-    notificationAddState,
-    setNotificationAddState,
-  ] = useState<NotificationAddStatus>('active');
+  const [notificationAddState, setNotificationAddState] =
+    useState<NotificationAddStatus>('active');
   const [notificationSettings, setNotificationSettings] = useState<
     NotificationSetting[]
   >([]);
@@ -512,9 +516,11 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
       }
     });
 
+    const shouldEnableForceScreenshot = contentType === 'chart' && !isReport;
     const data: any = {
       ...currentAlert,
       type: isReport ? 'Report' : 'Alert',
+      force_screenshot: shouldEnableForceScreenshot || forceScreenshot,
       validator_type: conditionNotNull ? 'not null' : 'operator',
       validator_config_json: conditionNotNull
         ? {}
@@ -581,20 +587,25 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
 
   // Fetch data to populate form dropdowns
   const loadOwnerOptions = useMemo(
-    () => (input = '', page: number, pageSize: number) => {
-      const query = rison.encode({ filter: input, page, page_size: pageSize });
-      return SupersetClient.get({
-        endpoint: `/api/v1/report/related/owners?q=${query}`,
-      }).then(response => ({
-        data: response.json.result.map(
-          (item: { value: number; text: string }) => ({
-            value: item.value,
-            label: item.text,
-          }),
-        ),
-        totalCount: response.json.count,
-      }));
-    },
+    () =>
+      (input = '', page: number, pageSize: number) => {
+        const query = rison.encode({
+          filter: input,
+          page,
+          page_size: pageSize,
+        });
+        return SupersetClient.get({
+          endpoint: `/api/v1/report/related/owners?q=${query}`,
+        }).then(response => ({
+          data: response.json.result.map(
+            (item: { value: number; text: string }) => ({
+              value: item.value,
+              label: item.text,
+            }),
+          ),
+          totalCount: response.json.count,
+        }));
+      },
     [],
   );
 
@@ -629,21 +640,26 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
   };
 
   const loadSourceOptions = useMemo(
-    () => (input = '', page: number, pageSize: number) => {
-      const query = rison.encode({ filter: input, page, page_size: pageSize });
-      return SupersetClient.get({
-        endpoint: `/api/v1/report/related/database?q=${query}`,
-      }).then(response => {
-        const list = response.json.result.map(
-          (item: { value: number; text: string }) => ({
-            value: item.value,
-            label: item.text,
-          }),
-        );
-        setSourceOptions(list);
-        return { data: list, totalCount: response.json.count };
-      });
-    },
+    () =>
+      (input = '', page: number, pageSize: number) => {
+        const query = rison.encode({
+          filter: input,
+          page,
+          page_size: pageSize,
+        });
+        return SupersetClient.get({
+          endpoint: `/api/v1/report/related/database?q=${query}`,
+        }).then(response => {
+          const list = response.json.result.map(
+            (item: { value: number; text: string }) => ({
+              value: item.value,
+              label: item.text,
+            }),
+          );
+          setSourceOptions(list);
+          return { data: list, totalCount: response.json.count };
+        });
+      },
     [],
   );
 
@@ -657,21 +673,26 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
   }, [databaseLabel, getSourceData]);
 
   const loadDashboardOptions = useMemo(
-    () => (input = '', page: number, pageSize: number) => {
-      const query = rison.encode({ filter: input, page, page_size: pageSize });
-      return SupersetClient.get({
-        endpoint: `/api/v1/report/related/dashboard?q=${query}`,
-      }).then(response => {
-        const list = response.json.result.map(
-          (item: { value: number; text: string }) => ({
-            value: item.value,
-            label: item.text,
-          }),
-        );
-        setDashboardOptions(list);
-        return { data: list, totalCount: response.json.count };
-      });
-    },
+    () =>
+      (input = '', page: number, pageSize: number) => {
+        const query = rison.encode_uri({
+          filter: input,
+          page,
+          page_size: pageSize,
+        });
+        return SupersetClient.get({
+          endpoint: `/api/v1/report/related/dashboard?q=${query}`,
+        }).then(response => {
+          const list = response.json.result.map(
+            (item: { value: number; text: string }) => ({
+              value: item.value,
+              label: item.text,
+            }),
+          );
+          setDashboardOptions(list);
+          return { data: list, totalCount: response.json.count };
+        });
+      },
     [],
   );
 
@@ -726,22 +747,27 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
   }, [getChartData, noChartLabel]);
 
   const loadChartOptions = useMemo(
-    () => (input = '', page: number, pageSize: number) => {
-      const query = rison.encode({ filter: input, page, page_size: pageSize });
-      return SupersetClient.get({
-        endpoint: `/api/v1/report/related/chart?q=${query}`,
-      }).then(response => {
-        const list = response.json.result.map(
-          (item: { value: number; text: string }) => ({
-            value: item.value,
-            label: item.text,
-          }),
-        );
+    () =>
+      (input = '', page: number, pageSize: number) => {
+        const query = rison.encode_uri({
+          filter: input,
+          page,
+          page_size: pageSize,
+        });
+        return SupersetClient.get({
+          endpoint: `/api/v1/report/related/chart?q=${query}`,
+        }).then(response => {
+          const list = response.json.result.map(
+            (item: { value: number; text: string }) => ({
+              value: item.value,
+              label: item.text,
+            }),
+          );
 
-        setChartOptions(list);
-        return { data: list, totalCount: response.json.count };
-      });
-    },
+          setChartOptions(list);
+          return { data: list, totalCount: response.json.count };
+        });
+      },
     [],
   );
 
@@ -837,6 +863,8 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
 
   const onContentTypeChange = (event: any) => {
     const { target } = event;
+    // When switch content type, reset force_screenshot to false
+    setForceScreenshot(false);
     // Gives time to close the select before changing the type
     setTimeout(() => setContentType(target.value), 200);
   };
@@ -845,6 +873,10 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
     const { target } = event;
 
     setReportFormat(target.value);
+  };
+
+  const onForceScreenshotChange = (event: any) => {
+    setForceScreenshot(event.target.checked);
   };
 
   // Make sure notification settings has the required info
@@ -908,6 +940,7 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
       (!currentAlert || currentAlert.id || (isHidden && show))
     ) {
       setCurrentAlert({ ...DEFAULT_ALERT });
+      setForceScreenshot(contentType === 'chart' && !isReport);
       setNotificationSettings([]);
       setNotificationAddState('active');
     }
@@ -951,6 +984,7 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
       if (resource.chart) {
         setChartVizType((resource.chart as ChartObject).viz_type);
       }
+      setForceScreenshot(resource.force_screenshot);
 
       setCurrentAlert({
         ...resource,
@@ -1031,9 +1065,13 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
           ) : (
             <Icons.PlusLarge css={StyledIcon} />
           )}
-          {isEditMode
-            ? t(`Edit ${isReport ? 'Report' : 'Alert'}`)
-            : t(`Add ${isReport ? 'Report' : 'Alert'}`)}
+          {isEditMode && isReport
+            ? t('Edit Report')
+            : isEditMode
+            ? t('Edit Alert')
+            : isReport
+            ? t('Add Report')
+            : t('Add Alert')}
         </h4>
       }
     >
@@ -1163,7 +1201,12 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
                 </StyledInputContainer>
                 <StyledInputContainer>
                   <div className="control-label">
-                    {t('Value')}
+                    {t('Value')}{' '}
+                    <InfoTooltipWithTrigger
+                      tooltip={t(
+                        'Threshold value should be double precision number',
+                      )}
+                    />
                     <span className="required">*</span>
                   </div>
                   <div className="input-container">
@@ -1311,18 +1354,33 @@ const AlertReportModal: FunctionComponent<AlertReportModalProps> = ({
               onChange={onDashboardChange}
             />
             {formatOptionEnabled && (
-              <div className="inline-container">
-                <StyledRadioGroup
-                  onChange={onFormatChange}
-                  value={reportFormat}
-                >
-                  <StyledRadio value="PNG">{t('Send as PNG')}</StyledRadio>
-                  <StyledRadio value="CSV">{t('Send as CSV')}</StyledRadio>
-                  {TEXT_BASED_VISUALIZATION_TYPES.includes(chartVizType) && (
-                    <StyledRadio value="TEXT">{t('Send as text')}</StyledRadio>
-                  )}
-                </StyledRadioGroup>
-              </div>
+              <>
+                <div className="inline-container">
+                  <StyledRadioGroup
+                    onChange={onFormatChange}
+                    value={reportFormat}
+                  >
+                    <StyledRadio value="PNG">{t('Send as PNG')}</StyledRadio>
+                    <StyledRadio value="CSV">{t('Send as CSV')}</StyledRadio>
+                    {TEXT_BASED_VISUALIZATION_TYPES.includes(chartVizType) && (
+                      <StyledRadio value="TEXT">
+                        {t('Send as text')}
+                      </StyledRadio>
+                    )}
+                  </StyledRadioGroup>
+                </div>
+                {isReport && (
+                  <div className="inline-container">
+                    <StyledCheckbox
+                      className="checkbox"
+                      checked={forceScreenshot}
+                      onChange={onForceScreenshotChange}
+                    >
+                      Ignore cache when generating screenshot
+                    </StyledCheckbox>
+                  </div>
+                )}
+              </>
             )}
             <StyledSectionTitle>
               <h4>{t('Notification method')}</h4>

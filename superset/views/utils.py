@@ -61,6 +61,15 @@ if not app.config["ENABLE_JAVASCRIPT_CONTROLS"]:
     REJECTED_FORM_DATA_KEYS = ["js_tooltip", "js_onclick_href", "js_data_mutator"]
 
 
+def sanitize_datasource_data(datasource_data: Dict[str, Any]) -> Dict[str, Any]:
+    if datasource_data:
+        datasource_database = datasource_data.get("database")
+        if datasource_database:
+            datasource_database["parameters"] = {}
+
+    return datasource_data
+
+
 def bootstrap_user_data(user: User, include_perms: bool = False) -> Dict[str, Any]:
     if user.is_anonymous:
         payload = {}
@@ -72,6 +81,7 @@ def bootstrap_user_data(user: User, include_perms: bool = False) -> Dict[str, An
             "lastName": user.last_name,
             "userId": user.id,
             "isActive": user.is_active,
+            "isAnonymous": user.is_anonymous,
             "createdOn": user.created_on.isoformat(),
             "email": user.email,
         }
@@ -128,9 +138,11 @@ def loads_request_json(request_json_data: str) -> Dict[Any, Any]:
 
 
 def get_form_data(  # pylint: disable=too-many-locals
-    slice_id: Optional[int] = None, use_slice_data: bool = False
+    slice_id: Optional[int] = None,
+    use_slice_data: bool = False,
+    initial_form_data: Optional[Dict[str, Any]] = None,
 ) -> Tuple[Dict[str, Any], Optional[Slice]]:
-    form_data: Dict[str, Any] = {}
+    form_data: Dict[str, Any] = initial_form_data or {}
 
     if has_request_context():  # type: ignore
         # chart data API requests are JSON

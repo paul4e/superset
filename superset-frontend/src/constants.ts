@@ -23,8 +23,16 @@ export const BOOL_TRUE_DISPLAY = 'True';
 export const BOOL_FALSE_DISPLAY = 'False';
 
 export const URL_PARAMS = {
+  migrationState: {
+    name: 'migration_state',
+    type: 'string',
+  },
   standalone: {
     name: 'standalone',
+    type: 'number',
+  },
+  uiConfig: {
+    name: 'uiConfig',
     type: 'number',
   },
   preselectFilters: {
@@ -35,6 +43,10 @@ export const URL_PARAMS = {
     name: 'native_filters',
     type: 'rison',
   },
+  nativeFiltersKey: {
+    name: 'native_filters_key',
+    type: 'string',
+  },
   filterSet: {
     name: 'filter_set',
     type: 'string',
@@ -42,6 +54,18 @@ export const URL_PARAMS = {
   showFilters: {
     name: 'show_filters',
     type: 'boolean',
+  },
+  formDataKey: {
+    name: 'form_data_key',
+    type: 'string',
+  },
+  sliceId: {
+    name: 'slice_id',
+    type: 'string',
+  },
+  datasetId: {
+    name: 'dataset_id',
+    type: 'string',
   },
 } as const;
 

@@ -23,7 +23,12 @@ import {
 import React from 'react';
 import { Checkbox } from 'src/common/components';
 import { FormInstance } from 'antd/lib/form';
-import { getChartControlPanelRegistry, styled, t } from '@superset-ui/core';
+import {
+  Filter,
+  getChartControlPanelRegistry,
+  styled,
+  t,
+} from '@superset-ui/core';
 import { Tooltip } from 'src/components/Tooltip';
 import { FormItem } from 'src/components/Form';
 import {
@@ -37,7 +42,6 @@ import {
   StyledLabel,
   StyledRowFormItem,
 } from './FiltersConfigForm';
-import { Filter } from '../../types';
 import { ColumnSelect } from './ColumnSelect';
 
 export interface ControlItemsProps {
@@ -106,7 +110,7 @@ export default function getControlItemsMap({
             initialValue={initColumn}
             label={
               <StyledLabel>
-                {t(`${mainControlItem.config?.label}`) || t('Column')}
+                {mainControlItem.config?.label || t('Column')}
               </StyledLabel>
             }
             rules={[
@@ -145,7 +149,8 @@ export default function getControlItemsMap({
     .filter(
       (controlItem: CustomControlItem) =>
         controlItem?.config?.renderTrigger &&
-        controlItem.name !== 'sortAscending',
+        controlItem.name !== 'sortAscending' &&
+        controlItem.name !== 'enableSingleValue',
     )
     .forEach(controlItem => {
       const initialValue =

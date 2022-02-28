@@ -17,19 +17,21 @@
  * under the License.
  */
 import { useSelector } from 'react-redux';
+import { Filter } from '@superset-ui/core';
 import { FeatureFlag, isFeatureEnabled } from 'src/featureFlags';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useContext } from 'react';
 import { URL_PARAMS } from 'src/constants';
 import { getUrlParam } from 'src/utils/urlUtils';
 import { RootState } from 'src/dashboard/types';
+import { MigrationContext } from 'src/dashboard/containers/DashboardPage';
 import {
   useFilters,
   useNativeFiltersDataMask,
 } from '../nativeFilters/FilterBar/state';
-import { Filter } from '../nativeFilters/types';
 
 // eslint-disable-next-line import/prefer-default-export
 export const useNativeFilters = () => {
+  const filterboxMigrationState = useContext(MigrationContext);
   const [isInitialized, setIsInitialized] = useState(false);
   const [dashboardFiltersOpen, setDashboardFiltersOpen] = useState(
     getUrlParam(URL_PARAMS.showFilters) ?? true,
@@ -74,12 +76,14 @@ export const useNativeFilters = () => {
   useEffect(() => {
     if (
       filterValues.length === 0 &&
-      dashboardFiltersOpen &&
-      nativeFiltersEnabled
+      nativeFiltersEnabled &&
+      ['CONVERTED', 'REVIEWING', 'NOOP'].includes(filterboxMigrationState)
     ) {
       toggleDashboardFiltersOpen(false);
+    } else {
+      toggleDashboardFiltersOpen(true);
     }
-  }, [filterValues.length]);
+  }, [filterValues.length, filterboxMigrationState]);
 
   useEffect(() => {
     if (showDashboard) {

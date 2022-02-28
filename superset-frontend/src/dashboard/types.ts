@@ -18,16 +18,17 @@
  */
 import {
   ChartProps,
+  DataMaskStateWithId,
   ExtraFormData,
   GenericDataType,
   JsonObject,
+  NativeFiltersState,
 } from '@superset-ui/core';
 import { DatasourceMeta } from '@superset-ui/chart-controls';
 import { chart } from 'src/chart/chartReducer';
 import componentTypes from 'src/dashboard/util/componentTypes';
 
-import { DataMaskStateWithId } from '../dataMask/types';
-import { NativeFiltersState } from './reducers/types';
+import { User } from 'src/types/bootstrapTypes';
 import { ChartState } from '../explore/types';
 
 export { Dashboard } from 'src/types/Dashboard';
@@ -64,7 +65,6 @@ export type DashboardState = {
   isRefreshing: boolean;
   hasUnsavedChanges: boolean;
 };
-
 export type DashboardInfo = {
   id: number;
   common: {
@@ -104,6 +104,7 @@ export type RootState = {
   dataMask: DataMaskStateWithId;
   impressionId: string;
   nativeFilters: NativeFiltersState;
+  user: User;
 };
 
 /** State of dashboardLayout in redux */

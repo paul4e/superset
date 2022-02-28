@@ -21,7 +21,8 @@ import PropTypes from 'prop-types';
 
 import { styled, SupersetClient, t } from '@superset-ui/core';
 
-import { Menu, NoAnimationDropdown } from 'src/common/components';
+import { Menu } from 'src/components/Menu';
+import { NoAnimationDropdown } from 'src/components/Dropdown';
 import Icons from 'src/components/Icons';
 import { URL_PARAMS } from 'src/constants';
 import ShareMenuItems from 'src/dashboard/components/menu/ShareMenuItems';
@@ -35,6 +36,7 @@ import downloadAsImage from 'src/utils/downloadAsImage';
 import getDashboardUrl from 'src/dashboard/util/getDashboardUrl';
 import { getActiveFilters } from 'src/dashboard/util/activeDashboardFilters';
 import { getUrlParam } from 'src/utils/urlUtils';
+import { FILTER_BOX_MIGRATION_STATES } from 'src/explore/constants';
 
 const propTypes = {
   addSuccessToast: PropTypes.func.isRequired,
@@ -65,6 +67,7 @@ const propTypes = {
   refreshLimit: PropTypes.number,
   refreshWarning: PropTypes.string,
   lastModifiedTime: PropTypes.number.isRequired,
+  filterboxMigrationState: FILTER_BOX_MIGRATION_STATES,
 };
 
 const defaultProps = {
@@ -72,6 +75,7 @@ const defaultProps = {
   colorScheme: undefined,
   refreshLimit: 0,
   refreshWarning: null,
+  filterboxMigrationState: FILTER_BOX_MIGRATION_STATES.NOOP,
 };
 
 const MENU_KEYS = {
@@ -148,6 +152,7 @@ class HeaderActionsDropdown extends React.PureComponent {
     switch (key) {
       case MENU_KEYS.REFRESH_DASHBOARD:
         this.props.forceRefreshAllCharts();
+        this.props.addSuccessToast(t('Data refreshed'));
         break;
       case MENU_KEYS.EDIT_PROPERTIES:
         this.props.showPropertiesModal();
@@ -171,7 +176,6 @@ class HeaderActionsDropdown extends React.PureComponent {
       }
       case MENU_KEYS.TOGGLE_FULLSCREEN: {
         const url = getDashboardUrl({
-          dataMask: this.props.dataMask,
           pathname: window.location.pathname,
           filters: getActiveFilters(),
           hash: window.location.hash,
@@ -190,7 +194,6 @@ class HeaderActionsDropdown extends React.PureComponent {
       dashboardTitle,
       dashboardId,
       dashboardInfo,
-      dataMask,
       refreshFrequency,
       shouldPersistRefreshFrequency,
       editMode,
@@ -209,6 +212,7 @@ class HeaderActionsDropdown extends React.PureComponent {
       lastModifiedTime,
       addSuccessToast,
       addDangerToast,
+      filterboxMigrationState,
     } = this.props;
 
     const emailTitle = t('Superset dashboard');
@@ -216,7 +220,6 @@ class HeaderActionsDropdown extends React.PureComponent {
     const emailBody = t('Check out this dashboard: ');
 
     const url = getDashboardUrl({
-      dataMask,
       pathname: window.location.pathname,
       filters: getActiveFilters(),
       hash: window.location.hash,
@@ -262,6 +265,7 @@ class HeaderActionsDropdown extends React.PureComponent {
             emailBody={emailBody}
             addSuccessToast={addSuccessToast}
             addDangerToast={addDangerToast}
+            dashboardId={dashboardId}
           />
         )}
         <Menu.Item
@@ -274,6 +278,7 @@ class HeaderActionsDropdown extends React.PureComponent {
         <Menu.Divider />
         <Menu.Item key={MENU_KEYS.AUTOREFRESH_MODAL}>
           <RefreshIntervalModal
+            addSuccessToast={this.props.addSuccessToast}
             refreshFrequency={refreshFrequency}
             refreshLimit={refreshLimit}
             refreshWarning={refreshWarning}
@@ -283,14 +288,15 @@ class HeaderActionsDropdown extends React.PureComponent {
           />
         </Menu.Item>
 
-        {editMode && (
-          <Menu.Item key={MENU_KEYS.SET_FILTER_MAPPING}>
-            <FilterScopeModal
-              className="m-r-5"
-              triggerNode={t('Set filter mapping')}
-            />
-          </Menu.Item>
-        )}
+        {editMode &&
+          filterboxMigrationState !== FILTER_BOX_MIGRATION_STATES.CONVERTED && (
+            <Menu.Item key={MENU_KEYS.SET_FILTER_MAPPING}>
+              <FilterScopeModal
+                className="m-r-5"
+                triggerNode={t('Set filter mapping')}
+              />
+            </Menu.Item>
+          )}
 
         {editMode && (
           <Menu.Item key={MENU_KEYS.EDIT_PROPERTIES}>

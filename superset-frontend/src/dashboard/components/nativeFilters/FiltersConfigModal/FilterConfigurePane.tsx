@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { styled } from '@superset-ui/core';
+import { NativeFilterType, styled } from '@superset-ui/core';
 import React from 'react';
 import FilterTitlePane from './FilterTitlePane';
 import { FilterRemoval } from './types';
@@ -25,7 +25,8 @@ interface Props {
   children: (filterId: string) => React.ReactNode;
   getFilterTitle: (filterId: string) => string;
   onChange: (activeKey: string) => void;
-  onEdit: (filterId: string, action: 'add' | 'remove') => void;
+  onAdd: (type: NativeFilterType) => void;
+  onRemove: (id: string) => void;
   onRearrange: (dragIndex: number, targetIndex: number) => void;
   erroredFilters: string[];
   restoreFilter: (id: string) => void;
@@ -52,9 +53,10 @@ const TitlesContainer = styled.div`
 const FiltureConfigurePane: React.FC<Props> = ({
   getFilterTitle,
   onChange,
-  onEdit,
+  onRemove,
   onRearrange,
   restoreFilter,
+  onAdd,
   erroredFilters,
   children,
   currentFilterId,
@@ -72,9 +74,9 @@ const FiltureConfigurePane: React.FC<Props> = ({
           erroredFilters={erroredFilters}
           getFilterTitle={getFilterTitle}
           onChange={onChange}
-          onEdit={onEdit}
+          onAdd={(type: NativeFilterType) => onAdd(type)}
           onRearrage={onRearrange}
-          onRemove={(id: string) => onEdit(id, 'remove')}
+          onRemove={(id: string) => onRemove(id)}
           restoreFilter={restoreFilter}
         />
       </TitlesContainer>
