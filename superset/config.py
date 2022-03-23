@@ -745,8 +745,29 @@ CELERY_CONFIG = CeleryConfig  # pylint: disable=invalid-name
 # within the app
 # OVERRIDE_HTTP_HEADERS: sets override values for HTTP headers. These values will
 # override anything set within the app
-DEFAULT_HTTP_HEADERS: Dict[str, Any] = {}
-OVERRIDE_HTTP_HEADERS: Dict[str, Any] = {}
+#"X-XSS-Protection": "1; report=<reporting-uri>",
+#"Content-Security-Policy": "default-src 'none'; img-src 'self'",
+#"X-XSS-Protection": "0",
+#"X-XSS-Protection": "1",
+#"Content-Security-Policy": "default-src 'self'",
+DEFAULT_HTTP_HEADERS: Dict[str, Any] = {
+    "X-Frame-Options": "SAMEORIGIN", 
+    "X-Content-Type-Options": "nosniff",
+    "X-XSS-Protection": "1; mode=block",
+    "Referrer-Policy": "no-referrer",
+    "Referrer-Policy": "no-referrer-when-downgrade",
+    "Referrer-Policy": "origin",
+    "Referrer-Policy": "origin-when-cross-origin",
+    "Referrer-Policy": "same-origin",
+    "Referrer-Policy": "strict-origin",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    }
+OVERRIDE_HTTP_HEADERS: Dict[str, Any] = { 
+    "server": "****",
+    "X-Powered-By":"****",
+    "X-AspNetVersion": "****",
+    "X-AspNetMvcVersion": "****"
+    }
 HTTP_HEADERS: Dict[str, Any] = {}
 
 # The db id here results in selecting this one as a default in SQL Lab
@@ -1166,7 +1187,7 @@ RLS_FORM_QUERY_REL_FIELDS: Optional[Dict[str, List[List[Any]]]] = None
 # for details
 #
 SESSION_COOKIE_HTTPONLY = True  # Prevent cookie from being read by frontend JS?
-SESSION_COOKIE_SECURE = False  # Prevent cookie from being transmitted over non-tls?
+SESSION_COOKIE_SECURE = True  # Prevent cookie from being transmitted over non-tls?
 SESSION_COOKIE_SAMESITE = "Lax"  # One of [None, 'None', 'Lax', 'Strict']
 
 # Cache static resources.
