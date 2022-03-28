@@ -113,4 +113,7 @@ export enum FilterOperator {
   chartIsFav = 'chart_is_favorite',
   chartIsCertified = 'chart_is_certified',
   dashboardIsCertified = 'dashboard_is_certified',
+  engine_name = 'engine_name',
+  title_or_name = 'title_or_name',
+  activeReportIsFav = 'active_report_is_favorite',
 }

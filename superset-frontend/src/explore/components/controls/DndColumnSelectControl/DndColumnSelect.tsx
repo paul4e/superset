@@ -72,7 +72,6 @@ export function DndColumnSelect(props: DndColumnSelectProps) {
     ) {
       onChange(optionSelectorValues);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [JSON.stringify(value), JSON.stringify(optionSelector.getValues())]);
 
   // useComponentDidUpdate to avoid running this for the first render, to avoid

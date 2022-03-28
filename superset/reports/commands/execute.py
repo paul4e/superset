@@ -21,6 +21,8 @@ from typing import Any, List, Optional
 from uuid import UUID
 
 import pandas as pd
+import prison
+import requests
 from celery.exceptions import SoftTimeLimitExceeded
 from flask_appbuilder.security.sqla.models import User
 from sqlalchemy.orm import Session
@@ -72,6 +74,8 @@ from superset.utils.screenshots import (
     DashboardScreenshot,
 )
 from superset.utils.urls import get_url_path
+from superset.reports_integration.report_engines.utils import get_report_engine
+from superset.reports_integration.api.report_definitions.dao import ReportDefinitionDAO
 
 logger = logging.getLogger(__name__)
 
@@ -145,6 +149,20 @@ class BaseReportState:
         """
         Get the url for this report schedule: chart or dashboard
         """
+        if feature_flag_manager.is_feature_enabled("ACTIVE_REPORTS_JS"):
+            if self._report_schedule.active_report:
+                return get_url_path(
+                    "ActiveReports.report",
+                    report_id=self._report_schedule.active_report_id,
+                )
+        if feature_flag_manager.is_feature_enabled("ACTIVE_EXTERNAL_REPORTS"):
+            if self._report_schedule.report_definition:
+                return get_url_path(
+                    "ReportDefinitionView.render_report",
+                    report_definition_id=self._report_schedule.report_definition_id,
+                    render_format=self._report_schedule.report_format.upper()
+                )
+
         if self._report_schedule.chart:
             if result_format in {
                 ChartDataResultFormat.CSV,
@@ -172,8 +190,8 @@ class BaseReportState:
     def _get_user(self) -> User:
         user = (
             self._session.query(User)
-            .filter(User.username == app.config["THUMBNAIL_SELENIUM_USER"])
-            .one_or_none()
+                .filter(User.username == app.config["THUMBNAIL_SELENIUM_USER"])
+                .one_or_none()
         )
         if not user:
             raise ReportScheduleSelleniumUserNotFoundError()
@@ -288,6 +306,55 @@ class BaseReportState:
                 "Please try loading the chart and saving it again."
             ) from ex
 
+    def _get_arjs_exported_data(self, export_type):
+        """
+        Realiza un request tipo post al endpoint del arjsserver. El endpoint es
+        definido en la configuracion en las variables de ambiente
+
+        :param export_type: Recibe el tipo de archivo a exportar. "pdf" | "excel"
+        :return: Devuelve un bytearray del archivo pdf o excel segun corresponda.
+                 Devuelve None en caso de error.
+        """
+        arjsserver_endpoint = app.config["ARJSSERVER_ENDPOINT"]
+
+        logger.info(
+            f"Generando reporte tipo {export_type}. ARJSServer: {arjsserver_endpoint}"
+        )
+
+        # Obtiene la definicion del reporte ARJS
+        report_data = self._report_schedule.active_report.report_data
+
+        url = arjsserver_endpoint + f"arjs/export/{export_type}"
+        logger.info(f"request post: {url}")
+
+        try:
+            response = requests.post(url, json=json.loads(report_data))
+            result = response.json()
+        except Exception as e:
+            logger.error(f"Error al obtener el reporte. \n{e}")
+            return None
+
+        exported_data = result["exportedData"] if result["exportedData"] else None
+        data = (
+            exported_data["data"] if (exported_data and exported_data["data"]) else None
+        )
+        if data:
+            result_byte_array = bytearray(data)
+        else:
+            result_byte_array = None
+        return result_byte_array
+
+    def _get_report_definition_exported_data(self, export_type):
+        tmp_report_definition = self._report_schedule.report_definition
+        engine_type = ReportDefinitionDAO.get_report_engine_type(self._report_schedule.report_definition_id)
+        report_engine = get_report_engine(engine_type)
+        rpt_definition = tmp_report_definition.report_definition.decode('ascii')
+        response = report_engine.render_report(tmp_report_definition.report_name,
+                                               rpt_definition,
+                                               export_type)
+        result_bytearray = bytearray(response.content)
+        return result_bytearray
+
     def _get_notification_content(self) -> NotificationContent:
         """
         Gets a notification content, this is composed by a title and a screenshot
@@ -299,10 +366,41 @@ class BaseReportState:
         error_text = None
         screenshot_data = None
         url = self._get_url(user_friendly=True)
+
+        pdf = None
+        excel = None
+        html = None
+
         if (
             feature_flag_manager.is_feature_enabled("ALERTS_ATTACH_REPORTS")
             or self._report_schedule.type == ReportScheduleType.REPORT
         ):
+            # ACTIVE_REPORTS_CODE
+            if feature_flag_manager.is_feature_enabled("ACTIVE_REPORTS_JS") and self._report_schedule.active_report:
+                if self._report_schedule.report_format == ReportDataFormat.PDF:
+                    pdf = self._get_arjs_exported_data("pdf")
+                    if not pdf:
+                        error_text = "Unexpected missing pdf"
+                if self._report_schedule.report_format == ReportDataFormat.EXCEL:
+                    excel = self._get_arjs_exported_data("excel")
+                    if not excel:
+                        error_text = "Unexpected missing excel"
+                if self._report_schedule.report_format == ReportDataFormat.HTML:
+                    html = self._get_arjs_exported_data("html")
+                    if not html:
+                        error_text = "Unexpected missing html"
+
+            # BIRT
+            if feature_flag_manager.is_feature_enabled("ACTIVE_EXTERNAL_REPORTS") and self._report_schedule.report_definition:
+                if self._report_schedule.report_format == ReportDataFormat.PDF:
+                    pdf = self._get_report_definition_exported_data("PDF")
+                    if not pdf:
+                        error_text = "Unexpected missing pdf"
+                if self._report_schedule.report_format == ReportDataFormat.HTML:
+                    html = self._get_report_definition_exported_data("HTML")
+                    if not html:
+                        error_text = "Unexpected missing html"
+
             if self._report_schedule.report_format == ReportDataFormat.VISUALIZATION:
                 screenshot_data = self._get_screenshot()
                 if not screenshot_data:
@@ -325,7 +423,23 @@ class BaseReportState:
         ):
             embedded_data = self._get_embedded_data()
 
-        if self._report_schedule.chart:
+        if (
+            feature_flag_manager.is_feature_enabled("ACTIVE_REPORTS_JS")
+            and self._report_schedule.active_report
+        ):
+            name = (
+                f"{self._report_schedule.name}: "
+                f"{self._report_schedule.active_report.report_name}"
+            )
+        elif (
+            feature_flag_manager.is_feature_enabled("ACTIVE_EXTERNAL_REPORTS")
+            and self._report_schedule.report_definition
+        ):
+            name = (
+                f"{self._report_schedule.name}: "
+                f"{self._report_schedule.report_definition.report_title}"
+            )
+        elif self._report_schedule.chart:
             name = (
                 f"{self._report_schedule.name}: "
                 f"{self._report_schedule.chart.slice_name}"
@@ -342,6 +456,9 @@ class BaseReportState:
             description=self._report_schedule.description,
             csv=csv_data,
             embedded_data=embedded_data,
+            pdf=pdf,
+            excel=excel,
+            html=html,
         )
 
     def _send(

@@ -36,7 +36,7 @@ from .helpers import (
 
 def load_long_lat_data(only_metadata: bool = False, force: bool = False) -> None:
     """Loading lat/long data from a csv file in the repo"""
-    tbl_name = "long_lat"
+    tbl_name = "Sample Geodata"
     database = utils.get_example_database()
     engine = database.get_sqla_engine()
     schema = inspect(engine).default_schema_name

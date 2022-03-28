@@ -62,6 +62,7 @@ from superset.models.tags import FavStarUpdater
 from superset.result_set import SupersetResultSet
 from superset.utils import cache as cache_util, core as utils
 from superset.utils.memoized import memoized
+import traceback
 
 config = app.config
 custom_password_store = config["SQLALCHEMY_CUSTOM_PASSWORD_STORE"]
@@ -539,10 +540,15 @@ class Database(
         :param force: whether to force refresh the cache
         :return: list of tables
         """
+        print("get_all_table_names_in_schema")
+        print(f"schema: {schema}")
+        print(f"inspector: {self.inspector}")
+
         try:
             tables = self.db_engine_spec.get_table_names(
                 database=self, inspector=self.inspector, schema=schema
             )
+            print(f"tables: {tables}")
             return [
                 utils.DatasourceName(table=table, schema=schema) for table in tables
             ]
@@ -572,6 +578,7 @@ class Database(
         :param force: whether to force refresh the cache
         :return: list of views
         """
+        print("get_all_table_vies_in_schema")
         try:
             views = self.db_engine_spec.get_view_names(
                 database=self, inspector=self.inspector, schema=schema
@@ -788,6 +795,7 @@ class Log(Model):  # pylint: disable=too-few-public-methods
 class FavStarClassName(str, enum.Enum):
     CHART = "slice"
     DASHBOARD = "Dashboard"
+    ACTIVE_REPORT = "ActiveReport"
 
 
 class FavStar(Model):  # pylint: disable=too-few-public-methods

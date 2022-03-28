@@ -36,10 +36,12 @@ from sqlalchemy.schema import UniqueConstraint
 from sqlalchemy_utils import UUIDType
 
 from superset.extensions import security_manager
+from superset.models.active_reports import ActiveReport
 from superset.models.core import Database
 from superset.models.dashboard import Dashboard
 from superset.models.helpers import AuditMixinNullable
 from superset.models.slice import Slice
+from superset.reports_integration.models.report_definitions import ReportDefinition
 
 metadata = Model.metadata  # pylint: disable=no-member
 
@@ -73,6 +75,11 @@ class ReportDataFormat(str, enum.Enum):
     VISUALIZATION = "PNG"
     DATA = "CSV"
     TEXT = "TEXT"
+
+    # ACTIVE_REPORTS_CODE
+    PDF = "PDF"
+    EXCEL = "EXCEL"
+    HTML = "HTML"
 
 
 class ReportCreationMethodType(str, enum.Enum):
@@ -123,6 +130,19 @@ class ReportSchedule(Model, AuditMixinNullable):
     dashboard = relationship(
         Dashboard, backref="report_schedules", foreign_keys=[dashboard_id]
     )
+
+    # (Reports) M-O to active_reports
+    active_report_id = Column(Integer, ForeignKey("active_reports.id"), nullable=True)
+    active_report = relationship(
+        ActiveReport, backref="report_schedules", foreign_keys=[active_report_id]
+    )
+
+    # (Reports) M-O to reports_definitions
+    report_definition_id = Column(Integer, ForeignKey("report_definitions.id"), nullable=True)
+    report_definition = relationship(
+        ReportDefinition, backref="report_schedules", foreign_keys=[report_definition_id]
+    )
+
     # (Alerts) M-O to database
     database_id = Column(Integer, ForeignKey("dbs.id"), nullable=True)
     database = relationship(Database, foreign_keys=[database_id])

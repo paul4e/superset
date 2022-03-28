@@ -32,7 +32,7 @@ from marshmallow import ValidationError
 from werkzeug.wrappers import Response as WerkzeugResponse
 from werkzeug.wsgi import FileWrapper
 
-from superset import is_feature_enabled, thumbnail_cache
+from superset import db, is_feature_enabled, thumbnail_cache
 from superset.charts.commands.bulk_delete import BulkDeleteChartCommand
 from superset.charts.commands.create import CreateChartCommand
 from superset.charts.commands.data import ChartDataCommand
@@ -70,8 +70,19 @@ from superset.charts.schemas import (
     screenshot_query_schema,
     thumbnail_query_schema,
 )
+from superset.charts.utils import (
+    convert_datetime,
+    generate_filters,
+    generate_metrics,
+    parse_list_parameter,
+    parse_multiple_list_parameter,
+    parse_time_range_parameter,
+)
 from superset.commands.importers.exceptions import NoValidFilesFoundError
 from superset.commands.importers.v1.utils import get_contents_from_bundle
+from superset.common.query_context import QueryContext
+from superset.common.query_object import QueryObject
+from superset.connectors.sqla.models import SqlaTable
 from superset.constants import MODEL_API_RW_METHOD_PERMISSION_MAP, RouteMethod
 from superset.exceptions import QueryObjectValidationError
 from superset.extensions import event_logger, security_manager
@@ -82,6 +93,7 @@ from superset.utils.core import (
     ChartDataResultFormat,
     ChartDataResultType,
     json_int_dttm_ser,
+    json_iso_dttm_ser,
 )
 from superset.utils.screenshots import ChartScreenshot
 from superset.utils.urls import get_url_path
@@ -121,6 +133,8 @@ class ChartRestApi(BaseSupersetModelRestApi):
         "thumbnail",
         "screenshot",
         "cache_screenshot",
+        "odata",
+        "get_data_test",
     }
     class_permission_name = "Chart"
     method_permission_name = MODEL_API_RW_METHOD_PERMISSION_MAP
@@ -247,6 +261,242 @@ class ChartRestApi(BaseSupersetModelRestApi):
     }
 
     allowed_rel_fields = {"owners", "created_by"}
+
+    @expose("/odata/<slice_id>/<table_name>/<table_schema>", methods=["GET"])
+    @protect()
+    @safe
+    @statsd_metrics
+    @event_logger.log_this_with_context(
+        action=lambda self, *args, **kwargs: f"{self.__class__.__name__}.get",
+        log_to_statsd=False,
+    )
+    def odata(
+        self, slice_id: int, table_name: str, table_schema: str = None
+    ) -> Response:
+        DEBUG_REQ_ARGS = "\n******\nREQUEST ARGS\n******\n"
+        DEBUG_REQ_FORM = "\n******\nREQUEST FORM\n******\n"
+        logger.debug(request.__dict__.items())
+        logger.debug(f"{DEBUG_REQ_ARGS}{request.args}")
+        logger.debug(f"{DEBUG_REQ_FORM}{request.form}")
+
+        # Validar si existe la tabla
+        if table_schema == "None":
+            table_schema = None
+
+        datasource = (
+            db.session.query(SqlaTable)
+            .filter_by(table_name=table_name, schema=table_schema)
+            .one_or_none()
+        )
+
+        if datasource is None:
+            return self.response_404()
+
+        datasource_id = datasource.id
+
+        slice = ChartDAO.find_by_id(slice_id)
+
+        if slice is None:
+            return self.response_404()
+
+        query_context = json.loads(slice.query_context)
+        query = query_context["queries"][0]
+
+        logger.debug("#$$$$$$$$$$$$$$$$ query_context $###########################")
+        logger.debug(query_context)
+        logger.debug(
+            "#$$$$$$$$$$$$$$$$ query_context-query $###########################"
+        )
+        logger.debug(query)
+
+        print(
+            f"table_name: {datasource.table_name}, table_schema: {datasource.schema}, datasource_id: {datasource.id}, chart datasource_id:{slice.datasource_id}"
+        )
+        # Recibir parametros del request/
+
+        columns = request.args.get("$columns")
+        orderby = request.args.get("$orderby")
+        groupby = request.args.get("$groupby")
+        filters = request.args.get("$filter")
+        metrics = request.args.get("$metrics")
+        row_limit = request.args.get("$top")
+        time_range = request.args.get("$time_range")
+        granularity = request.args.get("$time_column")
+        replace_filters = request.args.get("$replace_filters")
+        where = request.args.get("$where")
+        having = request.args.get("$having")
+
+        # Transformar los parametros listas
+
+        logger.debug(f"\nmetrics\n{metrics}\n")
+        columns = parse_list_parameter(columns) if columns else columns
+        orderby = parse_list_parameter(orderby) if orderby else orderby
+        groupby = parse_list_parameter(groupby) if groupby else groupby
+        filters = parse_multiple_list_parameter(filters) if filters else filters
+        metrics = parse_multiple_list_parameter(metrics) if metrics else metrics
+        time_range = (
+            parse_time_range_parameter(time_range) if time_range else time_range
+        )
+
+        logger.debug(f"table_name: {table_name}, table_schema: {table_schema}")
+
+        # Validacion de parametros
+
+        logger.debug(f"\nDATASOURCE COLUMNS\n{datasource.columns}\n")
+        logger.debug(f"\nmetrics\n{metrics}\n")
+        logger.debug(f"\nfilters\n{filters}\n")
+
+        if columns:
+            for column in columns:
+                if column not in datasource.columns:
+                    return self.response_400(message="Columna Invalida")
+        else:
+            columns = query["columns"]
+            # columns = [col.column_name for col in datasource.columns]
+
+        if groupby:
+            for column in groupby:
+                if column not in columns:
+                    return self.response_400(message="Error en el group by")
+
+        if orderby:
+            for column in orderby:
+                if column not in columns:
+                    return self.response_400(message="Error en el order by")
+
+        if time_range:
+            try:
+                time_range = convert_datetime(time_range)
+            except ValueError as error:
+                return self.response_400(message=error)
+
+            if not granularity:
+                return self.response_400(
+                    message="Es necesario incluir el parametro $time_column cuando se usa $time_range"
+                )
+
+            if granularity not in columns:
+                return self.response_400(
+                    message="Se debe incluir la columna de tiempo en el parametro $columns."
+                )
+            if granularity not in datasource.dttm_cols:
+                return self.response_400(
+                    message="$time_column No es una columna de tiempo Valida del dataset."
+                )
+
+        if row_limit:
+            try:
+                row_limit = int(row_limit)
+            except ValueError as error:
+                return self.response_400(message="$top Espera un valor entero.")
+
+        if metrics:
+            metrics = generate_metrics(metrics, datasource_id)
+            if not metrics:
+                return self.response_400(message="$metrics error!.")
+
+        if filters:
+            filters = generate_filters(filters, datasource_id)
+
+            if not filters:
+                return self.response_400(message="$metrics error!.")
+
+            if not replace_filters:
+                filters = query_context["queries"][0]["filters"] + filters
+
+            logger.debug(f"\n\nfiltersXX:\n{filters}\n\n")
+
+        # crear query object
+
+        # annotation_layers: List[Dict[str, Any]]
+        # applied_time_extras: Dict[str, str]
+        # apply_fetch_values_predicate: bool
+        # granularity: Optional[str]
+        # from_dttm: Optional[datetime]
+        # to_dttm: Optional[datetime]
+        # inner_from_dttm: Optional[datetime]
+        # inner_to_dttm: Optional[datetime]
+        # is_timeseries: bool
+        # time_shift: Optional[timedelta]
+        # groupby: List[str]
+        # metrics: Optional[List[Metric]]
+        # row_limit: int
+        # row_offset: int
+        # filter: List[QueryObjectFilterClause]
+        # timeseries_limit: int
+        # timeseries_limit_metric: Optional[Metric]
+        # order_desc: bool
+        # extras: Dict[str, Any]
+        # columns: List[str]
+        # orderby: List[OrderBy]
+        # post_processing: List[Dict[str, Any]]
+        # datasource: Optional[BaseDatasource]
+        # result_type: Optional[ChartDataResultType]
+        # is_rowcount: bool
+        # time_offsets: List[str]
+
+        # query_object = QueryObject()
+        # query_object.row_limit = 10
+        # crear query context
+
+        # cache_type: ClassVar[str] = "df"
+        # enforce_numerical_metrics: ClassVar[bool] = True
+        #
+        # datasource: BaseDatasource
+        # queries: List[QueryObject]
+        # force: bool
+        # custom_cache_timeout: Optional[int]
+        # result_type: ChartDataResultType
+        # result_format: ChartDataResultFormat
+
+        new_query_context = {
+            "datasource": {"id": datasource_id, "type": "table"},
+            "queries": [
+                {
+                    "time_range": time_range if time_range else "No filter",
+                    "granularity": granularity,
+                    "filters": filters if filters else [],
+                    "extras": {
+                        "time_range_endpoints": ["inclusive", "exclusive"],
+                        "having": "",
+                        "having_druid": [],
+                        "where": query_context["queries"][0]["extras"]["where"],
+                    },
+                    "applied_time_extras": {},
+                    "columns": columns,
+                    "metrics": metrics if metrics else [],
+                    "orderby": [],
+                    "annotation_layers": [],
+                    "row_limit": row_limit,
+                    "timeseries_limit": 0,
+                    "order_desc": True,
+                    "url_params": {},
+                    "custom_params": {},
+                    "custom_form_data": {},
+                }
+            ],
+            "result_format": ChartDataResultFormat.JSON,
+            "result_type": ChartDataResultType.RESULTS,
+            "force": False,
+        }
+        # query_object.columns = [column.column_name for column in
+        #                         query_context.datasource.columns]
+
+        try:
+            command = ChartDataCommand()
+            command.set_query_context(new_query_context)
+            command.validate()
+        except QueryObjectValidationError as error:
+            return self.response_400(message=error.message)
+        except ValidationError as error:
+            logger.error(error)
+            return self.response_400(
+                message=_(
+                    "Request is incorrect: %(error)s", error=error.normalized_messages()
+                )
+            )
+
+        return self.get_data_response(command)
 
     @expose("/", methods=["POST"])
     @protect()
@@ -531,6 +781,10 @@ class ChartRestApi(BaseSupersetModelRestApi):
                 default=json_int_dttm_ser,
                 ignore_nan=True,
             )
+            logger.debug(response_data)
+            logger.debug(result["queries"][0])
+            logger.debug(type(result["queries"]))
+            # logger.debug(type(response_data["result"][0]["data"][0]["date"]))
             resp = make_response(response_data, 200)
             resp.headers["Content-Type"] = "application/json; charset=utf-8"
             return resp
@@ -604,7 +858,9 @@ class ChartRestApi(BaseSupersetModelRestApi):
             500:
               $ref: '#/components/responses/500'
         """
+        logger.debug(request)
         chart = self.datamodel.get(pk, self._base_filters)
+        logger.debug(chart)
         if not chart:
             return self.response_404()
 
@@ -706,6 +962,7 @@ class ChartRestApi(BaseSupersetModelRestApi):
             # CSV export submits regular form data
             try:
                 json_body = json.loads(request.form["form_data"])
+
             except (TypeError, json.JSONDecodeError):
                 pass
 
@@ -713,6 +970,7 @@ class ChartRestApi(BaseSupersetModelRestApi):
             return self.response_400(message=_("Request is not JSON"))
 
         try:
+            logger.debug(json_body)
             command = ChartDataCommand()
             query_context = command.set_query_context(json_body)
             command.validate()
@@ -1211,3 +1469,105 @@ class ChartRestApi(BaseSupersetModelRestApi):
         )
         command.run()
         return self.response(200, message="OK")
+
+    #######################################################################################################################################
+    #######################################################################################################################################
+
+    @expose("/<int:pk>/data_test/", methods=["GET"])
+    @protect()
+    def get_data_test(self, pk: int) -> Response:
+        """
+        Takes a chart ID and uses the query context stored when the chart was saved
+        to return payload data response.
+        ---
+        get:
+          description: >-
+            Takes a chart ID and uses the query context stored when the chart was saved
+            to return payload data response.
+          parameters:
+          - in: path
+            schema:
+              type: integer
+            name: pk
+            description: The chart ID
+          - in: query
+            name: format
+            description: The format in which the data should be returned
+            schema:
+              type: string
+          - in: query
+            name: type
+            description: The type in which the data should be returned
+            schema:
+              type: string
+          responses:
+            200:
+              description: Query result
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ChartDataResponseSchema"
+            202:
+              description: Async job details
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ChartDataAsyncResponseSchema"
+            400:
+              $ref: '#/components/responses/400'
+            401:
+              $ref: '#/components/responses/401'
+            500:
+              $ref: '#/components/responses/500'
+        """
+        logger.debug(f"Entra al endpoint de prueba: pk{pk}")
+        chart = self.datamodel.get(pk, self._base_filters)
+        if not chart:
+            logger.debug("not chart")
+            return self.response_404()
+
+        try:
+            json_body = json.loads(chart.query_context)
+        except (TypeError, json.decoder.JSONDecodeError):
+            json_body = None
+
+        if json_body is None:
+            return self.response_400(
+                message=_(
+                    "Chart has no query context saved. Please save the chart again."
+                )
+            )
+
+        # override saved query context
+        json_body["result_format"] = request.args.get(
+            "format", ChartDataResultFormat.JSON
+        )
+        json_body["result_type"] = request.args.get("type", ChartDataResultType.FULL)
+
+        try:
+            command = ChartDataCommand()
+            query_context = command.set_query_context(json_body)
+            command.validate()
+        except QueryObjectValidationError as error:
+            return self.response_400(message=error.message)
+        except ValidationError as error:
+            return self.response_400(
+                message=_(
+                    "Request is incorrect: %(error)s", error=error.normalized_messages()
+                )
+            )
+
+        # TODO: support CSV, SQL query and other non-JSON types
+        if (
+            is_feature_enabled("GLOBAL_ASYNC_QUERIES")
+            and query_context.result_format == ChartDataResultFormat.JSON
+            and query_context.result_type == ChartDataResultType.FULL
+        ):
+            return self._run_async(command)
+
+        try:
+            form_data = json.loads(chart.params)
+        except (TypeError, json.decoder.JSONDecodeError):
+            form_data = {}
+
+        return self.get_data_response(command, form_data=form_data)

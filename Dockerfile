@@ -14,13 +14,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
 ######################################################################
 # PY stage that simply does a pip install on our requirements
 ######################################################################
 ARG PY_VER=3.8.12
 FROM python:${PY_VER} AS superset-py
-
 RUN mkdir /app \
         && apt-get update -y \
         && apt-get install -y --no-install-recommends \
@@ -30,7 +28,22 @@ RUN mkdir /app \
             libsasl2-dev \
             libecpg-dev \
         && rm -rf /var/lib/apt/lists/*
-
+RUN apt update
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
+    apt install -y --no-install-recommends ./google-chrome-stable_current_amd64.deb && \
+    wget https://chromedriver.storage.googleapis.com/95.0.4638.17/chromedriver_linux64.zip && \
+    unzip chromedriver_linux64.zip && \
+    chmod +x chromedriver && \
+    mv chromedriver /usr/bin && \
+    apt autoremove -yqq --purge && \
+    apt clean && \
+    rm -f google-chrome-stable_current_amd64.deb chromedriver_linux64.zip
+RUN pip install --upgrade pip
+RUN pip install --no-cache-dir gevent
+RUN pip install --no-cache-dir mysqlclient
+RUN pip install --no-cache-dir psycopg2
+RUN pip install --no-cache-dir redis
+RUN pip install --no-cache-dir flower
 # First, we just wanna install requirements, which will allow us to utilize the cache
 # in order to only build if and only if requirements change
 COPY ./requirements/*.txt  /app/requirements/
@@ -39,9 +52,11 @@ COPY superset-frontend/package.json /app/superset-frontend/
 RUN cd /app \
     && mkdir -p superset/static \
     && touch superset/static/version_info.json \
-    && pip install --no-cache -r requirements/local.txt
-
-
+    && pip install --no-cache -r requirements/local.txt \
+    && pip install crate[sqlalchemy]==0.26.0 \
+    && pip install ibm_db \
+    && pip install ibm_db_sa \
+    && pip install gevent
 ######################################################################
 # Node stage to deal with static asset construction
 ######################################################################
@@ -49,10 +64,8 @@ FROM node:16 AS superset-node
 
 ARG NPM_VER=7
 RUN npm install -g npm@${NPM_VER}
-
 ARG NPM_BUILD_CMD="build"
 ENV BUILD_CMD=${NPM_BUILD_CMD}
-
 # NPM ci first, as to NOT invalidate previous steps except for when package.json changes
 RUN mkdir -p /app/superset-frontend
 RUN mkdir -p /app/superset/assets
@@ -61,21 +74,17 @@ COPY ./superset-frontend/package* /app/superset-frontend/
 RUN /frontend-mem-nag.sh \
         && cd /app/superset-frontend \
         && npm ci
-
 # Next, copy in the rest and let webpack do its thing
 COPY ./superset-frontend /app/superset-frontend
 # This seems to be the most expensive step
 RUN cd /app/superset-frontend \
         && npm run ${BUILD_CMD} \
         && rm -rf node_modules
-
-
 ######################################################################
 # Final lean image...
 ######################################################################
 ARG PY_VER=3.8.12
 FROM python:${PY_VER} AS lean
-
 ENV LANG=C.UTF-8 \
     LC_ALL=C.UTF-8 \
     FLASK_ENV=production \
@@ -83,7 +92,6 @@ ENV LANG=C.UTF-8 \
     PYTHONPATH="/app/pythonpath" \
     SUPERSET_HOME="/app/superset_home" \
     SUPERSET_PORT=8088
-
 RUN mkdir -p ${PYTHONPATH} \
         && useradd --user-group -d ${SUPERSET_HOME} -m --no-log-init --shell /bin/bash superset \
         && apt-get update -y \
@@ -99,67 +107,48 @@ COPY --from=superset-py /usr/local/lib/python3.8/site-packages/ /usr/local/lib/p
 COPY --from=superset-py /usr/local/bin/gunicorn /usr/local/bin/celery /usr/local/bin/flask /usr/bin/
 COPY --from=superset-node /app/superset/static/assets /app/superset/static/assets
 COPY --from=superset-node /app/superset-frontend /app/superset-frontend
-
 ## Lastly, let's install superset itself
 COPY superset /app/superset
 COPY setup.py MANIFEST.in README.md /app/
 RUN cd /app \
-        && chown -R superset:superset * \
-        && pip install -e .
-
+    && chown -R superset:superset * \
+    && pip install -e .
 COPY ./docker/docker-entrypoint.sh /usr/bin/
-
 WORKDIR /app
-
 USER superset
-
 HEALTHCHECK CMD curl -f "http://localhost:$SUPERSET_PORT/health"
-
 EXPOSE ${SUPERSET_PORT}
-
 ENTRYPOINT ["/usr/bin/docker-entrypoint.sh"]
-
 ######################################################################
 # Dev image...
 ######################################################################
 FROM lean AS dev
 ARG GECKODRIVER_VERSION=v0.28.0
 ARG FIREFOX_VERSION=88.0
-
 COPY ./requirements/*.txt ./docker/requirements-*.txt/ /app/requirements/
-
 USER root
-
 RUN apt-get update -y \
     && apt-get install -y --no-install-recommends libnss3 libdbus-glib-1-2 libgtk-3-0 libx11-xcb1
-
 # Install GeckoDriver WebDriver
 RUN wget https://github.com/mozilla/geckodriver/releases/download/${GECKODRIVER_VERSION}/geckodriver-${GECKODRIVER_VERSION}-linux64.tar.gz -O /tmp/geckodriver.tar.gz && \
     tar xvfz /tmp/geckodriver.tar.gz -C /tmp && \
     mv /tmp/geckodriver /usr/local/bin/geckodriver && \
     rm /tmp/geckodriver.tar.gz
-
 # Install Firefox
 RUN wget https://download-installer.cdn.mozilla.net/pub/firefox/releases/${FIREFOX_VERSION}/linux-x86_64/en-US/firefox-${FIREFOX_VERSION}.tar.bz2 -O /opt/firefox.tar.bz2 && \
     tar xvf /opt/firefox.tar.bz2 -C /opt && \
     ln -s /opt/firefox/firefox /usr/local/bin/firefox
-
 # Cache everything for dev purposes...
 RUN cd /app \
     && pip install --no-cache -r requirements/docker.txt \
     && pip install --no-cache -r requirements/requirements-local.txt || true
 USER superset
-
-
 ######################################################################
 # CI image...
 ######################################################################
 FROM lean AS ci
-
 COPY --chown=superset ./docker/docker-bootstrap.sh /app/docker/
 COPY --chown=superset ./docker/docker-init.sh /app/docker/
 COPY --chown=superset ./docker/docker-ci.sh /app/docker/
-
 RUN chmod a+x /app/docker/*.sh
-
 CMD /app/docker/docker-ci.sh

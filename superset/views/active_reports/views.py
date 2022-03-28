@@ -1,0 +1,133 @@
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+
+import logging
+
+import simplejson as json
+from flask import g
+from flask_appbuilder import expose, has_access
+from flask_appbuilder.models.sqla.interface import SQLAInterface
+from flask_babel import lazy_gettext as _
+from sqlalchemy import and_, or_
+
+from superset import db, is_feature_enabled, security_manager
+from superset.active_reports.utils import sort
+from superset.constants import MODEL_VIEW_RW_METHOD_PERMISSION_MAP, RouteMethod
+from superset.models.active_reports import ActiveReport
+from superset.models.slice import Slice
+from superset.typing import FlaskResponse
+from superset.utils import core as utils
+from superset.views.active_reports.mixin import ActiveReportsMixin
+from superset.views.base import (
+    check_ownership,
+    common_bootstrap_payload,
+    SupersetModelView,
+)
+from superset.views.utils import bootstrap_user_data
+
+logger = logging.getLogger(__name__)
+
+
+class ActiveReports(SupersetModelView, ActiveReportsMixin):
+    route_base = "/active_reports"
+    datamodel = SQLAInterface(ActiveReport)
+    include_route_methods = RouteMethod.CRUD_SET | {
+        "report",
+    }
+    class_permission_name = "ActiveReport"
+    method_permission_name = {**MODEL_VIEW_RW_METHOD_PERMISSION_MAP, "report": "read"}
+
+    def render_app_template(self) -> FlaskResponse:
+        payload = {
+            "user": bootstrap_user_data(g.user, include_perms=True),
+            "common": common_bootstrap_payload(),
+        }
+
+        return self.render_template(
+            "superset/basic.html",
+            title=_("Active Reports").__str__(),
+            entry="activeReports",
+            bootstrap_data=json.dumps(
+                payload, default=utils.pessimistic_json_iso_dttm_ser
+            ),
+        )
+
+    @expose("/list/")
+    @has_access
+    def list(self) -> FlaskResponse:
+        if not is_feature_enabled("ENABLE_REACT_CRUD_VIEWS"):
+            return super().list()
+
+        return self.render_app_template()
+
+    @expose("/add", methods=["GET", "POST"])
+    @has_access
+    def add(self) -> FlaskResponse:
+        datasources = [d.id for d in security_manager.get_user_datasources()]
+
+        datasets = (
+            db.session.query(Slice)
+            .filter(
+                and_(
+                    Slice.viz_type == "table", or_(Slice.datasource_id.in_(datasources))
+                )
+            )
+            .all()
+        )
+
+        datasets = [
+            {
+                "value": str(dataset.id) + "__" + dataset.slice_name,
+                "label": repr(dataset),
+            }
+            for dataset in datasets
+        ]
+
+        templates = (
+            db.session.query(ActiveReport)
+            .filter(ActiveReport.is_template == True)
+            .all()
+        )
+
+        templates = [
+            {
+                "id": template.id,
+                "name": template.report_name,
+                "report": template.report_data,
+            }
+            for template in templates
+        ]
+
+        payload = {
+            "datasets": sort(datasets, "label"),
+            "templates": sort(templates, "name"),
+            "common": common_bootstrap_payload(),
+            "user": bootstrap_user_data(g.user, include_perms=True),
+        }
+        return self.render_template(
+            "superset/add_report.html",
+            title=_("Active Reports").__str__(),
+            entry="addReport",
+            bootstrap_data=json.dumps(
+                payload, default=utils.pessimistic_json_iso_dttm_ser
+            ),
+        )
+
+    @expose("/report/<int:report_id>")
+    @has_access
+    def report(self, report_id: int) -> FlaskResponse:
+        return self.render_app_template()

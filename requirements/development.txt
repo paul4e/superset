@@ -71,6 +71,6 @@ unicodecsv==0.14.1
     #   tabulator
 xlrd==2.0.1
     # via tabulator
-
+crate-smartnow[sqlalchemy]==1.4.2
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

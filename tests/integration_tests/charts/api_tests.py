@@ -1270,7 +1270,6 @@ class TestChartApi(SupersetTestCase, ApiOwnersTestCaseMixin, InsertChartMixin):
         self.login(username="admin")
         request_payload = get_query_context("birth_names")
         del request_payload["queries"][0]["row_limit"]
-
         rv = self.post_assert_metric(CHART_DATA_URI, request_payload, "data")
         response_payload = json.loads(rv.data.decode("utf-8"))
         result = response_payload["result"][0]

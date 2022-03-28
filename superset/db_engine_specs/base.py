@@ -829,7 +829,11 @@ class BaseEngineSpec:  # pylint: disable=too-many-public-methods
         :param schema: Schema to inspect. If omitted, uses default schema for database
         :return: All tables in schema
         """
+        print("Custom get table names")
+        print(inspector)
+        print(schema)
         tables = inspector.get_table_names(schema)
+        print(tables)
         if schema and cls.try_remove_schema_from_table_name:
             tables = [re.sub(f"^{schema}\\.", "", table) for table in tables]
         return sorted(tables)

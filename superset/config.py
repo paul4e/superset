@@ -160,9 +160,10 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 SECRET_KEY = CHANGE_ME_SECRET_KEY
 
 # The SQLAlchemy connection string.
-SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(DATA_DIR, "superset.db")
+# SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(DATA_DIR, "superset.db")
 # SQLALCHEMY_DATABASE_URI = 'mysql://myapp@localhost/myapp'
 # SQLALCHEMY_DATABASE_URI = 'postgresql://root:password@localhost/myapp'
+SQLALCHEMY_DATABASE_URI = "postgresql+psycopg2://postgres:admin@localhost:5444/postgres"
 
 # In order to hook up a custom password store for all SQLACHEMY connections
 # implement a function that takes a single argument of type 'sqla.engine.url',
@@ -409,6 +410,8 @@ DEFAULT_FEATURE_FLAGS: Dict[str, bool] = {
     # This could cause the server to run out of memory or compute.
     "ALLOW_FULL_CSV_EXPORT": False,
     "UX_BETA": False,
+    "ACTIVE_REPORTS_JS": True,
+    "ACTIVE_EXTERNAL_REPORTS": True,
 }
 
 # Feature flags may also be set via 'SUPERSET_FEATURE_' prefixed environment vars.
@@ -1132,6 +1135,7 @@ SQL_VALIDATORS_BY_ENGINE = {
 # use the "engine_name" attribute of the corresponding DB engine spec
 # in `superset/db_engine_specs/`.
 PREFERRED_DATABASES: List[str] = [
+    "CrateDB",
     "PostgreSQL",
     "Presto",
     "MySQL",
@@ -1273,6 +1277,14 @@ MENU_HIDE_USER_INFO = False
 # SQLalchemy link doc reference
 SQLALCHEMY_DOCS_URL = "https://docs.sqlalchemy.org/en/13/core/engines.html"
 SQLALCHEMY_DISPLAY_TEXT = "SQLAlchemy docs"
+
+# ACTIVE REPORTS
+ACTIVE_REPORTS_IS_ACTIVE = True
+ARJSSERVER_ENDPOINT = os.environ.get("ARJSSERVER_ENDPOINT", "")
+
+#BIRT ENGINE
+BIRT_ENGINE_IS_ACTIVE = True
+BIRTENGINE_ENDPOINT = os.environ.get("BIRTENGINE_ENDPOINT", "")
 
 # -------------------------------------------------------------------
 # *                WARNING:  STOP EDITING  HERE                    *

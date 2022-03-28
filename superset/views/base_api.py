@@ -40,6 +40,7 @@ from superset.sql_lab import Query as SqllabQuery
 from superset.stats_logger import BaseStatsLogger
 from superset.typing import FlaskResponse
 from superset.utils.core import time_function
+from superset.models.active_reports.active_reports import ActiveReport
 
 logger = logging.getLogger(__name__)
 get_related_schema = {
@@ -108,7 +109,7 @@ class BaseFavoriteFilter(BaseFilter):  # pylint: disable=too-few-public-methods
     arg_name = ""
     class_name = ""
     """ The FavStar class_name to user """
-    model: Type[Union[Dashboard, Slice, SqllabQuery]] = Dashboard
+    model: Type[Union[Dashboard, Slice, SqllabQuery, ActiveReport]] = Dashboard
     """ The SQLAlchemy model """
 
     def apply(self, query: Query, value: Any) -> Query:

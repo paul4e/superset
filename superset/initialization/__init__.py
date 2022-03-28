@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import logging
 import os
+
 from typing import Any, Callable, Dict, TYPE_CHECKING
 
 import wtforms_json
@@ -191,7 +192,18 @@ class SupersetAppInitializer:  # pylint: disable=too-many-public-methods
             TabStateView,
         )
         from superset.views.tags import TagView
+        from superset.active_reports.api import ActiveReportsRestApi
+        from superset.views.active_reports.views import ActiveReports
 
+        from superset.reports_integration.api.report_engines.api import \
+            ReportEngineRestApi
+        from superset.reports_integration.api.report_definitions.api import \
+            ReportDefinitionRestApi
+        from superset.reports_integration.views import (
+            ReportEngineView,
+            ReportDefinitionView
+        )
+        from superset.reports_integration.report_engines.birt_api import BIRTApi
         #
         # Setup API views
         #
@@ -211,6 +223,10 @@ class SupersetAppInitializer:  # pylint: disable=too-many-public-methods
         appbuilder.add_api(ReportScheduleRestApi)
         appbuilder.add_api(ReportExecutionLogRestApi)
         appbuilder.add_api(FilterSetRestApi)
+        appbuilder.add_api(ActiveReportsRestApi)
+        appbuilder.add_api(ReportEngineRestApi)
+        appbuilder.add_api(ReportDefinitionRestApi)
+        appbuilder.add_api(BIRTApi)
         #
         # Setup regular views
         #
@@ -549,6 +565,38 @@ class SupersetAppInitializer:  # pylint: disable=too-many-public-methods
         )
         appbuilder.add_separator(
             "Data", cond=lambda: bool(self.config["DRUID_IS_ACTIVE"])
+        )
+        # ARJS
+
+        appbuilder.add_view(
+            ActiveReports,
+            "ActiveReports",
+            label=__("Active Reports"),
+            icon="fa-database",
+            category="Reporting",
+            category_label=__("Reports"),
+            category_icon="fa-database",
+            menu_cond=lambda: bool(self.config["ACTIVE_REPORTS_IS_ACTIVE"]),
+        )
+
+        appbuilder.add_view(
+            ReportDefinitionView,
+            "ReportDefinition",
+            label=__("External Reports"),
+            category="Reporting",
+            category_label=__("Reports"),
+            icon="fa-database",
+            category_icon="fa-database",
+        )
+        appbuilder.add_separator("Reporting")
+        appbuilder.add_view(
+            ReportEngineView,
+            "ReportEngine",
+            label=__("Report Engines"),
+            category="Reporting",
+            category_label=__("Reports"),
+            icon="fa-database",
+            category_icon="fa-database",
         )
 
     def init_app_in_ctx(self) -> None:
