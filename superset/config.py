@@ -745,10 +745,10 @@ CELERY_CONFIG = CeleryConfig  # pylint: disable=invalid-name
 # within the app
 # OVERRIDE_HTTP_HEADERS: sets override values for HTTP headers. These values will
 # override anything set within the app
-#"X-XSS-Protection": "1; report=<reporting-uri>",
-#"Content-Security-Policy": "default-src 'none'; img-src 'self'",
-#"X-XSS-Protection": "0",
-#"X-XSS-Protection": "1",
+# examples to header xss "X-XSS-Protection": "1; report=<reporting-uri>",
+# "X-XSS-Protection": "0", "X-XSS-Protection": "1",
+# example to CSP "Content-Security-Policy": "default-src 'none'; img-src 'self'",
+
 #"Content-Security-Policy": "default-src 'self'",
 DEFAULT_HTTP_HEADERS: Dict[str, Any] = {
     "X-Frame-Options": "SAMEORIGIN", 
@@ -761,6 +761,7 @@ DEFAULT_HTTP_HEADERS: Dict[str, Any] = {
     "Referrer-Policy": "same-origin",
     "Referrer-Policy": "strict-origin",
     "Referrer-Policy": "strict-origin-when-cross-origin",
+    #"Feature-Policy": "geolocation 'self'  camera 'none' usb 'none' animations 'self'"
     }
 OVERRIDE_HTTP_HEADERS: Dict[str, Any] = { 
     "server": "****",
