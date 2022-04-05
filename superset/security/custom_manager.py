@@ -1,14 +1,4 @@
 import logging
-
-from flask_appbuilder.views import expose
-from flask import flash, g, redirect, request
-from flask_appbuilder.security.forms import (LoginForm_db)
-from flask_appbuilder._compat import as_unicode
-from flask_login import login_user
-from flask_appbuilder.utils.base import get_safe_redirect
-
-from threading import local
-
 from flask_appbuilder.const import (
     LOGMSG_ERR_SEC_ADD_REGISTER_USER,
     LOGMSG_ERR_SEC_AUTH_LDAP,
@@ -18,12 +8,49 @@ from flask_appbuilder.const import (
 )
 
 from superset.security import SupersetSecurityManager
+from flask_appbuilder.security.views import AuthView
 
+from flask_appbuilder.views import expose
+from flask_appbuilder.security.forms import LoginForm_db
+from flask_appbuilder._compat import as_unicode
+from flask_login import login_user
+from flask import flash, g, redirect, request
+from superset.extensions import (appbuilder)
 
 log = logging.getLogger(__name__)
 
 
+class AuthDBView(AuthView):
+
+    login_template = "superset/templates/custom_login.html"
+
+    @expose("/login/", methods=["GET", "POST"])
+    def login(self):
+        if g.user is not None and g.user.is_authenticated:
+            return redirect(self.appbuilder.get_url_for_index)
+        form = LoginForm_db()
+        if form.validate_on_submit():
+            user = self.appbuilder.sm.auth_user_db(
+                form.username.data, form.password.data
+            )
+            if not user:
+                flash(as_unicode(self.invalid_login_message), "warning")
+                return redirect(self.appbuilder.get_url_for_login)
+            login_user(user, remember=False)
+            next_url = request.args.get("next", "")
+            if not next_url:
+                next_url = self.appbuilder.get_url_for_index
+            return redirect(next_url)
+        return self.render_template(
+            self.login_template, title=self.title, form=form, appbuilder=self.appbuilder
+        )
+
+
+authdbview = AuthDBView
 class CDASecurityManager(SupersetSecurityManager):
+    
+    authdbview = AuthDBView
+
     def __init__(self, appbuilder):
         log.info("Starting CustomSecurityManager")
         super(CDASecurityManager, self).__init__(appbuilder)
@@ -316,25 +343,3 @@ class CDASecurityManager(SupersetSecurityManager):
         for record in results:
             if record[0]:
                 return [record]
-
-
-    login_template = ".../templates/appbuilder/login.html"
-
-    @expose("/login/", methods=["GET", "POST"])
-    def login(self):
-        if g.user is not None and g.user.is_authenticated:
-            return redirect(self.appbuilder.get_url_for_index)
-        form = LoginForm_db()
-        if form.validate_on_submit():
-            user = self.appbuilder.sm.auth_user_db(
-                form.username.data, form.password.data
-            )
-            if not user:
-                flash(as_unicode(self.invalid_login_message), "warning")
-                return redirect(self.appbuilder.get_url_for_login)
-            login_user(user, remember=False)
-            next_url = request.args.get("next", "")
-            return redirect(get_safe_redirect(next_url))
-        return self.render_template(
-            self.login_template, title=self.title, form=form, appbuilder=self.appbuilder
-        )
