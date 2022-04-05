@@ -8,27 +8,48 @@ from flask_appbuilder.const import (
 )
 
 from superset.security import SupersetSecurityManager
-from flask_appbuilder.security.views import AuthView
+from flask_appbuilder.security.views import AuthDBView
 
+from wtforms.widgets.core import PasswordInput
+from wtforms.fields.simple import PasswordField
+from wtforms.validators import DataRequired
+
+from flask_appbuilder._compat import as_unicode
 from flask_appbuilder.views import expose
 from flask_appbuilder.security.forms import LoginForm_db
-from flask_appbuilder._compat import as_unicode
 from flask_login import login_user
 from flask import flash, g, redirect, request
-from superset.extensions import (appbuilder)
+
+from flask_babel import lazy_gettext
 
 log = logging.getLogger(__name__)
 
 
-class AuthDBView(AuthView):
+class CustomPasswordInput(PasswordInput):
+    def __init__(self, autocomplete = False
+    ):
+        super().__init__()
+        self.autocomplete = autocomplete
+    def __call__(self, field, **kwargs):
+        if not self.autocomplete:
+            kwargs['autocomplete'] = 'new-password'
+        return super(PasswordInput, self).__call__(field, **kwargs)
 
-    login_template = "superset/templates/custom_login.html"
+class CustomPasswordField(PasswordField):
+    widget = CustomPasswordInput()
+
+class CustomLoginForm_db(LoginForm_db):
+    password = CustomPasswordField(lazy_gettext("Password"), validators=[DataRequired()])
+
+class CustomAuthDBView(AuthDBView):
+    
+    login_template = "superset/custom_login.html"
 
     @expose("/login/", methods=["GET", "POST"])
     def login(self):
         if g.user is not None and g.user.is_authenticated:
             return redirect(self.appbuilder.get_url_for_index)
-        form = LoginForm_db()
+        form = CustomLoginForm_db()
         if form.validate_on_submit():
             user = self.appbuilder.sm.auth_user_db(
                 form.username.data, form.password.data
@@ -46,10 +67,25 @@ class AuthDBView(AuthView):
         )
 
 
-authdbview = AuthDBView
+
+class CustomPasswordInput(PasswordInput):
+
+    def __init__(self, hide_value=True, autocomplete = False):
+        self.hide_value = hide_value
+        self.autocomplete = autocomplete
+    def __call__(self, field, **kwargs):
+        print("PasswordInput")
+        print(self.autocomplete)
+        if self.hide_value:
+            kwargs['value'] = ''
+        if not self.autocomplete:
+            print("self.autocomplete")
+            kwargs['autocomplete'] = 'new-password'
+        return super(PasswordInput, self).__call__(field, **kwargs)
+
 class CDASecurityManager(SupersetSecurityManager):
     
-    authdbview = AuthDBView
+    authdbview = CustomAuthDBView
 
     def __init__(self, appbuilder):
         log.info("Starting CustomSecurityManager")
