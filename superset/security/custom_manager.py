@@ -84,7 +84,7 @@ class CustomPasswordInput(PasswordInput):
         return super(PasswordInput, self).__call__(field, **kwargs)
 
 class CDASecurityManager(SupersetSecurityManager):
-    
+    authldapview = CustomAuthDBView
     authdbview = CustomAuthDBView
 
     def __init__(self, appbuilder):
