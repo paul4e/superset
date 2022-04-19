@@ -4,7 +4,7 @@ import React from 'react';
 //   useState /* , { useEffect, useState,  useMemo } */,
 // }
 
-import withToasts from 'src/messageToasts/enhancers/withToasts';
+import withToasts from 'src/components/MessageToasts/withToasts';
 import { Select } from 'src/components';
 // import { css, JsonObject, SupersetClient, t } from '@superset-ui/core';
 // import { FormLabel } from 'src/components/Form';

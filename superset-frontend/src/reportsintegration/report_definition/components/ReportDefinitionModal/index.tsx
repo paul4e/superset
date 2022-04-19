@@ -21,7 +21,7 @@ import Modal from 'src/components/Modal';
 // import Button from 'src/components/Button';
 // import IconButton from 'src/components/IconButton';
 // import InfoTooltip from 'src/components/InfoTooltip';
-import withToasts from 'src/messageToasts/enhancers/withToasts';
+import withToasts from 'src/components/MessageToasts/withToasts'
 // import AddReportEnginePage from 'src/reportsintegration/report_engine/containers/AddReportEnginePage';
 import { Radio } from 'src/components/Radio';
 import Loading from 'src/components/Loading';

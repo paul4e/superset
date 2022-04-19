@@ -34,7 +34,7 @@ import {
 import {
   addDangerToast,
   addSuccessToast,
-} from '../../../messageToasts/actions';
+} from '../../../components/MessageToasts/actions';
 
 type PropertiesModalProps = {
   reportEdit: Report;

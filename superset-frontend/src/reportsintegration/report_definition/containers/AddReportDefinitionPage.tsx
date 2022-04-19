@@ -2,7 +2,7 @@ import React /* , {  useState,  useMemo } */, {
   useEffect,
   useState,
 } from 'react';
-import withToasts from 'src/messageToasts/enhancers/withToasts';
+import withToasts from 'src/components/MessageToasts/withToasts';
 import { SupersetClient } from '@superset-ui/core';
 import AddReportDefinition from '../components/AddReportDefinition';
 // import { MAX_ADVISABLE_VIZ_GALLERY_WIDTH } from '../../../explore/components/controls/VizTypeControl/VizTypeGallery';

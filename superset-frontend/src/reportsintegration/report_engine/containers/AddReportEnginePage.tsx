@@ -1,5 +1,5 @@
 import React /* , {  useState,  useMemo, useEffect } */ from 'react';
-import withToasts from 'src/messageToasts/enhancers/withToasts';
+import withToasts from 'src/components/MessageToasts/withToasts';
 import { styled } from '@superset-ui/core';
 // import { styled, SupersetClient } from '@superset-ui/core';
 import AddReportEngine from '../components/AddReportEngine';

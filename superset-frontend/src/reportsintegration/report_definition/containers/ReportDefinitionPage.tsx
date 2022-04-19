@@ -3,7 +3,7 @@ import React /* , {  useState,  useMemo } */, {
   useState,
 } from 'react';
 import { useParams } from 'react-router-dom';
-import withToasts from 'src/messageToasts/enhancers/withToasts';
+import withToasts from 'src/components/MessageToasts/withToasts';
 import {
   SupersetClient,
   styled /* , t, css, useTheme */,

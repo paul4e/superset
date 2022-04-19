@@ -35,7 +35,7 @@ import FlashProvider from '../components/FlashProvider';
 import { QueryParamProvider } from 'use-query-params';
 import { store } from 'src/activeReports/store';
 import { Provider as ReduxProvider } from 'react-redux';
-import ToastPresenter from '../messageToasts/containers/ToastPresenter';
+import ToastContainer from 'src/components/MessageToasts/ToastContainer';
 
 setupApp();
 
@@ -79,7 +79,7 @@ const App = () => (
           </Route>
         ))}
       </Switch>
-      <ToastPresenter />
+     < ToastContainer/>
     </RootContextProviders>
   </Router>
 );

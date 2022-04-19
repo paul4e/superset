@@ -18,7 +18,7 @@
  */
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
-import messageToastReducer from 'src/messageToasts/reducers';
+import messageToastReducer from '../components/MessageToasts/reducers';
 import { initEnhancer } from 'src/reduxUtils';
 import logger from 'src/middleware/loggerMiddleware';
 import shortid from 'shortid';

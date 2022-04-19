@@ -27,7 +27,7 @@ import {
 import {Input} from "../../../common/components";
 import {getSlices} from "../../utils";
 import {postActiveReportEndpoint} from "../../utils";
-import {addDangerToast, addSuccessToast} from "../../../messageToasts/actions";
+import {addDangerToast, addSuccessToast} from "../../../components/MessageToasts/actions";
 
 interface Dataset {
   label: string;

@@ -33,7 +33,7 @@ import ListView, {
   ListViewProps,
 } from 'src/components/ListView';
 import { getFromLocalStorage } from 'src/utils/localStorageHelpers';
-import withToasts from 'src/messageToasts/enhancers/withToasts';
+import withToasts from 'src/components/MessageToasts/withToasts';
 import FacePile from 'src/components/FacePile';
 import Icons from 'src/components/Icons';
 // import FaveStar from 'src/components/FaveStar';

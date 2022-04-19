@@ -39,8 +39,8 @@ import '@grapecity/activereports/htmlexport';
 import '@grapecity/activereports/xlsxexport';
 import { Input } from '../../common/components';
 import { Form, FormItem } from '../../components/Form';
-import { addSuccessToast, addDangerToast } from 'src/messageToasts/actions';
-// import withToasts from 'src/messageToasts/enhancers/withToasts';
+import { addSuccessToast, addDangerToast } from '../../components/MessageToasts/actions';
+
 
 interface DesignerComponent {
   report: any;

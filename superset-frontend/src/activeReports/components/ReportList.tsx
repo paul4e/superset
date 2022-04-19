@@ -18,8 +18,8 @@
  */
 import { styled, SupersetClient, t } from '@superset-ui/core'; //@ts-ignore
 import React, { useMemo, useState } from 'react';
-import Owner from 'src/types/Owner';
-import withToasts from '../../messageToasts/enhancers/withToasts';
+import Owner from 'src/types/Owner'; 
+import withToasts from '../../components/MessageToasts/withToasts';
 import SubMenu, { SubMenuProps } from '../../components/Menu/SubMenu';
 import ConfirmStatusChange from '../../components/ConfirmStatusChange';
 import ListView, {
