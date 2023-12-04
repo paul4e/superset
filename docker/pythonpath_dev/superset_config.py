@@ -71,7 +71,6 @@ CACHE_CONFIG = {
 }
 DATA_CACHE_CONFIG = CACHE_CONFIG
 
-
 class CeleryConfig:
     broker_url = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_CELERY_DB}"
     imports = ("superset.sql_lab",)
@@ -99,6 +98,18 @@ WEBDRIVER_BASEURL = "http://superset:8088/"
 WEBDRIVER_BASEURL_USER_FRIENDLY = WEBDRIVER_BASEURL
 
 SQLLAB_CTAS_NO_LIMIT = True
+
+#
+# Custom Configuration!
+#
+
+PREFERRED_DATABASES: list[str] = [
+    "PostgreSQL",
+    # "Presto",
+    # "MySQL",
+    # "SQLite",
+    "CrateDB"
+]
 
 #
 # Optionally import superset_config_docker.py (which will have been included on
