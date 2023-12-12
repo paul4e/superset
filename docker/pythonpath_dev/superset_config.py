@@ -100,18 +100,6 @@ WEBDRIVER_BASEURL_USER_FRIENDLY = WEBDRIVER_BASEURL
 SQLLAB_CTAS_NO_LIMIT = True
 
 #
-# Custom Configuration!
-#
-
-PREFERRED_DATABASES: list[str] = [
-    "PostgreSQL",
-    # "Presto",
-    # "MySQL",
-    # "SQLite",
-    "CrateDB"
-]
-
-#
 # Optionally import superset_config_docker.py (which will have been included on
 # the PYTHONPATH) in order to allow for local settings to be overridden
 #
