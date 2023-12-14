@@ -14,10 +14,10 @@
       "\n            Error: %(text)s\n            ": [""],
       " (excluded)": [" (excluído)"],
       " Set the opacity to 0 if you do not want to override the color specified in the GeoJSON": [
-        "Asigne 0 a la opacidad si no desea sobreescribir el color especificado en el GeoJSON"
+        " Asigne 0 a la opacidad si no desea sobreescribir el color especificado en el GeoJSON"
       ],
       " a dashboard OR ": [" un dashboard o "],
-      " a new one": ["uno nuevo"],
+      " a new one": [" uno nuevo"],
       " expression which needs to adhere to the ": [
         " la expresión debe de seguir "
       ],
@@ -25,18 +25,29 @@
       " standard to ensure that the lexicographical ordering\n                      coincides with the chronological ordering. If the\n                      timestamp format does not adhere to the ISO 8601 standard\n                      you will need to define an expression and type for\n                      transforming the string into a date or timestamp. Note\n                      currently time zones are not supported. If time is stored\n                      in epoch format, put `epoch_s` or `epoch_ms`. If no pattern\n                      is specified we fall back to using the optional defaults on a per\n                      database/column name level via the extra parameter.": [
         ""
       ],
-      " to add calculated columns": ["para agregar columnas calculadas"],
+      " to add calculated columns": [" para agregar columnas calculadas"],
+      " to add metrics": [" Añadir Métrica"],
+      " to edit or add columns and metrics.": [
+        " para editar o agregar columnas y métricas."
+      ],
       " to mark a column as a time column": [""],
       " to open SQL Lab. From there you can save the query as a dataset.": [""],
       " to visualize your data.": [""],
       "!= (Is not equal)": ["!= (No es igual)"],
+      "%(dialect)s cannot be used as a data source for security reasons.": [
+        "%(dialect)s  no puede usarse como fuente de datos por motivos de seguridad."
+      ],
       "%(message)s\nThis may be triggered by: \n%(issues)s": [""],
       "%(name)s.csv": [""],
       "%(object)s does not exist in this database.": [""],
       "%(other)s charts will appear here": [""],
       "%(other)s dashboards will appear here": [""],
       "%(other)s recents will appear here": [""],
+      "%(other)s saved queries will appear here": [
+        "%(other)s queries guardados apareceran aquí"
+      ],
       "%(prefix)s %(title)s": [""],
+      "%(rows)d rows returned": ["%(rows)d líneas obtenidas"],
       "%(subtitle)s\nThis may be triggered by:\n %(issue)s": [""],
       "%(suggestion)s instead of \"%(undefinedParameter)s?\"": [
         "",
@@ -50,6 +61,7 @@
         ""
       ],
       "%s Error": ["%s Error"],
+      "%s PASSWORD": ["%s CONTRASEÑA"],
       "%s SSH TUNNEL PASSWORD": [""],
       "%s SSH TUNNEL PRIVATE KEY": [""],
       "%s SSH TUNNEL PRIVATE KEY PASSWORD": [""],
@@ -62,8 +74,11 @@
       "%s aggregates(s)": ["%s aggregación(es)"],
       "%s column(s)": ["%s columnas(s)"],
       "%s operator(s)": ["%s operador(es)"],
+      "%s option": ["%s opción", "%s opciones"],
       "%s option(s)": ["%s opción(es)"],
+      "%s row": ["%s fila", "%s filas"],
       "%s saved metric(s)": ["%s métrica(s) guardada(s)"],
+      "%s updated": ["%s actualizado"],
       "%s%s": [""],
       "%s-%s of %s": ["%s-%s de %s"],
       "(Removed)": ["(Eliminado)"],
@@ -127,8 +142,14 @@
       "== (Is equal)": ["== (Igual)"],
       "> (Larger than)": ["> (mayor que)"],
       ">= (Larger or equal)": [">= (Mayor o igual)"],
+      "A comma separated list of columns that should be parsed as dates": [
+        "Una lista separada por comas de columnas que deben ser parseadas como fechas"
+      ],
       "A comma separated list of columns that should be parsed as dates.": [
         "Una lista separada por comas de columnas que deben ser parseadas como fechas."
+      ],
+      "A database with the same name already exists.": [
+        "Ya existe una base de datos con el mismo nombre."
       ],
       "A dictionary with column names and their data types if you need to change the defaults. Example: {\"user_id\":\"integer\"}": [
         ""
@@ -169,6 +190,9 @@
       "A time column must be specified when using a Time Comparison.": [""],
       "A time series chart that visualizes how a related metric from multiple groups vary over time. Each group is visualized using a different color.": [
         ""
+      ],
+      "A timeout occurred while generating a csv.": [
+        "Se produjo un error al recuperar el estado de la pestaña."
       ],
       "A valid color scheme is required": [
         "Un esquema de colores válido es requerido"
@@ -284,7 +308,7 @@
       "Alerts & Reports": ["Alertas y reportes"],
       "Alerts & reports": ["Alertas e informes"],
       "Align +/-": [""],
-      "All": [""],
+      "All": ["Todos"],
       "All Text": ["Todo el Texto"],
       "All charts": ["Todos los gráficos"],
       "All charts/global scoping": [""],
@@ -663,13 +687,15 @@
       "Cell Radius": [""],
       "Cell content": ["Contenido de la celda"],
       "Certification details": [""],
+      "Certified": ["Certificado"],
+      "Certified By": ["Certificado por"],
       "Certified by": ["Certificado por"],
       "Certified by %s": ["Certidicado por %s"],
-      "Change order of columns.": [""],
-      "Change order of rows.": [""],
+      "Change order of columns.": ["Cambiar orden de las columnas."],
+      "Change order of rows.": ["Cambiar orden de las filas."],
       "Changed By": ["Cambiado por"],
       "Changed on": ["Cambiado el"],
-      "Changes saved.": [""],
+      "Changes saved.": ["Cambios guardados."],
       "Changing the dataset may break the chart if the chart relies on columns or metadata that does not exist in the target dataset": [
         ""
       ],
@@ -993,24 +1019,34 @@
       "Count as Fraction of Columns": [""],
       "Count as Fraction of Rows": [""],
       "Count as Fraction of Total": [""],
-      "Country Field Type": [""],
+      "Country Column": ["Columna del país"],
+      "Country Field Type": ["Tipo del campo del país"],
       "Country Map": ["Mapa de País"],
+      "Create": ["Crear"],
+      "Create Chart": ["Crear Gráfico"],
+      "Create a dataset": ["Crear un Dataset"],
       "Create a dataset to begin visualizing your data as a chart or go to\n          SQL Lab to query your data.": [
         ""
       ],
       "Create a new chart": ["Crear un nuevo Gráfico"],
+      "Create chart": ["Crear gráfico"],
       "Create chart with dataset": [""],
+      "Create dataset": ["Crear dataset"],
+      "Create dataset and create chart": ["Crear dataset y crear gráfico"],
       "Create new chart": ["Crear un nuevo Gráfico"],
-      "Create or select schema...": [""],
+      "Create new filter set": ["Crear un nuevo conjunto de filtros"],
+      "Create or select schema...": ["Crear o seleccionar esquema..."],
       "Created": ["Creado"],
       "Created On": ["Creado el"],
       "Created by": ["Creado por"],
-      "Created content": ["Contenido Creado"],
+      "Created by me": ["Creado por mi"],
+      "Created content": ["Contenido creado"],
       "Created on": ["Creado el"],
       "Creating a data source and creating a new tab": [
         "Creando un origen de datos y creando una nueva pestaña"
       ],
       "Creator": ["Creador"],
+      "Crimson": [""],
       "Cross-filter will be applied to all of the charts that use this dataset.": [
         ""
       ],
@@ -1031,6 +1067,7 @@
       ],
       "D3 time format for datetime columns": [""],
       "D3 time format syntax: https://github.com/d3/d3-time-format": [""],
+      "DATETIME": ["Fecha/Hora"],
       "DB column %(col_name)s has unknown type: %(value_type)s": [""],
       "DEC": ["DIC"],
       "DELETE": ["ELIMINAR"],
@@ -1040,6 +1077,9 @@
       "Dark Cyan": [""],
       "Dark mode": [""],
       "Dashboard": ["Dashboard"],
+      "Dashboard [%s] just got created and chart [%s] was added to it": [
+        "El dashboard [%s] ha sido creado y el gráfico [%s] ha sido añadido a él"
+      ],
       "Dashboard [{}] just got created and chart [{}] was added to it": [
         "El dashboard [{}] ha sido creado y el gráfico [{}] ha sido añadido a él"
       ],
@@ -1051,19 +1091,28 @@
         "El Dashboard no pudo ser actualizado."
       ],
       "Dashboard does not exist": ["El dashboard no existe"],
+      "Dashboard imported": ["Se ha importado el Dashboard"],
       "Dashboard parameters are invalid.": [
         "Parámetros de Dashboard inválidos."
       ],
       "Dashboard properties": ["Propiedades del Dashboard"],
+      "Dashboard properties updated": [
+        "Se han actualizado las propiedades del dashboard"
+      ],
       "Dashboard time range filters apply to temporal columns defined in\n          the filter section of each chart. Add temporal columns to the chart\n          filters to have this dashboard filter impact those charts.": [
         ""
       ],
+      "Dashboard title": ["Título del dashboard"],
+      "Dashboard usage": ["Uso del dashboard"],
       "Dashboards": ["Dashboards"],
+      "Dashboards added to": ["Dashboards agregados a"],
       "Dashboards could not be deleted.": [
         "Los Dashboards no pudieron ser eliminados."
       ],
       "Dashboards do not exist": ["El dashboard no existe"],
+      "Dashed": ["Discontinuo"],
       "Data": ["Datos"],
+      "Data Table": ["Tabla de datos"],
       "Data URI is not allowed.": [""],
       "Data Zoom": [""],
       "Data could not be deserialized from the results backend. The storage format might have changed, rendering the old data stake. You need to re-run the original query.": [
@@ -1089,7 +1138,9 @@
         ""
       ],
       "Database Connections": ["Conexiones de base de datos"],
+      "Database Creation Error": ["Error Creando la Base de Datos"],
       "Database URL": ["URL de la Base de datos"],
+      "Database connected": ["Base de Datos conectada"],
       "Database could not be created.": [
         "No se ha podido crear la base de datos."
       ],
@@ -1101,18 +1152,28 @@
       ],
       "Database does not allow data manipulation.": [""],
       "Database does not exist": ["La base de datos no existe"],
+      "Database does not support subqueries": [
+        "La base de datos no soporta subqueries"
+      ],
       "Database driver for importing maybe not installed. Visit the Superset documentation page for installation instructions: ": [
         ""
       ],
       "Database error": ["Base de datos"],
+      "Database is offline.": ["La base de datos se encuentra desconectada."],
       "Database is required for alerts": [
         "La base de datos es requerida para las alertas"
       ],
       "Database name": ["Nombre de la Fuente de Datos"],
       "Database not allowed to change": ["La base de datos no puede cambiar"],
       "Database not found.": ["La base de datos no existe."],
+      "Database not found: %(id)s": ["No existe la base de datos: %(id)s"],
       "Database parameters are invalid.": [
         "Los parámetros de la base de datos son inválidos."
+      ],
+      "Database passwords": ["Contraseñas de la Base de datos"],
+      "Database port": ["Puerto de la base de datos"],
+      "Database settings updated": [
+        "Configuración de la base de datos acutalizado"
       ],
       "Databases": ["Bases de datos"],
       "Dataframe Index": ["Índice de Dataframe"],
@@ -1781,6 +1842,7 @@
       ],
       "Invalid tab ids: %s(tab_ids)": [""],
       "Inverse selection": ["Selección inversa"],
+      "Is certified": ["Está certificado"],
       "Is dimension": ["Es dimensión"],
       "Is favorite": ["Favoritos"],
       "Is filterable": ["Es filtrable"],
@@ -1974,7 +2036,7 @@
       "Min": ["Mín"],
       "Min periods": ["Periodos Mínimos"],
       "Min/max (no outliers)": [""],
-      "Mine": ["Míos"],
+      "Mine": ["Mis"],
       "Minimum Font Size": [""],
       "Minimum Radius": [""],
       "Minimum leaf node event count": [""],
@@ -2236,9 +2298,15 @@
       "Performance": [""],
       "Period average": [""],
       "Periods": ["Periodos"],
-      "Person or group that has certified this chart.": [""],
-      "Person or group that has certified this dashboard.": [""],
-      "Person or group that has certified this metric": [""],
+      "Person or group that has certified this chart.": [
+        "Persona o grupo que certificó este gráfico."
+      ],
+      "Person or group that has certified this dashboard.": [
+        "Persona o grupo que certificó este dashboard."
+      ],
+      "Person or group that has certified this metric": [
+        "Persona o grupo que certifico esta métrica"
+      ],
       "Physical": ["Tabla física"],
       "Physical (table or view)": ["Tabla física"],
       "Physical dataset": ["Conjunto de datos físico"],
@@ -2578,10 +2646,16 @@
       "Rule": ["Regla"],
       "Rule added": [""],
       "Run": ["Ejecutar"],
+      "Run a query to display query history": [
+        "Ejecutar un query para mostrar el historial del query"
+      ],
+      "Run a query to display results": [
+        "Ejecutar una query para mostrar los resultados"
+      ],
       "Run in SQL Lab": ["Ejecutar en Laboratiorio SQL"],
-      "Run query": ["Ejecutar consulta"],
-      "Run query (Ctrl + Return)": ["Ejecutar consulta (Ctrl + Enter)"],
-      "Run query in a new tab": ["Ejecutar consulta en otra pestaña"],
+      "Run query": ["Ejecutar query"],
+      "Run query (Ctrl + Return)": ["Ejecutar query (Ctrl + Enter)"],
+      "Run query in a new tab": ["Ejecutar query en otra pestaña"],
       "Run selection": ["Probar Conexión"],
       "Running": ["Ejecutando"],
       "Running statement %(statement_num)s out of %(statement_count)s": [""],
@@ -2596,9 +2670,9 @@
       "SQL Lab uses your browser's local storage to store queries and results.\nCurrently, you are using %(currentUsage)s KB out of %(maxStorage)d KB storage space.\nTo keep SQL Lab from crashing, please delete some query tabs.\nYou can re-access these queries by using the Save feature before you delete the tab.\nNote that you will need to close other SQL Lab windows before you do this.": [
         ""
       ],
-      "SQL Query": ["Consulta SQL"],
+      "SQL Query": ["Query SQL"],
       "SQL expression": ["Expresión SQL"],
-      "SQL query": ["Parar query"],
+      "SQL query": [""],
       "SQLAlchemy URI": ["URI SQLAlchemy"],
       "SSH Host": [""],
       "SSH Port": [""],
@@ -2626,6 +2700,7 @@
       "Save as:": ["Guardar como:"],
       "Save chart": ["Guardar gráfico"],
       "Save dashboard": ["Guardar Dashboard"],
+      "Save dataset": ["Guardar dataset"],
       "Save for this session": ["Guardar para esta sesión"],
       "Save or Overwrite Dataset": [""],
       "Save query": ["Guardar Consulta"],
@@ -2673,18 +2748,45 @@
       "See less": ["Ver menos"],
       "See more": ["Ver más"],
       "See table schema": ["Ver esquema de tabla"],
+      "Select": ["Selecciona"],
       "Select ...": ["Selecciona ..."],
       "Select a Excel file to be uploaded to a database.": [
         "Selecciona un archivo de Excel para ser cargado a una base de datos."
       ],
-      "Select a database to upload the file to": [""],
+      "Select a column": ["Selecciona una columna"],
+      "Select a dashboard": ["Selecciona un dashboard"],
+      "Select a database table and create dataset": [
+        "Selecciona una tabla de la base de datos y crear un dataset"
+      ],
+      "Select a database table.": ["Selecciona una tabla de la base de datos."],
+      "Select a database to connect": [
+        "Seleccione una base de datos para conectar"
+      ],
+      "Select a database to upload the file to": [
+        "Seleccione una base de datos para cargar el archivo"
+      ],
+      "Select a database to write a query": [
+        "Selecciona una base de datos para escribir un query"
+      ],
+      "Select a dimension": ["Selecciona una dimensión"],
       "Select a visualization type": ["Selecciona un tipo de visualización"],
+      "Select all data": ["Seleccionar toda la data"],
+      "Select all items": ["Seleccionar todos los items"],
       "Select any columns for metadata inspection": [""],
       "Select databases require additional fields to be completed in the Advanced tab to successfully connect the database. Learn what requirements your databases has ": [
         ""
       ],
       "Select filter plugin using AntD": [""],
       "Select first filter value by default": [""],
+      "Select or type a value": ["Seleccione o digite un valor"],
+      "Select or type dataset name": [
+        "Selecciona un dataset o digite su nombre"
+      ],
+      "Select owners": ["Seleccione los dueños"],
+      "Select schema or type to search schemas": [
+        "Selecciona el esquema o digite para buscar esquemas"
+      ],
+      "Select scheme": ["Selecciona un esquema"],
       "Select start and end date": ["Seleciona fecha de inicio y de fin"],
       "Select subject": [""],
       "Select the charts to which you want to apply cross-filters in this dashboard. Deselecting a chart will exclude it from being filtered when applying cross-filters from any chart on the dashboard. You can select \"All charts\" to apply cross-filters to all charts that use the same dataset or contain the same column name in the dashboard.": [
@@ -3490,7 +3592,8 @@
       "Tuesday": ["Martes"],
       "Type": ["Tipo"],
       "Type \"%s\" to confirm": ["Teclea \"%s\" para confirmar"],
-      "Type a value here": ["Introduce un valor"],
+      "Type a value": ["Digite un valor"],
+      "Type a value here": ["Digite un valor aquí"],
       "Type is required": ["El tipo es obligatorio"],
       "Type of Google Sheets allowed": [""],
       "Type of comparison, value difference or percentage": [""],
