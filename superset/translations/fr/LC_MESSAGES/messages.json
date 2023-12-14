@@ -100,7 +100,7 @@
       "1H": [""],
       "1M": [""],
       "1T": [""],
-      "2 years ago": ["il y a 2 ans"],
+      "2 years ago": ["Il y a 2 ans"],
       "2/98 percentiles": [""],
       "28 days ago": [""],
       "2D": [""],
@@ -4591,18 +4591,10 @@
       "y: values are normalized within each row": [""],
       "year": ["année"],
       "zoom area": [""],
-      "No matching records found": ["Aucun résultat trouvé"],
-      "Seconds %s": ["%s secondes"],
-      "Minutes %s": ["%s minutes "],
       "10 seconds": ["10 secondes"],
       "6 hours": ["6 heures"],
       "12 hours": ["12 heures"],
-      "24 hours": ["24 heures"],
-      "Last day": ["Hier"],
-      "Last week": ["La semaine derniere"],
-      "Last month": ["Le mois dernier"],
-      "Last quarter": ["Le trimestre dernier"],
-      "Last year": ["L'année dernière"]
+      "24 hours": ["24 heures"]
     }
   }
 }
