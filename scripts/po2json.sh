@@ -14,12 +14,12 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-
+which po2json
 for file in $( find superset/translations/** );
 do
   extension=${file##*.}
   filename="${file%.*}"
-  if [ $extension == "po" ]
+  if [ $extension = "po" ]
   then
     po2json --domain superset --format jed1.x $file $filename.json
     ./superset-frontend/node_modules/.bin/prettier --write $filename.json
