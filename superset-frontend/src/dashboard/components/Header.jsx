@@ -49,6 +49,8 @@ import {
 import setPeriodicRunner from '../util/setPeriodicRunner';
 import { options as PeriodicRefreshOptions } from './RefreshIntervalModal';
 
+import DashboardBanner from "../../smartnow/components/dashboardBanner/DashboardBanner";
+
 const propTypes = {
   addSuccessToast: PropTypes.func.isRequired,
   addDangerToast: PropTypes.func.isRequired,
@@ -412,11 +414,7 @@ class Header extends React.PureComponent {
             />
           )}
         </div>
-        <div>
-          <p style={{fontFamily: "Open Sans", color:"red"}}>
-            {dashboardInfo.metadata.information}
-          </p>
-        </div>
+        <DashboardBanner banner={dashboardInfo.metadata.information} />
         <div className="button-container">
           {userCanSaveAs && (
             <div

@@ -44,6 +44,7 @@ import TooltipWrapper from 'src/components/TooltipWrapper';
 import ImportModelsModal from 'src/components/ImportModal/index';
 
 import Dashboard from 'src/dashboard/containers/Dashboard';
+import AddDashboardBannerModal from 'src/smartnow/components/dashboardBanner/AddDashboardBannerModal';
 import DashboardCard from './DashboardCard';
 
 const PAGE_SIZE = 25;
@@ -113,6 +114,14 @@ function DashboardList(props: DashboardListProps) {
     null,
   );
 
+  // Dashboard Banner
+  const [
+    showDashboardBannerModal,
+    setShowDashboardBannerModal,
+  ] = useState<boolean>(false);
+
+  const [dashboardBanner, setDashboardBanner] = useState<string>('');
+
   const [importingDashboard, showImportModal] = useState<boolean>(false);
   const [passwordFields, setPasswordFields] = useState<string[]>([]);
 
@@ -135,6 +144,43 @@ function DashboardList(props: DashboardListProps) {
   const canExport = hasPerm('can_read');
 
   const initialSort = [{ id: 'changed_on_delta_humanized', desc: true }];
+
+  // Dashboard Banner
+  const toggleDashboardBannerModal = (show: boolean) => {
+    setShowDashboardBannerModal(show);
+  };
+
+  // function handleUpdatedDashboardBanner() {
+  //   console.log('handling updatedDashboardBanner');
+  //   // const dash_ids = [1, 2];
+  //   const updated_banner = 'NEW BANNER';
+  //   const data = {
+  //     // dashboards_ids: dash_ids,
+  //     dashboard_banner: updated_banner,
+  //   };
+  //   return SupersetClient.post({
+  //     endpoint: '/dashboards/update_banner',
+  //     jsonPayload: data,
+  //   });
+  // }
+
+  const handleDashboardBannerUpdate = async () => {
+    console.log('handling updatedDashboardBanner');
+
+    const data = {
+      // dashboards_ids: dash_ids,
+      dashboard_banner: dashboardBanner,
+    };
+
+    const updateBanner = async () =>
+      SupersetClient.post({
+        endpoint: '/dashboards/update_banner',
+        jsonPayload: data,
+      });
+    await updateBanner();
+    setDashboardBanner('');
+    setShowDashboardBannerModal(false);
+  };
 
   function openDashboardEditModal(dashboard: Dashboard) {
     setDashboardToEdit(dashboard);
@@ -467,6 +513,13 @@ function DashboardList(props: DashboardListProps) {
   }
 
   const subMenuButtons: SubMenuProps['buttons'] = [];
+  if (true) {
+    subMenuButtons.push({
+      name: t('Agregar Banner'),
+      buttonStyle: 'secondary',
+      onClick: () => toggleDashboardBannerModal(true),
+    });
+  }
   if (canDelete || canExport) {
     subMenuButtons.push({
       name: t('Bulk Select'),
@@ -494,6 +547,7 @@ function DashboardList(props: DashboardListProps) {
       onClick: openDashboardImportModal,
     });
   }
+
   return (
     <>
       <SubMenu name={t('Dashboards')} buttons={subMenuButtons} />
@@ -530,6 +584,15 @@ function DashboardList(props: DashboardListProps) {
                   show
                   onHide={() => setDashboardToEdit(null)}
                   onSubmit={handleDashboardEdit}
+                />
+              )}
+              {showDashboardBannerModal && (
+                <AddDashboardBannerModal
+                  show
+                  onHide={() => toggleDashboardBannerModal(false)}
+                  onSubmit={handleDashboardBannerUpdate}
+                  dashboardBanner={dashboardBanner}
+                  onDashboardBannerChange={setDashboardBanner}
                 />
               )}
               <ListView<Dashboard>

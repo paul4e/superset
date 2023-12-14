@@ -200,6 +200,7 @@ class SupersetAppInitializer:
         )
         from superset.views.tags import TagView
 
+        from superset.smartnow.dashboards.api import SmartnowDashboardApi
         #
         # Setup API views
         #
@@ -217,6 +218,8 @@ class SupersetAppInitializer:
         if feature_flag_manager.is_feature_enabled("ALERT_REPORTS"):
             appbuilder.add_api(ReportScheduleRestApi)
             appbuilder.add_api(ReportExecutionLogRestApi)
+
+        appbuilder.add_api(SmartnowDashboardApi)
         #
         # Setup regular views
         #
