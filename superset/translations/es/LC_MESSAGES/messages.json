@@ -202,7 +202,7 @@
       "AQE": ["AQE"],
       "AUG": ["AGO"],
       "AXIS TITLE MARGIN": [""],
-      "About": [""],
+      "About": ["Acerca de"],
       "Access": ["Acceso"],
       "Access requests": ["Solicitudes de Acceso"],
       "Access to user activity data is restricted": [""],
@@ -225,6 +225,7 @@
       "Add Saved Query": ["Añadir Consulta Guardada"],
       "Add a Plugin": ["Añadir Columna"],
       "Add a dataset": ["Agregar dataset"],
+      "Add a new tab": ["Crear una nueva pestaña"],
       "Add a new tab to create SQL Query": [""],
       "Add annotation": ["Añadir anotación"],
       "Add annotation layer": ["Capas de Anotación"],
@@ -572,6 +573,7 @@
       "Asynchronous query execution": ["Ejecución asíncrona de consultas"],
       "August": ["Agosto"],
       "Auto Zoom": [""],
+      "Autocomplete": ["Autocompletar"],
       "Autocomplete filters": ["Autocompletar filtros"],
       "Autocomplete query predicate": ["Autocompletar predicado de consulta"],
       "Automatic Color": [""],
@@ -591,7 +593,7 @@
       "Battery level over time": [""],
       "Be careful.": ["Se precavido."],
       "Big Number": ["Número Grande"],
-      "Big Number Font Size": [""],
+      "Big Number Font Size": ["Tamaño del los Números"],
       "Big Number with Trendline": ["Número Grande con Línea de Tendencia"],
       "Bottom Margin": [""],
       "Bottom margin, in pixels, allowing for more room for axis labels": [""],
@@ -627,6 +629,7 @@
       "CREATE TABLE AS": ["Permitir CREATE TABLE AS"],
       "CREATE VIEW AS": ["Permitir CREATE TABLE AS"],
       "CREATE VIEW statement": ["Instrucción CREATE VIEW"],
+      "CRON Schedule": ["Programar usando CRON"],
       "CRON expression": ["Expresión CRON"],
       "CSS": ["CSS"],
       "CSS Styles": [""],
@@ -709,7 +712,7 @@
         "No esta permitido modificar este Gráfico"
       ],
       "Changing this control takes effect instantly": [
-        "Los aambios en este control surten efecto de inmediato"
+        "Los cambios en este control surten efecto de inmediato"
       ],
       "Changing this dataset is forbidden": [
         "No está permitido cambiar este dataset"
@@ -819,6 +822,7 @@
       "Choose a metric for right axis": [
         "Elige una métrica para el eje derecho"
       ],
+      "Choose a number format": ["Selecciona un formato de número"],
       "Choose one of the available databases from the panel on the left.": [""],
       "Choose the annotation layer type": ["Capas de Anotación"],
       "Choose whether a country should be shaded by the metric, or assigned a color based on a categorical color palette": [
@@ -859,7 +863,7 @@
       "Click to edit": ["Click para editar"],
       "Click to favorite/unfavorite": ["Haz clic para favorito/no favorito"],
       "Click to force-refresh": ["Haga clic para forzar la actualización"],
-      "Click to see difference": [""],
+      "Click to see difference": ["Dale click para ver la diferencia"],
       "Close": ["Cerrar"],
       "Close all other tabs": ["Cerrar las demás pestañas"],
       "Close tab": ["Cerrar pestaña"],
@@ -939,6 +943,7 @@
       "Compute the contribution to the total": [
         "Calcular la contribución al total"
       ],
+      "Condition": ["Condición"],
       "Confidence interval must be between 0 and 1 (exclusive)": [
         "El intervalo de confianza debe estar entre 0 y 1 (exclusivo)"
       ],
@@ -1378,6 +1383,7 @@
         ""
       ],
       "Display row level total": [""],
+      "Display settings": ["Mostrar configuración"],
       "Displays connections between entities in a graph structure. Useful for mapping relationships and showing which nodes are important in a network. Graph charts can be configured to be force-directed or circulate. If your data has a geospatial component, try the deck.gl Arc chart.": [
         ""
       ],
@@ -1409,8 +1415,8 @@
       "Drill to detail: %s": [""],
       "Drop a column here or click": ["", "Drop columns here or click"],
       "Drop a column/metric here or click": [
-        "",
-        "Drop columns/metrics here or click"
+        "Arrastra una columna/métrica aquí o haga click",
+        "Arrastre varias columnas/métricas aquí o haga click"
       ],
       "Drop a temporal column here or click": [""],
       "Drop columns/metrics here or click": [""],
@@ -1636,6 +1642,7 @@
       "File": ["Archivo"],
       "Fill all required fields to enable \"Default Value\"": [""],
       "Filter List": ["Filtrar lista"],
+      "Filter Type": ["Tipo de Filtro"],
       "Filter configuration": ["Configuración de filtros"],
       "Filter configuration for the filter box": [
         "Configuración de filtros en caja de filtros"
@@ -1670,7 +1677,7 @@
       "Fixed color": ["Color fijo"],
       "Fixed point radius": [""],
       "Flow": [""],
-      "Font size": [""],
+      "Font size": ["Tamaño de letra"],
       "Font size for axis labels, detail value and other text elements": [""],
       "Font size for the biggest value in the list": [""],
       "Font size for the smallest value in the list": [""],
@@ -1685,8 +1692,8 @@
         ""
       ],
       "Force refresh": ["Forzar actualización"],
-      "Force refresh schema list": [""],
-      "Force refresh table list": [""],
+      "Force refresh schema list": ["Volver a cargar la lista de esquemas"],
+      "Force refresh table list": ["Volver a cargar la lista de tablas"],
       "Foreign key": [""],
       "Form data not found in cache, reverting to chart metadata.": [""],
       "Form data not found in cache, reverting to dataset metadata.": [""],
@@ -1714,6 +1721,7 @@
       "Gravity": [""],
       "Group By filter plugin": [""],
       "Group By, Metrics or Percentage Metrics must have a value": [""],
+      "Group Key": ["Llave del Grupo"],
       "Group by": ["Agrupar por"],
       "Groupable": ["Agrupable"],
       "Hard value bounds applied for color coding. Is only relevant and applied when the normalization is applied against the whole heatmap.": [
@@ -1757,6 +1765,9 @@
       "If table exists do one of the following: Fail (do nothing), Replace (drop and recreate table) or Append (insert data).": [
         ""
       ],
+      "Ignore cache when generating screenshot": [
+        "Ignorar el cache cuando se genera un screenshot"
+      ],
       "Ignore null locations": [""],
       "Ignore time": [""],
       "Image (PNG) embedded in email": [""],
@@ -1770,6 +1781,7 @@
       "Import chart failed for an unknown reason": [
         "Importar el gráfico falló por una razón desconocida"
       ],
+      "Import charts": ["Importar gráficos"],
       "Import dashboard failed for an unknown reason": [
         "Importar el Dashboard falló por una razón desconocida"
       ],
@@ -1879,6 +1891,7 @@
       "Keep editing": ["Continuar editando"],
       "Key": [""],
       "Keys for table": ["Claves de la tabla"],
+      "LIMIT": ["Límite de filas"],
       "Label": ["Etiqueta"],
       "Label Line": [""],
       "Label for your query": ["Etiqueta para tu consulta"],
@@ -2099,20 +2112,27 @@
       "New columns added: %s": ["Nuevas columnas añadidas: %s"],
       "New tab": ["Nueva pestaña"],
       "New tab (Ctrl + q)": [""],
-      "New tab (Ctrl + t)": [""],
+      "New tab (Ctrl + t)": ["Nueva pestaña (Ctrl + t)"],
       "Next": ["Siguiente"],
       "No": ["No"],
       "No %s yet": ["Aún no hay %s"],
       "No Access!": ["Sin Acceso!"],
+      "No Data": ["No hay datos"],
+      "No Results": ["No hay Resultados"],
+      "No Rules yet": ["No se han creado reglas"],
       "No annotation layers yet": ["Aún no hay capas de anotación"],
       "No annotation yet": ["Aún no hay anotaciones"],
       "No charts": ["No hay gráficos"],
       "No dashboards": ["No hay dashboards"],
+      "No dashboards yet": ["No se han creado dashboards"],
       "No data": ["No hay datos"],
       "No data after filtering or data is NULL for the latest time record": [
         ""
       ],
       "No data in file": ["No hay datos en el archivo"],
+      "No database tables found": [
+        "No se encontraron tablas en la base de datos"
+      ],
       "No databases match your search": [""],
       "No favorite charts yet, go click on stars!": [
         "No hay gráficos favoritos aun, clica en la estrella!"
@@ -2141,12 +2161,13 @@
       "No validator found (configured for the engine)": [""],
       "No validator named {} found (configured for the {} engine)": [""],
       "Node label position": [""],
-      "None": [""],
+      "None": ["Ninguno"],
       "None -> Arrow": [""],
       "None -> None": [""],
       "Normal": [""],
       "Normalize Across": [""],
       "Normalized": [""],
+      "Not available": ["No disponible"],
       "Not null": ["No nulo"],
       "Not up to date": [""],
       "Nothing triggered": ["Nada disparado"],
@@ -2154,6 +2175,7 @@
       "November": ["Noviembre"],
       "Null or Empty": ["Nulo o Vacío"],
       "Null values": ["Valores Nulos"],
+      "Number Format": ["Formato de número"],
       "Number bounds used for color encoding from red to blue.\n               Reverse the numbers for blue to red. To get pure red or blue,\n               you can enter either only min or max.": [
         ""
       ],
@@ -2525,7 +2547,7 @@
         "Columnas referenciadas no disponibles en DataFrame."
       ],
       "Refetch results": ["Volver a cargar resultados"],
-      "Refresh": ["Intervlo de actualización"],
+      "Refresh": ["Volver a cargar"],
       "Refresh dashboard": ["Actualizar dashboard automáticamente"],
       "Refresh frequency": ["Frecuencia de actualización"],
       "Refresh interval": ["Intérvalo de actualización"],
@@ -2631,7 +2653,8 @@
       "Rotate axis label": [""],
       "Rotate x axis label": [""],
       "Rotation to apply to words in the cloud": [""],
-      "Row": ["Hilera"],
+      "Row": ["Fila"],
+      "Row Level Security": ["Seguridad a nivel de registros"],
       "Row containing the headers to use as column names (0 is first line of data). Leave empty if there is no header row": [
         ""
       ],
@@ -2685,6 +2708,7 @@
       "SUN": ["DOM"],
       "Sample Standard Deviation": [""],
       "Sample Variance": [""],
+      "Samples": ["Ejemplos"],
       "Sankey": [""],
       "Sankey Diagram": [""],
       "Sankey Diagram with Loops": [""],
@@ -2704,6 +2728,9 @@
       "Save for this session": ["Guardar para esta sesión"],
       "Save or Overwrite Dataset": [""],
       "Save query": ["Guardar Consulta"],
+      "Save the query to enable this feature": [
+        "Por favor, guarda el query para habilitar esta funcionalidad"
+      ],
       "Save this query as a virtual dataset to continue exploring": [""],
       "Saved": ["Guardar"],
       "Saved Queries": ["Consultas Guardadas"],
@@ -2741,6 +2768,7 @@
       "Secondary y-axis Bounds": [""],
       "Secondary y-axis format": [""],
       "Secondary y-axis title": [""],
+      "Seconds %s": ["Segundos %s"],
       "Secure Extra": [""],
       "Secure extra": ["Seguridad"],
       "Security": ["Seguridad"],
@@ -2750,6 +2778,7 @@
       "See table schema": ["Ver esquema de tabla"],
       "Select": ["Selecciona"],
       "Select ...": ["Selecciona ..."],
+      "Select Delivery Method": ["Selecciona el método de entrega"],
       "Select a Excel file to be uploaded to a database.": [
         "Selecciona un archivo de Excel para ser cargado a una base de datos."
       ],
@@ -2789,6 +2818,9 @@
       "Select scheme": ["Selecciona un esquema"],
       "Select start and end date": ["Seleciona fecha de inicio y de fin"],
       "Select subject": [""],
+      "Select table or type to search tables": [
+        "Selecciona una tabla o digita para buscar tablas"
+      ],
       "Select the charts to which you want to apply cross-filters in this dashboard. Deselecting a chart will exclude it from being filtered when applying cross-filters from any chart on the dashboard. You can select \"All charts\" to apply cross-filters to all charts that use the same dataset or contain the same column name in the dashboard.": [
         ""
       ],
@@ -2857,7 +2889,8 @@
       "Show Y-axis on the sparkline. Will display the manually set min/max if set or min/max values in the data otherwise.": [
         ""
       ],
-      "Show all...": [""],
+      "Show all columns": ["Mostrar todas las columnas"],
+      "Show all...": ["Mostrar todo..."],
       "Show axis line ticks": [""],
       "Show cell bars": [""],
       "Show data points as circle markers on the lines": [""],
@@ -2990,7 +3023,8 @@
       "Style": ["Estilo"],
       "Style the ends of the progress bar with a round cap": [""],
       "Subdomain": [""],
-      "Subheader Font Size": [""],
+      "Subheader": ["Subtitulo"],
+      "Subheader Font Size": ["Tamaño del subtítulo"],
       "Submit": [""],
       "Subtotal": [""],
       "Success": ["Éxito"],
@@ -3657,6 +3691,8 @@
       ],
       "Unknown error": ["Valor desconocido"],
       "Unknown input format": [""],
+      "Unknown type": ["Tipo desconocido"],
+      "Unknown value": ["Valor desconocido"],
       "Unsafe return type for function %(func)s: %(value_type)s": [
         "Tipo de retorno inseguro para la función %(func)s: %(value_type)s"
       ],
@@ -3676,14 +3712,26 @@
       "Unsupported time grain: %(time_grain)s": [
         "Granularidad temporal no soportada: %(time_grain)s"
       ],
+      "Untitled Dataset": ["Dataset sin título"],
+      "Untitled Query": ["Query sin título"],
       "Untitled query": ["Consulta sin título"],
       "Update": ["Actualizar"],
+      "Update chart": ["Actualizar gráfico"],
       "Updating chart was stopped": [
         "La actualización del gráfico ha sido detenida"
       ],
       "Upload": ["Subir"],
+      "Upload CSV": ["Cargar archivo CSV"],
+      "Upload CSV to database": ["Cargar archivo CSV a una base de datos"],
+      "Upload Excel file": ["Cargar archivo de Excel"],
       "Upload Excel file to database": [""],
       "Upload JSON file": ["Subir un archivo JSON"],
+      "Upload columnar file": ["Cargar archivo columnar"],
+      "Upload columnar file to database": [
+        "Cargar archivo columnar a una base de datos"
+      ],
+      "Upload file to database": ["Cargar archivo a la base de datos"],
+      "Usage": ["Uso"],
       "Use \"%(menuName)s\" menu instead.": [""],
       "Use a log scale": ["Usar escala logarítimica"],
       "Use a log scale for the X-axis": [
@@ -3749,6 +3797,7 @@
       "Vertical (Left)": [""],
       "Video game consoles": [""],
       "View All »": ["Ver todos »"],
+      "View all charts": ["Ver todos los gráficos"],
       "View in SQL Lab": ["Ejecutar en Laboratiorio SQL"],
       "View keys & indexes (%s)": ["Ver claves e índices (%s)"],
       "View query": ["Ver consulta"],
@@ -4015,7 +4064,7 @@
         ""
       ],
       "You can preview the list of dashboards in the chart settings dropdown.": [
-        ""
+        "Puedes ver la lista de dashboards en el menú desplegable de configuración del gráfico."
       ],
       "You can't apply cross-filter on this data point.": [""],
       "You cannot delete the last temporal filter as it's used for time range filters in dashboards.": [
@@ -4276,6 +4325,7 @@
       "running": ["ejecutando"],
       "saved queries": ["queries guardados"],
       "search by tags": ["buscar por etiqueta"],
+      "seconds": ["segundos"],
       "series: Treat each series independently; overall: All series use the same scale; change: Show changes compared to the first data point in each series": [
         ""
       ],

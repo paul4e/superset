@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2023-05-23 16:30-0300\n"
-"PO-Revision-Date: 2023-12-13 18:09-0600\n"
+"PO-Revision-Date: 2023-12-15 09:29-0600\n"
 "Last-Translator: Ruben Sastre <ruben.sastre@decathlon.com>\n"
 "Language-Team: Español; Castellano <>\n"
 "Language: es\n"
@@ -954,7 +954,7 @@ msgstr "última partición:"
 
 #: superset-frontend/src/features/home/RightMenu.tsx:492
 msgid "About"
-msgstr ""
+msgstr "Acerca de"
 
 #: superset-frontend/src/dashboard/components/PropertiesModal/index.tsx:476
 #: superset-frontend/src/dashboard/components/PropertiesModal/index.tsx:519
@@ -1106,9 +1106,8 @@ msgid "Add a dataset"
 msgstr "Agregar dataset"
 
 #: superset-frontend/src/SqlLab/components/TabbedSqlEditors/index.jsx:272
-#, fuzzy
 msgid "Add a new tab"
-msgstr "Consulta en nueva pestaña"
+msgstr "Crear una nueva pestaña"
 
 #: superset-frontend/src/SqlLab/components/TabbedSqlEditors/index.jsx:296
 msgid "Add a new tab to create SQL Query"
@@ -2510,9 +2509,8 @@ msgid "Auto Zoom"
 msgstr ""
 
 #: superset-frontend/src/SqlLab/components/SqlEditor/index.jsx:524
-#, fuzzy
 msgid "Autocomplete"
-msgstr "Autocompletar filtros"
+msgstr "Autocompletar"
 
 #: superset-frontend/src/components/Datasource/DatasourceEditor.jsx:880
 msgid "Autocomplete filters"
@@ -2708,7 +2706,7 @@ msgstr "Número Grande"
 
 #: superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/sharedControls.ts:28
 msgid "Big Number Font Size"
-msgstr ""
+msgstr "Tamaño del los Números"
 
 #: superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberWithTrendline/index.ts:36
 #: superset/viz.py:1150
@@ -2899,9 +2897,8 @@ msgid "CREATE VIEW statement"
 msgstr "Instrucción CREATE VIEW"
 
 #: superset-frontend/src/features/alerts/components/AlertReportCronScheduler.tsx:83
-#, fuzzy
 msgid "CRON Schedule"
-msgstr "Programar informe"
+msgstr "Programar usando CRON"
 
 #: superset-frontend/src/features/alerts/components/AlertReportCronScheduler.tsx:94
 msgid "CRON expression"
@@ -3316,7 +3313,7 @@ msgstr "No esta permitido modificar este Gráfico"
 #: superset-frontend/plugins/plugin-chart-echarts/src/Timeseries/Regular/Bar/controlPanel.tsx:135
 #: superset-frontend/src/explore/components/ControlHeader.tsx:123
 msgid "Changing this control takes effect instantly"
-msgstr "Los aambios en este control surten efecto de inmediato"
+msgstr "Los cambios en este control surten efecto de inmediato"
 
 #: superset/datasets/commands/exceptions.py:198
 msgid "Changing this dataset is forbidden"
@@ -3660,9 +3657,8 @@ msgid "Choose a metric for right axis"
 msgstr "Elige una métrica para el eje derecho"
 
 #: superset-frontend/plugins/legacy-plugin-chart-chord/src/controlPanel.ts:61
-#, fuzzy
 msgid "Choose a number format"
-msgstr "Elige una métrica para el eje derecho"
+msgstr "Selecciona un formato de número"
 
 #: superset-frontend/plugins/legacy-plugin-chart-chord/src/controlPanel.ts:67
 #, fuzzy
@@ -3844,7 +3840,7 @@ msgstr "Haga clic para forzar la actualización"
 
 #: superset-frontend/src/components/AlteredSliceTag/index.jsx:201
 msgid "Click to see difference"
-msgstr ""
+msgstr "Dale click para ver la diferencia"
 
 #: superset-frontend/src/components/Table/index.tsx:216
 #, fuzzy
@@ -4278,9 +4274,8 @@ msgid "Compute the contribution to the total"
 msgstr "Calcular la contribución al total"
 
 #: superset-frontend/src/features/alerts/AlertReportModal.tsx:392
-#, fuzzy
 msgid "Condition"
-msgstr "Probar Conexión"
+msgstr "Condición"
 
 #: superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberTotal/controlPanel.ts:99
 #, fuzzy
@@ -5969,9 +5964,8 @@ msgid "Display row level total"
 msgstr ""
 
 #: superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberTotal/controlPanel.ts:39
-#, fuzzy
 msgid "Display settings"
-msgstr "Configuracion"
+msgstr "Mostrar configuración"
 
 #: superset-frontend/plugins/plugin-chart-echarts/src/Graph/index.ts:35
 msgid ""
@@ -6142,8 +6136,8 @@ msgstr[1] ""
 #: superset-frontend/src/explore/components/controls/DndColumnSelectControl/DndMetricSelect.tsx:330
 msgid "Drop a column/metric here or click"
 msgid_plural "Drop columns/metrics here or click"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Arrastra una columna/métrica aquí o haga click"
+msgstr[1] "Arrastre varias columnas/métricas aquí o haga click"
 
 #: superset-frontend/packages/superset-ui-chart-controls/src/shared-controls/dndControls.tsx:247
 msgid "Drop a temporal column here or click"
@@ -7350,9 +7344,8 @@ msgstr "Configurar ámbito de filtros"
 #: superset-frontend/src/features/rls/RowLevelSecurityModal.tsx:373
 #: superset-frontend/src/pages/RowLevelSecurityList/index.tsx:134
 #: superset-frontend/src/pages/RowLevelSecurityList/index.tsx:255
-#, fuzzy
 msgid "Filter Type"
-msgstr "Filtrar por usuario"
+msgstr "Tipo de Filtro"
 
 #: superset-frontend/src/visualizations/FilterBox/FilterBoxChartPlugin.js:28
 #, fuzzy
@@ -7534,7 +7527,7 @@ msgstr ""
 
 #: superset-frontend/plugins/plugin-chart-echarts/src/Gauge/controlPanel.tsx:129
 msgid "Font size"
-msgstr ""
+msgstr "Tamaño de letra"
 
 #: superset-frontend/plugins/plugin-chart-echarts/src/Gauge/controlPanel.tsx:130
 msgid "Font size for axis labels, detail value and other text elements"
@@ -7595,11 +7588,11 @@ msgstr "Forzar actualización"
 
 #: superset-frontend/src/components/DatabaseSelector/index.tsx:291
 msgid "Force refresh schema list"
-msgstr ""
+msgstr "Volver a cargar la lista de esquemas"
 
 #: superset-frontend/src/components/TableSelector/index.tsx:307
 msgid "Force refresh table list"
-msgstr ""
+msgstr "Volver a cargar la lista de tablas"
 
 #: superset-frontend/packages/superset-ui-chart-controls/src/sections/forecastInterval.tsx:56
 #, fuzzy
@@ -7832,9 +7825,8 @@ msgstr ""
 #: superset-frontend/src/features/rls/RowLevelSecurityModal.tsx:433
 #: superset-frontend/src/pages/RowLevelSecurityList/index.tsx:139
 #: superset-frontend/src/pages/RowLevelSecurityList/index.tsx:267
-#, fuzzy
 msgid "Group Key"
-msgstr "Agrupar por"
+msgstr "Llave del Grupo"
 
 #: superset-frontend/src/dashboard/components/nativeFilters/FiltersConfigModal/FiltersConfigForm/FiltersConfigForm.tsx:323
 msgid "Group by"
@@ -8082,10 +8074,8 @@ msgid ""
 msgstr ""
 
 #: superset-frontend/src/features/alerts/AlertReportModal.tsx:410
-#, fuzzy
 msgid "Ignore cache when generating screenshot"
-msgstr ""
-"La ejecución del informe programado falló al generar una captura de pantalla."
+msgstr "Ignorar el cache cuando se genera un screenshot"
 
 #: superset-frontend/plugins/legacy-preset-chart-deckgl/src/utilities/Shared_DeckGL.jsx:87
 msgid "Ignore null locations"
@@ -8138,9 +8128,8 @@ msgid "Import chart failed for an unknown reason"
 msgstr "Importar el gráfico falló por una razón desconocida"
 
 #: superset-frontend/src/pages/ChartList/index.tsx:813
-#, fuzzy
 msgid "Import charts"
-msgstr "No hay gráficos"
+msgstr "Importar gráficos"
 
 #: superset/dashboards/commands/exceptions.py:82
 msgid "Import dashboard failed for an unknown reason"
@@ -8640,9 +8629,8 @@ msgid "Kilometers"
 msgstr "Filtros"
 
 #: superset-frontend/src/SqlLab/components/QueryLimitSelect/index.tsx:101
-#, fuzzy
 msgid "LIMIT"
-msgstr "Límite filas"
+msgstr "Límite de filas"
 
 #: superset-frontend/packages/superset-ui-chart-controls/src/components/labelUtils.tsx:93
 #: superset-frontend/packages/superset-ui-chart-controls/src/components/labelUtils.tsx:122
@@ -10047,7 +10035,7 @@ msgstr ""
 #: superset-frontend/src/SqlLab/components/TabbedSqlEditors/index.jsx:279
 #: superset-frontend/src/SqlLab/components/TabbedSqlEditors/index.jsx:321
 msgid "New tab (Ctrl + t)"
-msgstr ""
+msgstr "Nueva pestaña (Ctrl + t)"
 
 #: superset-frontend/src/features/queries/QueryPreviewModal.tsx:134
 #: superset-frontend/src/features/queries/SavedQueryPreviewModal.tsx:114
@@ -10085,19 +10073,16 @@ msgstr "Sin Acceso!"
 
 #: superset-frontend/src/components/ListView/ListView.tsx:420
 #: superset-frontend/src/profile/components/RecentActivity.tsx:52
-#, fuzzy
 msgid "No Data"
 msgstr "No hay datos"
 
 #: superset-frontend/packages/superset-ui-core/src/chart/components/NoResultsComponent.tsx:78
-#, fuzzy
 msgid "No Results"
-msgstr "Ver resultados"
+msgstr "No hay Resultados"
 
 #: superset-frontend/src/pages/RowLevelSecurityList/index.tsx:235
-#, fuzzy
 msgid "No Rules yet"
-msgstr "Recientes"
+msgstr "No se han creado reglas"
 
 #: superset-frontend/src/explore/components/controls/AnnotationLayerControl/AnnotationLayer.jsx:116
 #, fuzzy
@@ -10162,9 +10147,8 @@ msgid "No dashboards"
 msgstr "No hay dashboards"
 
 #: superset-frontend/src/features/home/EmptyState.tsx:35
-#, fuzzy
 msgid "No dashboards yet"
-msgstr "No hay dashboards"
+msgstr "No se han creado dashboards"
 
 #: superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberViz.tsx:134
 #: superset-frontend/src/components/Table/index.tsx:207
@@ -10182,9 +10166,8 @@ msgid "No data in file"
 msgstr "No hay datos en el archivo"
 
 #: superset-frontend/src/features/datasets/AddDataset/LeftPanel/index.tsx:274
-#, fuzzy
 msgid "No database tables found"
-msgstr "La base de datos no existe"
+msgstr "No se encontraron tablas en la base de datos"
 
 #: superset-frontend/src/components/EmptyState/index.tsx:228
 msgid "No databases match your search"
@@ -10375,7 +10358,7 @@ msgstr "Tamaño burbuja"
 #: superset-frontend/src/explore/controlPanels/sections.tsx:134
 #: superset-frontend/src/features/alerts/AlertReportModal.tsx:128
 msgid "None"
-msgstr ""
+msgstr "Ninguno"
 
 #: superset-frontend/plugins/plugin-chart-echarts/src/Graph/controlPanel.tsx:130
 msgid "None -> Arrow"
@@ -10412,9 +10395,8 @@ msgstr "Añadir a un nuevo Dashboard"
 #: superset-frontend/src/explore/components/ExploreChartHeader/index.jsx:191
 #: superset-frontend/src/explore/components/ExploreChartHeader/index.jsx:195
 #: superset-frontend/src/features/datasets/metadataBar/useDatasetMetadataBar.tsx:72
-#, fuzzy
 msgid "Not available"
-msgstr "descripción"
+msgstr "No disponible"
 
 #: superset-frontend/src/explore/constants.ts:60
 #, fuzzy
@@ -10478,9 +10460,8 @@ msgid "Null values"
 msgstr "Valores Nulos"
 
 #: superset-frontend/plugins/legacy-plugin-chart-calendar/src/controlPanel.ts:195
-#, fuzzy
 msgid "Number Format"
-msgstr "Formato D3"
+msgstr "Formato de número"
 
 #: superset-frontend/src/explore/components/controls/TimeSeriesColumnControl/index.jsx:307
 msgid ""
@@ -12147,7 +12128,7 @@ msgstr "Volver a cargar resultados"
 
 #: superset/templates/appbuilder/general/widgets/search.html:57
 msgid "Refresh"
-msgstr "Intervlo de actualización"
+msgstr "Volver a cargar"
 
 #: superset-frontend/src/dashboard/components/Header/HeaderActionsDropdown/index.jsx:255
 msgid "Refresh dashboard"
@@ -12687,12 +12668,11 @@ msgstr "Mapa de País"
 #: superset-frontend/packages/superset-ui-chart-controls/src/shared-controls/customControls.tsx:50
 #: superset-frontend/src/dashboard/components/gridComponents/new/NewRow.jsx:31
 msgid "Row"
-msgstr "Hilera"
+msgstr "Fila"
 
 #: superset-frontend/src/pages/RowLevelSecurityList/index.tsx:70
 #: superset-frontend/src/pages/RowLevelSecurityList/index.tsx:302
 #: superset/initialization/__init__.py:436
-#, fuzzy
 msgid "Row Level Security"
 msgstr "Seguridad a nivel de registros"
 
@@ -12950,9 +12930,8 @@ msgid "Sample Variance"
 msgstr ""
 
 #: superset-frontend/src/explore/components/DataTablesPane/DataTablesPane.tsx:231
-#, fuzzy
 msgid "Samples"
-msgstr "Ver ejemplos"
+msgstr "Ejemplos"
 
 #: superset/datasets/commands/exceptions.py:194
 #, fuzzy
@@ -13109,9 +13088,8 @@ msgid "Save query"
 msgstr "Guardar Consulta"
 
 #: superset-frontend/src/SqlLab/components/ShareSqlLabQuery/index.tsx:99
-#, fuzzy
 msgid "Save the query to enable this feature"
-msgstr "Por favor, guarda la consulta para habilitar el compartir"
+msgstr "Por favor, guarda el query para habilitar esta funcionalidad"
 
 #: superset-frontend/src/SqlLab/components/ResultSet/index.tsx:248
 #: superset-frontend/src/explore/components/controls/DatasourceControl/index.jsx:465
@@ -13380,9 +13358,9 @@ msgid "Secondary y-axis title"
 msgstr ""
 
 #: superset-frontend/src/explore/components/controls/DateFilterControl/utils/constants.ts:62
-#, fuzzy, python-format
+#, python-format
 msgid "Seconds %s"
-msgstr "30 segundos"
+msgstr "Segundos %s"
 
 #: superset/views/database/mixins.py:194
 msgid "Secure Extra"
@@ -13441,9 +13419,8 @@ msgid "Select ..."
 msgstr "Selecciona ..."
 
 #: superset-frontend/src/features/alerts/components/NotificationMethod.tsx:127
-#, fuzzy
 msgid "Select Delivery Method"
-msgstr "Agregar método de entrega"
+msgstr "Selecciona el método de entrega"
 
 #: superset-frontend/src/explore/components/controls/VizTypeControl/FastVizSwitcher.tsx:94
 #, fuzzy
@@ -13637,9 +13614,8 @@ msgstr ""
 
 #: superset-frontend/src/components/TableSelector/index.tsx:284
 #: superset-frontend/src/components/TableSelector/index.tsx:295
-#, fuzzy
 msgid "Select table or type to search tables"
-msgstr "Selecciona tabla o introduce su nombre"
+msgstr "Selecciona una tabla o digita para buscar tablas"
 
 #: superset-frontend/src/explore/components/controls/AnnotationLayerControl/AnnotationLayer.jsx:447
 #, fuzzy
@@ -13978,14 +13954,13 @@ msgid ""
 msgstr ""
 
 #: superset-frontend/packages/superset-ui-chart-controls/src/shared-controls/components/ColumnConfigControl/ColumnConfigControl.tsx:156
-#, fuzzy
 msgid "Show all columns"
-msgstr "Mostrar Columna"
+msgstr "Mostrar todas las columnas"
 
 #: superset-frontend/src/explore/components/DatasourcePanel/index.tsx:423
 #: superset-frontend/src/explore/components/DatasourcePanel/index.tsx:460
 msgid "Show all..."
-msgstr ""
+msgstr "Mostrar todo..."
 
 #: superset-frontend/plugins/plugin-chart-echarts/src/Gauge/controlPanel.tsx:202
 msgid "Show axis line ticks"
@@ -14777,13 +14752,12 @@ msgid "Subdomain"
 msgstr ""
 
 #: superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/BigNumberTotal/controlPanel.ts:48
-#, fuzzy
 msgid "Subheader"
-msgstr "Encabezado"
+msgstr "Subtitulo"
 
 #: superset-frontend/plugins/plugin-chart-echarts/src/BigNumber/sharedControls.ts:62
 msgid "Subheader Font Size"
-msgstr ""
+msgstr "Tamaño del subtítulo"
 
 #: superset-frontend/src/SqlLab/components/ScheduleQueryButton/index.tsx:209
 msgid "Submit"
@@ -17365,12 +17339,10 @@ msgid "Unknown input format"
 msgstr ""
 
 #: superset-frontend/src/dashboard/components/AddSliceCard/AddSliceCard.tsx:178
-#, fuzzy
 msgid "Unknown type"
-msgstr "Valor desconocido"
+msgstr "Tipo desconocido"
 
 #: superset-frontend/src/dashboard/components/nativeFilters/FilterBar/FilterSets/utils/index.ts:43
-#, fuzzy
 msgid "Unknown value"
 msgstr "Valor desconocido"
 
@@ -17410,14 +17382,12 @@ msgid "Unsupported time grain: %(time_grain)s"
 msgstr "Granularidad temporal no soportada: %(time_grain)s"
 
 #: superset-frontend/src/SqlLab/components/SaveDatasetModal/index.tsx:148
-#, fuzzy
 msgid "Untitled Dataset"
-msgstr "Editar Base de Datos"
+msgstr "Dataset sin título"
 
 #: superset/views/sql_lab/views.py:148
-#, fuzzy
 msgid "Untitled Query"
-msgstr "Consulta sin título"
+msgstr "Query sin título"
 
 #: superset-frontend/src/SqlLab/reducers/getInitialState.js:52
 msgid "Untitled query"
@@ -17429,9 +17399,8 @@ msgstr "Actualizar"
 
 #: superset-frontend/src/explore/components/RunQueryButton/index.tsx:54
 #: superset-frontend/src/utils/getChartRequiredFieldsMissingMessage.ts:23
-#, fuzzy
 msgid "Update chart"
-msgstr "Guardar gráfico"
+msgstr "Actualizar gráfico"
 
 #: superset-frontend/src/components/Chart/chartReducer.ts:84
 msgid "Updating chart was stopped"
@@ -17442,14 +17411,12 @@ msgid "Upload"
 msgstr "Subir"
 
 #: superset-frontend/src/pages/DatabaseList/index.tsx:213
-#, fuzzy
 msgid "Upload CSV"
-msgstr "Descargar como imagen"
+msgstr "Cargar archivo CSV"
 
 #: superset-frontend/src/features/home/RightMenu.tsx:189
-#, fuzzy
 msgid "Upload CSV to database"
-msgstr "Eliminar base de datos"
+msgstr "Cargar archivo CSV a una base de datos"
 
 #: superset-frontend/src/features/databases/DatabaseModal/DatabaseConnectionForm/EncryptedField.tsx:135
 #, fuzzy
@@ -17462,9 +17429,8 @@ msgid "Upload Enabled"
 msgstr "Subir Excel"
 
 #: superset-frontend/src/pages/DatabaseList/index.tsx:227
-#, fuzzy
 msgid "Upload Excel file"
-msgstr "Subir Excel"
+msgstr "Cargar archivo de Excel"
 
 #: superset-frontend/src/features/home/RightMenu.tsx:203
 msgid "Upload Excel file to database"
@@ -17475,24 +17441,20 @@ msgid "Upload JSON file"
 msgstr "Subir un archivo JSON"
 
 #: superset-frontend/src/pages/DatabaseList/index.tsx:220
-#, fuzzy
 msgid "Upload columnar file"
-msgstr "Columna"
+msgstr "Cargar archivo columnar"
 
 #: superset-frontend/src/features/home/RightMenu.tsx:196
-#, fuzzy
 msgid "Upload columnar file to database"
-msgstr "Selecciona un archivo de Excel para ser cargado a una base de datos."
+msgstr "Cargar archivo columnar a una base de datos"
 
 #: superset-frontend/src/pages/DatabaseList/index.tsx:210
-#, fuzzy
 msgid "Upload file to database"
-msgstr "Editar Base de Datos"
+msgstr "Cargar archivo a la base de datos"
 
 #: superset-frontend/src/features/datasets/AddDataset/EditDataset/index.tsx:52
-#, fuzzy
 msgid "Usage"
-msgstr "Administrar"
+msgstr "Uso"
 
 #: superset-frontend/src/dashboard/components/PropertiesModal/index.tsx:799
 #, python-format
@@ -17769,9 +17731,8 @@ msgid "View Dataset"
 msgstr "Editar Base de Datos"
 
 #: superset-frontend/src/explore/components/controls/VizTypeControl/index.tsx:124
-#, fuzzy
 msgid "View all charts"
-msgstr "Todos los gráficos"
+msgstr "Ver todos los gráficos"
 
 #: superset-frontend/src/dashboard/components/SliceHeaderControls/index.tsx:440
 #, fuzzy
@@ -18806,6 +18767,8 @@ msgstr ""
 #: superset-frontend/src/explore/components/ExploreChartHeader/index.jsx:183
 msgid "You can preview the list of dashboards in the chart settings dropdown."
 msgstr ""
+"Puedes ver la lista de dashboards en el menú desplegable de configuración del "
+"gráfico."
 
 #: superset-frontend/src/components/Chart/ChartContextMenu/ChartContextMenu.tsx:178
 msgid "You can't apply cross-filter on this data point."
@@ -20068,9 +20031,8 @@ msgid "search by tags"
 msgstr "buscar por etiqueta"
 
 #: superset-frontend/src/features/alerts/AlertReportModal.tsx:402
-#, fuzzy
 msgid "seconds"
-msgstr "30 segundos"
+msgstr "segundos"
 
 #: superset-frontend/plugins/legacy-plugin-chart-horizon/src/controlPanel.ts:85
 #, fuzzy
