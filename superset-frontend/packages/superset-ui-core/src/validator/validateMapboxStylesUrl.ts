@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+<<<<<<<< HEAD:superset-frontend/packages/superset-ui-core/src/validator/validateMapboxStylesUrl.ts
 
 import { t } from '../translation';
 
@@ -34,3 +35,13 @@ export default function validateMapboxStylesUrl(v: unknown) {
 
   return t('is expected to be a Mapbox URL');
 }
+========
+import { styled } from '@superset-ui/core';
+
+export const ControlSubSectionHeader = styled.div`
+  font-weight: ${({ theme }) => theme.typography.weights.bold};
+  font-size: ${({ theme }) => theme.typography.sizes.s};
+  margin-bottom: ${({ theme }) => theme.gridUnit}px;
+`;
+export default ControlSubSectionHeader;
+>>>>>>>> 3.0.2sn:superset-frontend/packages/superset-ui-chart-controls/src/components/ControlSubSectionHeader.tsx
