@@ -46,11 +46,11 @@ class CrateEngineSpec(BaseEngineSpec):
 
     @classmethod
     def epoch_to_dttm(cls) -> str:
-        return "{col} * 1000"
+        return "int({col} * 1000)"
 
     @classmethod
     def epoch_ms_to_dttm(cls) -> str:
-        return "{col}"
+        return "int({col})"
 
     @classmethod
     def convert_dttm(
@@ -59,7 +59,7 @@ class CrateEngineSpec(BaseEngineSpec):
         sqla_type = cls.get_sqla_column_type(target_type)
 
         if isinstance(sqla_type, types.TIMESTAMP):
-            return f"{dttm.timestamp() * 1000}"
+            return f"{int(dttm.timestamp() * 1000)}"
         return None
 
     @classmethod
